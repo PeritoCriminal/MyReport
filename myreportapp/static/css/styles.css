@@ -1,0 +1,28 @@
+.titulo-2 {
+    color: gray !important;
+    margin-bottom: 20px !important;
+}
+
+
+.reports-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.report-image {
+    width: 150px;
+    height: auto;
+    border: 1px solid #ddd;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.report-image:hover {
+    border-color: #007bff;
+}
+
+.form-check-inline {
+    margin-right: 15px;
+    margin-top: 15px;
+}

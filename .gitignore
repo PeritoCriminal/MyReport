@@ -1,0 +1,40 @@
+# Ambiente Virtual
+venv/
+.env
+
+# Arquivos de compilação
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Arquivos de configuração do sistema
+.DS_Store
+Thumbs.db
+
+# Arquivos de logs
+*.log
+
+# Diretórios de banco de dados
+db.sqlite3
+
+# Arquivos e diretórios de configuração de IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Arquivos de configuração do Django
+*.sqlite3
+*.pyc
+
+# Arquivos de cache
+*.cache
+*.pyo
+*.pyd
+
+# Ambiente de desenvolvimento e build
+*.egg-info/
+dist/
+build/
+*.egg

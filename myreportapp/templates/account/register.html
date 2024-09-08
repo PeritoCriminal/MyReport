@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <h2 class="my-4">Registro de Usuário</h2>
+    <div class="row">
+        <div class="col-md-8 col-lg-6 mx-auto">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+
+                <div class="alert alert-danger">
+                   
+                    {{ msg_simple_director }}
+        
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.director.id_for_label }}">{{ form.director.label }}</label>
+                    {{ form.director }}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+                    {{ form.username }}
+                    {{ form.username.errors }}
+                </div>
+
+                <div class="alert alert-danger">
+                   
+                    {{ msg_simple_password }}
+        
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
+                    {{ form.password1 }}
+                    {{ form.password1.errors }}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.password2.id_for_label }}">{{ form.password2.label }}</label>
+                    {{ form.password2 }}
+                    {{ form.password2.errors }}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.full_name.id_for_label }}">{{ form.full_name.label }}</label>
+                    {{ form.full_name }}
+                    {% if form.full_name.help_text %}
+                        <small class="form-text text-muted">{{ form.full_name.help_text }}</small>
+                    {% endif %}
+                    {{ form.full_name.errors }}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                    {{ form.email }}
+                    {{ form.email.errors }}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.city.id_for_label }}">{{ form.city.label }}</label>
+                    {{ form.city }}
+                    {{ form.city.errors }}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.unit.id_for_label }}">{{ form.unit.label }}</label>
+                    {{ form.unit }}
+                    {{ form.unit.errors }}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.team.id_for_label }}">{{ form.team.label }}</label>
+                    {{ form.team }}
+                    {{ form.team.errors }}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.image.id_for_label }}">{{ form.image.label }}</label>
+                    {{ form.image }}
+                    {{ form.image.errors }}
+                </div>
+
+                <button type="submit" class="btn btn-primary">Registrar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

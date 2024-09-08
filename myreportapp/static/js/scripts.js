@@ -1,0 +1,76 @@
+function formatStringWithYear(str, date) {
+    /*
+    Formata a numeração do Laudo, Protocolo e Boletim, incluindo o ano do registro.
+    Aplica o formato "X.XXX/AAAA".
+    */
+    let _date;
+    if (date instanceof Date) {
+        _date = new Date(date);
+    } else {
+        _date = new Date();
+    }
+    let _str;
+    try {
+        const number = parseInt(str, 10);
+        if (!isNaN(number)) {
+            _str = number.toLocaleString('pt-BR').trim().toUpperCase();
+        } else {
+            throw new Error("Invalid number");
+        }
+    } catch (e) {
+        _str = str.trim().toUpperCase();
+    }
+    const year = _date.getFullYear();
+    return `${_str}/${year}`;
+}
+
+
+// Função para gerar o preâmbulo
+function generatePreamble(designatedDate, city, director, reportingExpert, requestingAuthority) {
+    // Extrai dia, mês e ano da data
+    const dateObj = new Date(designatedDate);
+    const day = String(dateObj.getDate()).padStart(2, '0');  // Adiciona o '0' à esquerda se necessário
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');  // Meses são base 0, então soma-se 1
+    const year = dateObj.getFullYear();
+    const designatedDateFormatted = `${day}-${month}-${year}`;
+
+    let diretorTexto;
+    if (director.startsWith('Dr. ')) {
+        diretorTexto = `pelo Diretor deste Instituto de Criminalística, o Perito Criminal ${director}`;
+    } else if (director.startsWith('Dra. ')) {
+        diretorTexto = `pela Diretora deste Instituto de Criminalística, a Perita Criminal ${director}`;
+    } else {
+        diretorTexto = `pelo(a) Diretor(a) deste Instituto de Criminalística, o(a) Perito(a) Criminal ${director}`; // Padrão para outros casos
+    }
+
+    let peritoTexto;
+    if (reportingExpert.startsWith('Dr. ')) {
+        peritoTexto = `o perito criminal ${reportingExpert}`;
+    } else if (reportingExpert.startsWith('Dra. ')) {
+        peritoTexto = `a perita criminal ${reportingExpert}`;
+    } else {
+        peritoTexto = `o(a) perito(a) criminal ${reportingExpert}`; // Padrão para outros casos
+    }
+
+    let autoridadeTexto;
+    if (requestingAuthority.startsWith('Dr. ')) {
+        autoridadeTexto = `o Delegado de Polícia ${requestingAuthority}`;
+    } else if (requestingAuthority.startsWith('Dra. ')) {
+        autoridadeTexto = `a Delegada de Polícia ${requestingAuthority}`;
+    } else {
+        autoridadeTexto = `o(a) Delegado(a) de Polícia ${requestingAuthority}`; // Padrão para outros casos
+    }
+
+    const preamble = `Em ${designatedDateFormatted}, na cidade de ${city} e no Instituto de Criminalística, 
+    da Superintendência da Polícia Técnico-Científica, da Secretaria de Segurança Pública do Estado de São Paulo, 
+    ${diretorTexto}, foi designado ${peritoTexto} para proceder ao Exame Pericial especificado em requisição de exame assinada pela Autoridade Policial, 
+    ${autoridadeTexto}.`;
+
+    return preamble;
+}
+
+
+function teste(texto) {
+    alert(texto)
+}
+

@@ -1,0 +1,411 @@
+{% extends "base.html" %}
+
+{% block title %}Entorpecentes - Constatação Provisória{% endblock title %}
+
+{% block content %}
+<h2 class="titulo-2">Entorpecentes - Constatação Provisória</h2>
+<br>
+
+<!-- Formulário Drug_report
+    Os valores dos campos serão tratados para depois serem postados.
+-->
+<form id="drug-report-form">
+    <div class="alert alert-warning">
+                   
+        {{ msg_about_this_form_to_user|safe }}
+
+    </div>
+    <div class="item-group form-group border p-3 mb-3">
+        <div class="form-group d-flex justify-content-between">
+            <div class="form-group">
+                <label for="protocolo">Protocolo</label>
+                <input type="text" id="protocolo" name="protocolo" class="form-control text-uppercase" required>
+            </div>
+            <div class="form-group">
+                <label for="boletim">Boletim</label>
+                <input type="text" id="boletim" name="boletim" class="form-control text-uppercase" required>
+            </div>
+            <div class="form-group">
+                <label for="delegacia">Delegacia</label>
+                <input type="text" id="delegacia" name="delegacia" class="form-control" required value="{{ delegacia }}">
+            </div>
+            <div class="form-group">
+                <label for="autoridade_requisitante">Autoridade Requisitante</label>
+                <input type="text" id="autoridade_requisitante" name="autoridade_requisitante" class="form-control" required>
+            </div>
+        </div>
+        <div class="form-group d-flex justify-content-between">
+            <div class="form-group">
+                <label for="data_atendimento">Data do Atendimento</label>
+                <input type="date" id="data_atendimento" name="data_atendimento" class="form-control" value="{{ today_date|date:'Y-m-d' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="hora_atendimento">Hora do Atendimento</label>
+                <input type="time" id="hora_atendimento" name="hora_atendimento" class="form-control" value="{{ before_time }}" required>
+            </div>
+            <div class="form-group">
+                <label for="data_liberacao">Data da Liberação</label>
+                <input type="date" id="data_liberacao" name="data_liberacao" class="form-control" value="{{ today_date|date:'Y-m-d' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="hora_liberacao">Hora da Liberação</label>
+                <input type="time" id="hora_liberacao" name="hora_liberacao" class="form-control" value="{{ current_time }}" required>
+            </div>
+        </div>    
+        <div class="form-group">
+            <label>Substâncias Examinadas:</label>
+            <div class="form-group d-flex align-items-center justify-content-between">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="checkboxMaconha" name="substance" value="maconha" checked>
+                    <label class="form-check-label" for="checkboxMaconha">Maconha</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="checkboxCocaina" name="substance" value="cocaina" checked>
+                    <label class="form-check-label" for="checkboxCocaina">Cocaína</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="checkboxCrack" name="substance" value="crack" checked>
+                    <label class="form-check-label" for="checkboxCrack">Crack</label>
+                </div>
+            </div>
+            
+            <!-- Observações - Caixa de texto opcional -->
+            <div class="form-group">
+                <label for="observacoes">Observações</label>
+                <textarea class="form-control" id="observacoes" name="observacoes" rows="3" placeholder="Opcional."></textarea>
+            </div>
+        
+            <!-- Input file com legenda -->
+            <div class="form-group d-flex align-items-center justify-content-between">
+                <div class="form-check form-check-inline">
+                    <input type="file" class="form-control-file" id="escolher-imagem-geral" name="escolher_imagem[]" accept="image/*">
+                </div>
+                <div class="form-check form-group w-100">
+                    <label for="imagem-legendas">Legenda da imagem</label>
+                    <input type="text" class="form-control" id="imagem-legenda" name="imagem_legenda" value="Material recebido.">
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div id="people-involved-container">
+        <label>Pessoas Envolvidas</label>
+        <div class="form-group d-flex align-items-center">
+            <input type="text" name="people_involved" class="form-control people-involved" placeholder="Nome da Pessoa" required>
+            <button type="button" class="btn btn-secondary ml-2 add-person">+</button>
+        </div>
+    </div>
+    <div id="item-container">
+        <label>Itens</label>    
+        <div class="item-group form-group border p-3 mb-3">
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label for="testado-para">Testado para</label>
+                    <select id="testado-para" name="testado_para[]" class="form-control">
+                        <option value="maconha">Maconha</option>
+                        <option value="cocaina">Cocaína</option>
+                        <option value="craque">Crack</option>
+                    </select>
+                </div>    
+                <div class="form-group col-md-3">
+                    <label for="massa-bruta">Massa Bruta (g)</label>
+                    <input type="number" step="0.01" name="massa_bruta[]" id="massa-bruta" class="form-control" placeholder="Massa Bruta" required>
+                </div>    
+                <div class="form-group col-md-3">
+                    <label for="massa-liquida">Massa Líquida (g)</label>
+                    <input type="number" step="0.01" name="massa_liquida[]" id="massa-liquida" class="form-control" placeholder="Massa Líquida" required>
+                </div>    
+                <div class="form-group col-md-3">
+                    <label for="resultado">Resultado</label>
+                    <select id="resultado" name="resultado[]" class="form-control">
+                        <option value="positivo">Positivo</option>
+                        <option value="inconclusivo">Inconclusivo</option>
+                        <option value="negativo">Negativo</option>
+                    </select>
+                </div>
+            </div>    
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <div class="form-check">
+                        <input type="checkbox" name="devolvido[]" id="devolvido" class="form-check-input" checked>
+                        <label for="devolvido" class="form-check-label">Devolvido</label>
+                    </div>
+                </div>    
+                <div class="form-group col-md-3">
+                    <div class="form-check">
+                        <input type="checkbox" name="contrapericia[]" id="contrapericia" class="form-check-input" checked>
+                        <label for="contrapericia" class="form-check-label">Contraperícia</label>
+                    </div>
+                </div>    
+                <div class="form-group col-md-3">
+                    <label for="lacre-entrada">Lacre de Entrada</label>
+                    <input type="text" name="lacre_entrada[]" id="lacre-entrada" class="form-control" placeholder="Lacre de Entrada" style="text-transform: uppercase;" required>
+                </div>    
+                <div class="form-group col-md-3">
+                    <label for="lacre-saida">Lacre de Saída</label>
+                    <input type="text" name="lacre_saida[]" id="lacre-saida" class="form-control" placeholder="Lacre de Saída" style="text-transform: uppercase;" required>
+                </div>
+            </div>    
+    
+            <!-- Campo de texto para observações -->
+            <div class="form-group">
+                <label for="observacoes">Observações</label>
+                <textarea class="form-control" id="observacoes" name="observacoes[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
+            </div>
+    
+            <div class="d-flex align-items-center">
+                <!-- Input para seleção de imagem -->
+                <input type="file" class="form-control-file" id="escolher-imagem" name="escolher_imagem[]" accept="image/*">
+                
+                <div class="form-check form-group flex-grow-1 mx-3 w-100">
+                    <label for="imagem-legenda_item">Legenda da Imagem</label>
+                    <input type="text" class="form-control" id="imagem-legenda_item" name="imagem_legenda_item[]" value="Item examinado">
+                </div>
+                
+                <!-- Botão alinhado à direita -->
+                <button type="button" class="btn btn-secondary ml-auto add-item">+</button>
+            </div>
+            
+        </div>
+    </div>
+
+</div>
+</div>
+
+<!-- Novo item-group com inputs de imagem e legendas -->
+<div class="item-group form-group border p-3 mb-3">
+    <!-- Material Devolvido -->
+    <div class="form-group d-flex justify-content-between">
+        <div class="form-check form-group">
+            <label for="material-devolvido">Material Devolvido</label>
+            <input type="file" class="form-control-file" id="material-devolvido" name="material_devolvido" accept="image/*">
+        </div>
+        <div class="form-check form-group w-100">
+            <label for="material-devolvido-legenda">Legenda da imagem</label>
+            <input type="text" class="form-control" id="material-devolvido-legenda" name="material_devolvido_legenda" value="Material devolvido após exame.">
+        </div>
+    </div>
+
+    <!-- Contraperícia -->
+    <div class="form-group d-flex justify-content-between">
+        <div class="form-check form-group">
+            <label for="contrapericia-imagem">Contraperícia</label>
+            <input type="file" class="form-control-file" id="contrapericia-imagem" name="contrapericia_imagem" accept="image/*">
+        </div>
+        <div class="form-check form-group w-100">
+            <label for="contrapericia-legenda">Legenda da imagem</label>
+            <input type="text" class="form-control" id="contrapericia-legenda" name="contrapericia_legenda" value="Material separado para contraperícia.">
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="conclusao">Conclusão</label>
+    <textarea class="form-control" id="conclusao" name="conclusao" rows="4" placeholder="Digite a conclusão aqui..."></textarea>
+</div>
+
+    <button type="submit" class="btn btn-primary" id='enviar'>Enviar</button>
+    
+</form>
+
+<script>
+// Adicionar novos campos para pessoas envolvidas
+document.getElementById('people-involved-container').addEventListener('click', function (event) {
+    if (event.target.classList.contains('add-person')) {
+        var container = document.getElementById('people-involved-container');
+        var newPersonField = document.createElement('div');
+        newPersonField.classList.add('form-group', 'd-flex', 'align-items-center');
+        newPersonField.innerHTML = `
+            <input type="text" name="people_involved" class="form-control people-involved" placeholder="Nome da Pessoa" required>
+            <button type="button" class="btn btn-secondary ml-2 add-person">+</button>
+            <button type="button" class="btn btn-danger ml-2 remove-person">-</button>
+        `;
+        container.appendChild(newPersonField);
+        newPersonField.querySelector('input').focus();
+    }
+    if (event.target.classList.contains('remove-person')) {
+        event.target.parentElement.remove();
+    }
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Função para adicionar um novo item
+    function addItem() {
+        const container = document.getElementById('item-container');
+        const newItem = document.createElement('div');
+        newItem.className = 'item-group form-group border p-3 mb-3';
+        newItem.innerHTML = `
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label for="testado-para">Testado para</label>
+                    <select id="testado-para" name="testado_para[]" class="form-control">
+                        <option value="maconha">Maconha</option>
+                        <option value="cocaina">Cocaína</option>
+                        <option value="craque">Crack</option>
+                    </select>
+                </div>
+    
+                <div class="form-group col-md-3">
+                    <label for="massa-bruta">Massa Bruta (g)</label>
+                    <input type="number" step="0.01" name="massa_bruta[]" id="massa-bruta" class="form-control" placeholder="Massa Bruta" required>
+                </div>
+    
+                <div class="form-group col-md-3">
+                    <label for="massa-liquida">Massa Líquida (g)</label>
+                    <input type="number" step="0.01" name="massa_liquida[]" id="massa-liquida" class="form-control" placeholder="Massa Líquida" required>
+                </div>
+    
+                <div class="form-group col-md-3">
+                    <label for="resultado">Resultado</label>
+                    <select id="resultado" name="resultado[]" class="form-control">
+                        <option value="positivo">Positivo</option>
+                        <option value="inconclusivo">Inconclusivo</option>
+                        <option value="negativo">Negativo</option>
+                    </select>
+                </div>
+            </div>
+    
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <div class="form-check">
+                        <input type="checkbox" name="devolvido[]" id="devolvido" class="form-check-input" checked>
+                        <label for="devolvido" class="form-check-label">Devolvido</label>
+                    </div>
+                </div>
+    
+                <div class="form-group col-md-3">
+                    <div class="form-check">
+                        <input type="checkbox" name="contrapericia[]" id="contrapericia" class="form-check-input" checked>
+                        <label for="contrapericia" class="form-check-label">Contraperícia</label>
+                    </div>
+                </div>
+    
+                <div class="form-group col-md-3">
+                    <label for="lacre-entrada">Lacre de Entrada</label>
+                    <input type="text" name="lacre_entrada[]" id="lacre-entrada" class="form-control" placeholder="Lacre de Entrada" style="text-transform: uppercase;" required>
+                </div>
+    
+                <div class="form-group col-md-3">
+                    <label for="lacre-saida">Lacre de Saída</label>
+                    <input type="text" name="lacre_saida[]" id="lacre-saida" class="form-control" placeholder="Lacre de Saída" style="text-transform: uppercase;" required>
+                </div>
+            </div>
+    
+            <!-- Campo de texto para observações -->
+            <div class="form-group">
+                <label for="observacoes">Observações</label>
+                <textarea class="form-control" id="observacoes" name="observacoes[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
+            </div>
+    
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <input type="file" name="imagem[]" class="form-control-file">
+
+                <div class="form-check form-group flex-grow-1 mx-3 w-100">
+                    <label for="imagem-legenda_item">Legenda da Imagem</label>
+                    <input type="text" class="form-control" id="imagem-legenda_item" name="imagem_legenda_item[]" value="Item examinado">
+                </div>
+
+                <button type="button" class="btn btn-secondary add-item">+</button>
+                <button type="button" class="btn btn-danger ml-2 remove-item">-</button>
+            </div>
+        `;
+    
+        container.appendChild(newItem);
+    
+        // Adiciona event listeners aos novos botões
+        newItem.querySelector('.add-item').addEventListener('click', addItem);
+        newItem.querySelector('.remove-item').addEventListener('click', function() {
+            newItem.remove();
+        });
+    }
+    
+    // Inicializa event listeners no item original
+    document.querySelector('.add-item').addEventListener('click', addItem);
+    document.querySelector('.remove-item').addEventListener('click', function() {
+        if (document.querySelectorAll('.item-group').length > 1) {
+            this.closest('.item-group').remove();
+        }
+    });
+});
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const submitButton = document.getElementById('enviar'); // Substitua 'enviar' pelo ID do seu botão
+
+    submitButton.addEventListener('click', function(event) {
+        event.preventDefault(); // Previne o envio do formulário para fins de teste
+
+        // Coleta de pessoas envolvidas
+        let involveds = [];
+        const peopleInputs = document.querySelectorAll('input[name="people_involved"]');
+        peopleInputs.forEach(input => {
+            if (input.value.trim() !== "") {
+                involveds.push(input.value.trim());
+            }
+        });
+
+        // Coleta de dados de drogas
+        const drugSelects = document.querySelectorAll('select[name="testado_para[]"]'); // Adiciona esta linha para definir `drugSelects`
+        const drugData = [];
+        drugSelects.forEach((select, index) => {
+            const typeOfDrug = select.value;
+            const grossWeight = parseFloat(document.querySelectorAll('input[name="massa_bruta[]"]')[index].value) || 0;
+            const netWeight = parseFloat(document.querySelectorAll('input[name="massa_liquida[]"]')[index].value) || 0;
+            const result = document.querySelectorAll('select[name="resultado[]"]')[index].value;
+            const counterExpertise = document.querySelectorAll('input[name="contrapericia[]"]')[index].checked;
+            const returned = document.querySelectorAll('input[name="devolvido[]"]')[index].checked;
+            const entrySeal = document.querySelectorAll('input[name="lacre_entrada[]"]')[index].value.toUpperCase();
+            const exitSeal = document.querySelectorAll('input[name="lacre_saida[]"]')[index].value.toUpperCase();
+            
+            // Cria o dicionário para cada item
+            const drugItem = {
+                typeOfDrug: typeOfDrug,
+                grossWeight: grossWeight,
+                netWeight: netWeight,
+                result: result,
+                counterExpertise: counterExpertise,
+                returned: returned,
+                entrySeal: entrySeal,
+                exitSeal: exitSeal
+            };
+        
+            drugData.push(drugItem); // Adiciona o item à lista
+        });
+
+        // Coleta de dados adicionais
+        const serviceDate = document.getElementById('data_atendimento').value;
+        const protocolName = formatStringWithYear(document.getElementById('protocolo').value, serviceDate);
+        const incidentReport = formatStringWithYear(document.getElementById('boletim').value, serviceDate);
+        const policeStation = document.getElementById('delegacia').value;
+        const requestingAuthority = document.getElementById('autoridade_requisitante').value;
+        const serviceTime = document.getElementById('hora_atendimento').value;
+        const releaseDate = document.getElementById('data_liberacao').value;
+        const releaseTime = document.getElementById('hora_liberacao').value;
+
+        // Criação da saída para exibição
+        const output = `
+            Protocol Name: ${protocolName}
+            Incident Report: ${incidentReport}
+            Police Station: ${policeStation}
+            Requesting Authority: ${requestingAuthority}
+            Service Date: ${serviceDate}
+            Service Time: ${serviceTime}
+            Release Date: ${releaseDate}
+            Release Time: ${releaseTime}
+            Involveds: ${involveds.join(", ")}
+            Drogas Testadas: ${drugData.map(item => JSON.stringify(item)).join(", ")}
+        `;
+
+        alert(output);
+        alert(generatePreamble(serviceDate, 'Limeira', 'Dr. Samuel', 'Marcos Capristo', requestingAuthority));
+        alert('')
+        teste('teste realizado com sucesso!');
+        
+    });
+});
+
+</script>
+
+{% endblock content %}

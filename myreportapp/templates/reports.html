@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<h1>Selecione um Relatório</h1>
+<div class="reports-links">
+    {% for link in report_links %}
+    <a href="{% url link.url %}">
+        <img src="{% static link.image %}" alt="{{ link.alt }}" title="{{ link.title }}" class="report-image" >
+    </a>
+    {% endfor %}
+</div>
+{% endblock content %}
