@@ -71,8 +71,8 @@
             
             <!-- Observações - Caixa de texto opcional -->
             <div class="form-group">
-                <label for="observacoes">Observações</label>
-                <textarea class="form-control" id="observacoes" name="observacoes" rows="3" placeholder="Opcional."></textarea>
+                <label for="observacoes_material_total">Observações</label>
+                <textarea class="form-control" id="observacoes_material_total" name="observacoes_material_total" rows="3" placeholder="Opcional."></textarea>
             </div>
         
             <!-- Input file com legenda -->
@@ -329,79 +329,115 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-
+// Inputs para variáveis
+let protocol = document.querySelector('#protocolo').value;
+let policereport = document.querySelector('#boletim').value;
+let policestation = document.querySelector('#delegacia').value;
+let authority = document.querySelector('#autoridade_requisitante').value;
 
 document.addEventListener('DOMContentLoaded', function() {
     const submitButton = document.getElementById('enviar'); // Substitua 'enviar' pelo ID do seu botão
 
     submitButton.addEventListener('click', function(event) {
         event.preventDefault(); // Previne o envio do formulário para fins de teste
-
-        // Coleta de pessoas envolvidas
-        let involveds = [];
-        const peopleInputs = document.querySelectorAll('input[name="people_involved"]');
-        peopleInputs.forEach(input => {
-            if (input.value.trim() !== "") {
-                involveds.push(input.value.trim());
+        
+        // Inputs para variáveis
+        let protocol = document.querySelector('#protocolo').value;
+        if (protocol.trim() === '' || protocol === 'TOX') {
+            alert('Valor para Protocolo inválido.');
+            document.querySelector('#protocolo').value = 'TOX';
+            document.querySelector('#protocolo').focus();
+            return;
+        }       
+        let policereport = document.querySelector('#boletim').value;
+        if (policereport.trim() === ''){
+            alert('Valor para Boletim inválido.')
+            document.querySelector('#boletim').value = '';
+            document.querySelector('#boletim').focus();
+            return;
+        }
+        let policestation = document.querySelector('#delegacia').value;
+        if (policestation.trim() === ''){
+            alert('Valor para Delegacia inválido.')
+            document.querySelector('#delegacia').value = '';
+            document.querySelector('#delegacia').focus();
+            return;
+        }
+        let authority = document.querySelector('#autoridade_requisitante').value;
+        if (authority.trim() === ''){
+            alert('Valor para Autoridade Requisitante inválido.')
+            document.querySelector('#autoridade_requisitante').value = '';
+            document.querySelector('#autoridade_requisitante').focus();
+            return;
+        }
+        let serviceDate;
+        try {
+            serviceDate = new Date(document.querySelector('#data_atendimento').value);
+            if (isNaN(serviceDate.getTime())) {
+                throw new Error('Data inválida.');
+            }
+        } catch (error) {
+            alert(`${error.message}`);
+            document.querySelector('#data_atendimento').focus();
+            return;
+        }
+        let releaseDate;
+        try {
+            releaseDate = new Date(document.querySelector('#data_liberacao').value);
+            if (isNaN(releaseDate.getTime())) {
+                throw new Error('Data inválida.');
+            }
+        } catch (error) {
+            alert(`${error.message}`);
+            document.querySelector('#data_liberacao').focus();
+            return;
+        }
+        let serviceHour;
+        try {
+            serviceHour = new Date(`1970-01-01T${document.querySelector('#hora_atendimento').value}:00`);
+            if (isNaN(serviceHour.getTime())) {
+                throw new Error('Hora inválida.');
+            }
+        } catch (error) {
+            alert(`${error.message}`);
+            document.querySelector('#hora_atendimento').focus();
+            return;
+        }
+        let releaseHour;
+        try {
+            releaseHour = new Date(`1970-01-01T${document.querySelector('#hora_liberacao').value}:00`);
+            if (isNaN(releaseHour.getTime())) {
+                throw new Error('Hora inválida.');
+            }
+        } catch (error) {
+            alert(`${error.message}`);
+            document.querySelector('#hora_liberacao').focus();
+            return;
+        }
+        let substances = [];
+        const checkboxes = document.querySelectorAll('input[name="substance"]');
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                substances.push(checkbox.value);
             }
         });
+        if (substances.length === 0) {
+            alert('Nenhuma substância foi selecionada.');
+            if (checkboxes.length > 0) {
+                checkboxes[0].focus();
+            }
+            return;
+        }
+        let materialReceivedObservations = document.querySelector('#observacoes_material_total').value;
 
-        // Coleta de dados de drogas
-        const drugSelects = document.querySelectorAll('select[name="testado_para[]"]'); // Adiciona esta linha para definir `drugSelects`
-        const drugData = [];
-        drugSelects.forEach((select, index) => {
-            const typeOfDrug = select.value;
-            const grossWeight = parseFloat(document.querySelectorAll('input[name="massa_bruta[]"]')[index].value) || 0;
-            const netWeight = parseFloat(document.querySelectorAll('input[name="massa_liquida[]"]')[index].value) || 0;
-            const result = document.querySelectorAll('select[name="resultado[]"]')[index].value;
-            const counterExpertise = document.querySelectorAll('input[name="contrapericia[]"]')[index].checked;
-            const returned = document.querySelectorAll('input[name="devolvido[]"]')[index].checked;
-            const entrySeal = document.querySelectorAll('input[name="lacre_entrada[]"]')[index].value.toUpperCase();
-            const exitSeal = document.querySelectorAll('input[name="lacre_saida[]"]')[index].value.toUpperCase();
-            
-            // Cria o dicionário para cada item
-            const drugItem = {
-                typeOfDrug: typeOfDrug,
-                grossWeight: grossWeight,
-                netWeight: netWeight,
-                result: result,
-                counterExpertise: counterExpertise,
-                returned: returned,
-                entrySeal: entrySeal,
-                exitSeal: exitSeal
-            };
+
+        //  PRECISO CONTINUAR DESSE PONTO
+
+        alert(`${protocol}\n${policereport}\n
+        ${policestation}\n${authority}\n${serviceDate}\n
+        ${releaseDate}\n${serviceHour}\n${releaseHour}\n
+        ${substances}\n${materialReceivedObservations}`); // E ACABAR DE PREENCHER ESSA CAIXA DE DIÁÇOGO
         
-            drugData.push(drugItem); // Adiciona o item à lista
-        });
-
-        // Coleta de dados adicionais
-        const serviceDate = document.getElementById('data_atendimento').value;
-        const protocolName = formatStringWithYear(document.getElementById('protocolo').value, serviceDate);
-        const incidentReport = formatStringWithYear(document.getElementById('boletim').value, serviceDate);
-        const policeStation = document.getElementById('delegacia').value;
-        const requestingAuthority = document.getElementById('autoridade_requisitante').value;
-        const serviceTime = document.getElementById('hora_atendimento').value;
-        const releaseDate = document.getElementById('data_liberacao').value;
-        const releaseTime = document.getElementById('hora_liberacao').value;
-
-        // Criação da saída para exibição
-        const output = `
-            Protocol Name: ${protocolName}
-            Incident Report: ${incidentReport}
-            Police Station: ${policeStation}
-            Requesting Authority: ${requestingAuthority}
-            Service Date: ${serviceDate}
-            Service Time: ${serviceTime}
-            Release Date: ${releaseDate}
-            Release Time: ${releaseTime}
-            Involveds: ${involveds.join(", ")}
-            Drogas Testadas: ${drugData.map(item => JSON.stringify(item)).join(", ")}
-        `;
-
-        alert(output);
-        alert(generatePreamble(serviceDate, 'Limeira', 'Dr. Samuel', 'Marcos Capristo', requestingAuthority));
-        alert('')
-        teste('teste realizado com sucesso!');
         
     });
 });
