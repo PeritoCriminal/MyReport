@@ -19,7 +19,7 @@
         <div class="form-group d-flex justify-content-between">
             <div class="form-group">
                 <label for="protocolo">Protocolo</label>
-                <input type="text" id="protocolo" name="protocolo" class="form-control text-uppercase" required>
+                <input type="text" id="protocolo" name="protocolo" class="form-control text-uppercase" required value="{{ protocol_prefix }}">
             </div>
             <div class="form-group">
                 <label for="boletim">Boletim</label>
@@ -37,7 +37,7 @@
         <div class="form-group d-flex justify-content-between">
             <div class="form-group">
                 <label for="data_atendimento">Data do Atendimento</label>
-                <input type="date" id="data_atendimento" name="data_atendimento" class="form-control" value="{{ today_date|date:'Y-m-d' }}" required>
+                <input type="date" id="data_atendimento" name="data_atendimento" class="form-control" value="{{ before_date|date:'Y-m-d' }}" required>
             </div>
             <div class="form-group">
                 <label for="hora_atendimento">Hora do Atendimento</label>
