@@ -359,6 +359,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.querySelector('#protocolo').focus();
             return;
         }       
+
         let policereport = document.querySelector('#boletim').value;
         if (policereport.trim() === ''){
             alert('Valor para Boletim inválido.')
@@ -366,6 +367,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.querySelector('#boletim').focus();
             return;
         }
+
         let policestation = document.querySelector('#delegacia').value;
         if (policestation.trim() === ''){
             alert('Valor para Delegacia inválido.')
@@ -373,6 +375,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.querySelector('#delegacia').focus();
             return;
         }
+
         let authority = document.querySelector('#autoridade_requisitante').value;
         if (authority.trim() === ''){
             alert('Valor para Autoridade Requisitante inválido.')
@@ -380,6 +383,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.querySelector('#autoridade_requisitante').focus();
             return;
         }
+
         let serviceDate;
         try {
             serviceDate = new Date(document.querySelector('#data_atendimento').value);
@@ -424,6 +428,27 @@ document.addEventListener('DOMContentLoaded', function() {
             document.querySelector('#hora_liberacao').focus();
             return;
         }
+
+        let dateTimeService = new Date(
+            serviceDate.getFullYear(),
+            serviceDate.getMonth(),
+            serviceDate.getDate(),
+            serviceHour.getHours(),
+            serviceHour.getMinutes()
+        );
+        let dateTimeRelease = new Date(
+            releaseDate.getFullYear(),
+            releaseDate.getMonth(),
+            releaseDate.getDate(),
+            releaseHour.getHours(),
+            releaseHour.getMinutes()
+        );
+        if (dateTimeService > dateTimeRelease) {
+            alert('A data e hora do acionamento não pode ser superior à data e hora da liberação.');
+            document.querySelector('#data_atendimento').focus();
+            return;
+        }
+
         let substances = [];
         const checkboxes = document.querySelectorAll('input[name="substance"]');
         checkboxes.forEach(checkbox => {
@@ -438,12 +463,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             return;
         }
+
         let materialReceivedObservations = document.querySelector('#observacoes_material_total').value.trim();
+        
         let labelAllMaterialImg = document.querySelector('#imagem-legenda').value;        
         
         let listOfPeople = document.querySelectorAll('input[name="people_involved[]"]');
         let involvedPeople = [];
-
         listOfPeople.forEach(person => {
             if (person.value) { 
                 involvedPeople.push(person.value);
