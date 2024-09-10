@@ -81,7 +81,7 @@
                     <input type="file" class="form-control-file" id="escolher-imagem-geral" name="escolher_imagem[]" accept="image/*">
                 </div>
                 <div class="form-check form-group w-100">
-                    <label for="imagem-legendas">Legenda da imagem</label>
+                    <label for="imagem-legenda">Legenda da imagem</label>
                     <input type="text" class="form-control" id="imagem-legenda" name="imagem_legenda" value="Material recebido.">
                 </div>
             </div>
@@ -91,7 +91,7 @@
     <div id="people-involved-container">
         <label>Pessoas Envolvidas</label>
         <div class="form-group d-flex align-items-center">
-            <input type="text" name="people_involved" class="form-control people-involved" placeholder="Nome da Pessoa" required>
+            <input type="text" name="people_involved[]" class="form-control people-involved" placeholder="Nome da Pessoa" required>
             <button type="button" class="btn btn-secondary ml-2 add-person">+</button>
         </div>
     </div>
@@ -216,7 +216,7 @@ document.getElementById('people-involved-container').addEventListener('click', f
         var newPersonField = document.createElement('div');
         newPersonField.classList.add('form-group', 'd-flex', 'align-items-center');
         newPersonField.innerHTML = `
-            <input type="text" name="people_involved" class="form-control people-involved" placeholder="Nome da Pessoa" required>
+            <input type="text" name="people_involved[]" class="form-control people-involved" placeholder="Nome da Pessoa" required>
             <button type="button" class="btn btn-secondary ml-2 add-person">+</button>
             <button type="button" class="btn btn-danger ml-2 remove-person">-</button>
         `;
@@ -329,14 +329,24 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Inputs para variáveis
-let protocol = document.querySelector('#protocolo').value;
-let policereport = document.querySelector('#boletim').value;
-let policestation = document.querySelector('#delegacia').value;
-let authority = document.querySelector('#autoridade_requisitante').value;
+//  PRECISO CONTINUAR DESSE PONTO
+
+
+
+
+const allMaterialImg = document.querySelector('#escolher-imagem-geral');
+let selectedAllMaterialImg = null;
+
+allMaterialImg.addEventListener('change', function(event) {
+    const files = event.target.files;
+    if (files.length > 0) {
+        selectedAllMaterialImg = files[0];
+    }
+});
+
 
 document.addEventListener('DOMContentLoaded', function() {
-    const submitButton = document.getElementById('enviar'); // Substitua 'enviar' pelo ID do seu botão
+    const submitButton = document.getElementById('enviar');
 
     submitButton.addEventListener('click', function(event) {
         event.preventDefault(); // Previne o envio do formulário para fins de teste
@@ -381,17 +391,6 @@ document.addEventListener('DOMContentLoaded', function() {
             document.querySelector('#data_atendimento').focus();
             return;
         }
-        let releaseDate;
-        try {
-            releaseDate = new Date(document.querySelector('#data_liberacao').value);
-            if (isNaN(releaseDate.getTime())) {
-                throw new Error('Data inválida.');
-            }
-        } catch (error) {
-            alert(`${error.message}`);
-            document.querySelector('#data_liberacao').focus();
-            return;
-        }
         let serviceHour;
         try {
             serviceHour = new Date(`1970-01-01T${document.querySelector('#hora_atendimento').value}:00`);
@@ -401,6 +400,17 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (error) {
             alert(`${error.message}`);
             document.querySelector('#hora_atendimento').focus();
+            return;
+        }
+        let releaseDate;
+        try {
+            releaseDate = new Date(document.querySelector('#data_liberacao').value);
+            if (isNaN(releaseDate.getTime())) {
+                throw new Error('Data inválida.');
+            }
+        } catch (error) {
+            alert(`${error.message}`);
+            document.querySelector('#data_liberacao').focus();
             return;
         }
         let releaseHour;
@@ -428,16 +438,28 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             return;
         }
-        let materialReceivedObservations = document.querySelector('#observacoes_material_total').value;
+        let materialReceivedObservations = document.querySelector('#observacoes_material_total').value.trim();
+        let labelAllMaterialImg = document.querySelector('#imagem-legenda').value;        
+        
+        let listOfPeople = document.querySelectorAll('input[name="people_involved[]"]');
+        let involvedPeople = [];
 
+        listOfPeople.forEach(person => {
+            if (person.value) { 
+                involvedPeople.push(person.value);
+            }
+        });
 
-        //  PRECISO CONTINUAR DESSE PONTO
+        //  CONTINUAR DESSE PONTO EM DIANTE. 
 
         alert(`${protocol}\n${policereport}\n
         ${policestation}\n${authority}\n${serviceDate}\n
         ${releaseDate}\n${serviceHour}\n${releaseHour}\n
-        ${substances}\n${materialReceivedObservations}`); // E ACABAR DE PREENCHER ESSA CAIXA DE DIÁÇOGO
+        ${substances}\n${materialReceivedObservations}\n
+        ${selectedAllMaterialImg}\n${labelAllMaterialImg}\n
+        ${involvedPeople.join(', ')}`);
         
+        // E ACABAR DE PREENCHER ESSA CAIXA DE DIÁLOGO        
         
     });
 });
