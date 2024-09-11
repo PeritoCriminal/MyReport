@@ -98,6 +98,9 @@
     <div id="item-container">
         <label>Itens</label>    
         <div class="item-group form-group border p-3 mb-3">
+            <div class="item-header-dark mb-2">
+                <h5>Item 1</h5>
+            </div>
             <div class="form-row">
                 <div class="form-group col-md-3">
                     <label for="packaging">Invólucro</label>
@@ -114,11 +117,9 @@
                     <input type="number" step="0.01" name="massa_liquida[]" id="massa-liquida" class="form-control" placeholder="Massa Líquida" required>
                 </div>    
                 <div class="form-group col-md-3">
-                    <label for="resultado">Resultado</label>
-                    <select id="resultado" name="resultado[]" class="form-control">
-                        <option value="positivo">Positivo</option>
-                        <option value="inconclusivo">Inconclusivo</option>
-                        <option value="negativo">Negativo</option>
+                    <label for="morphology">Morfologia</label>
+                    <select id="morphology" name="morphology[]" class="form-control">
+                        <option value="">Selecione uma opção</option>
                     </select>
                 </div>
             </div>    
@@ -229,97 +230,102 @@ document.getElementById('people-involved-container').addEventListener('click', f
 
 document.addEventListener('DOMContentLoaded', function() {
     // Função para adicionar um novo item
-    function addItem() {
-        const container = document.getElementById('item-container');
-        const newItem = document.createElement('div');
-        newItem.className = 'item-group form-group border p-3 mb-3';
-        newItem.innerHTML = `
-            <div class="form-row">
-                <div class="form-group col-md-3">
-                    <label for="packaging">Invólucro</label>
-                    <select id="packaging" name="packaging[]" class="form-control">
-                        <option value="">Selecione uma opção</option>
-                    </select>
-                </div>
-    
-                <div class="form-group col-md-3">
-                    <label for="massa-bruta">Massa Bruta (g)</label>
-                    <input type="number" step="0.01" name="massa_bruta[]" id="massa-bruta" class="form-control" placeholder="Massa Bruta" required>
-                </div>
-    
-                <div class="form-group col-md-3">
-                    <label for="massa-liquida">Massa Líquida (g)</label>
-                    <input type="number" step="0.01" name="massa_liquida[]" id="massa-liquida" class="form-control" placeholder="Massa Líquida" required>
-                </div>
-    
-                <div class="form-group col-md-3">
-                    <label for="resultado">Resultado</label>
-                    <select id="resultado" name="resultado[]" class="form-control">
-                        <option value="positivo">Positivo</option>
-                        <option value="inconclusivo">Inconclusivo</option>
-                        <option value="negativo">Negativo</option>
-                    </select>
+    let itemCount = 1;  // Contador global para itens
+
+function addItem() {
+    itemCount++;  // Incrementa o contador para o novo item
+
+    const container = document.getElementById('item-container');
+    const newItem = document.createElement('div');
+    newItem.className = 'item-group form-group border p-3 mb-3';
+    newItem.innerHTML = `
+        <div class="item-header-dark mb-2">
+            <h5>Item ${itemCount}</h5>  <!-- Cabeçalho com número do item -->
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="packaging">Invólucro</label>
+                <select class="packaging-select form-control">
+                    <option value="">Selecione uma opção</option>
+                </select>
+            </div>
+
+            <div class="form-group col-md-3">
+                <label for="massa-bruta">Massa Bruta (g)</label>
+                <input type="number" step="0.01" name="massa_bruta[]" class="form-control" placeholder="Massa Bruta" required>
+            </div>
+
+            <div class="form-group col-md-3">
+                <label for="massa-liquida">Massa Líquida (g)</label>
+                <input type="number" step="0.01" name="massa_liquida[]" class="form-control" placeholder="Massa Líquida" required>
+            </div>
+
+            <div class="form-group col-md-3">
+                <label for="morphology">Morfologia</label>
+                <select class="morphology-select form-control">
+                    <option value="">Selecione uma opção</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <div class="form-check">
+                    <input type="checkbox" name="devolvido[]" class="form-check-input" checked>
+                    <label class="form-check-label">Devolvido</label>
                 </div>
             </div>
-    
-            <div class="form-row">
-                <div class="form-group col-md-3">
-                    <div class="form-check">
-                        <input type="checkbox" name="devolvido[]" id="devolvido" class="form-check-input" checked>
-                        <label for="devolvido" class="form-check-label">Devolvido</label>
-                    </div>
-                </div>
-    
-                <div class="form-group col-md-3">
-                    <div class="form-check">
-                        <input type="checkbox" name="contrapericia[]" id="contrapericia" class="form-check-input" checked>
-                        <label for="contrapericia" class="form-check-label">Contraperícia</label>
-                    </div>
-                </div>
-    
-                <div class="form-group col-md-3">
-                    <label for="lacre-entrada">Lacre de Entrada</label>
-                    <input type="text" name="lacre_entrada[]" id="lacre-entrada" class="form-control" placeholder="Lacre de Entrada" style="text-transform: uppercase;" required>
-                </div>
-    
-                <div class="form-group col-md-3">
-                    <label for="lacre-saida">Lacre de Saída</label>
-                    <input type="text" name="lacre_saida[]" id="lacre-saida" class="form-control" placeholder="Lacre de Saída" style="text-transform: uppercase;" required>
+
+            <div class="form-group col-md-3">
+                <div class="form-check">
+                    <input type="checkbox" name="contrapericia[]" class="form-check-input" checked>
+                    <label class="form-check-label">Contraperícia</label>
                 </div>
             </div>
-    
-            <!-- Campo de texto para observações -->
-            <div class="form-group">
-                <label for="observacoes">Observações</label>
-                <textarea class="form-control" id="observacoes" name="observacoes[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
+
+            <div class="form-group col-md-3">
+                <label for="lacre-entrada">Lacre de Entrada</label>
+                <input type="text" name="lacre_entrada[]" class="form-control" placeholder="Lacre de Entrada" style="text-transform: uppercase;" required>
             </div>
-    
-            <div class="d-flex justify-content-between align-items-center mt-3">
-                <input type="file" name="imagem[]" class="form-control-file">
 
-                <div class="form-check form-group flex-grow-1 mx-3 w-100">
-                    <label for="imagem-legenda_item">Legenda da Imagem</label>
-                    <input type="text" class="form-control" id="imagem-legenda_item" name="imagem_legenda_item[]" value="Item examinado">
-                </div>
-
-                <button type="button" class="btn btn-secondary add-item">+</button>
-                <button type="button" class="btn btn-danger ml-2 remove-item">-</button>
+            <div class="form-group col-md-3">
+                <label for="lacre-saida">Lacre de Saída</label>
+                <input type="text" name="lacre_saida[]" class="form-control" placeholder="Lacre de Saída" style="text-transform: uppercase;" required>
             </div>
-        `;
-    
-        container.appendChild(newItem);
+        </div>
 
+        <!-- Campo de texto para observações -->
+        <div class="form-group">
+            <label for="observacoes">Observações</label>
+            <textarea class="form-control" name="observacoes[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
+        </div>
 
-        const newSelect = newItem.querySelector('#packaging');
-        populateSelect(newSelect);
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <input type="file" name="imagem[]" class="form-control-file">
 
-    
-        // Adiciona event listeners aos novos botões
-        newItem.querySelector('.add-item').addEventListener('click', addItem);
-        newItem.querySelector('.remove-item').addEventListener('click', function() {
-            newItem.remove();
-        });
-    }
+            <div class="form-check form-group flex-grow-1 mx-3 w-100">
+                <label for="imagem-legenda_item">Legenda da Imagem</label>
+                <input type="text" class="form-control" name="imagem_legenda_item[]" value="Item examinado">
+            </div>
+
+            <button type="button" class="btn btn-secondary add-item">+</button>
+            <button type="button" class="btn btn-danger ml-2 remove-item">-</button>
+        </div>
+    `;
+
+    container.appendChild(newItem);
+    const newSelectPac = newItem.querySelector('.packaging-select');
+    populateSelectPac(newSelectPac);
+
+    const newSelectMorph = newItem.querySelector('.morphology-select');
+    populateSelectMorph(newSelectMorph);
+
+    // Adiciona event listeners aos novos botões
+    newItem.querySelector('.add-item').addEventListener('click', addItem);
+    newItem.querySelector('.remove-item').addEventListener('click', function() {
+        newItem.remove();
+    });
+}
     
     // Inicializa event listeners no item original
     document.querySelector('.add-item').addEventListener('click', addItem);
@@ -330,10 +336,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-const packaging = {{ packaging|safe }};
 
-// Função para popular o combobox
-function populateSelect(selectElement) {
+
+
+
+const packaging = {{ packaging|safe }};
+function populateSelectPac(selectElement) {
     for (const key in packaging) {
         const option = document.createElement('option');  // Cria o elemento <option>
         option.value = key;  // Define o valor como a chave do dicionário
@@ -341,10 +349,18 @@ function populateSelect(selectElement) {
         selectElement.appendChild(option);  // Adiciona a opção ao combobox
     }
 }
-document.querySelectorAll('select[name="packaging[]"]').forEach(populateSelect);
-// Seleciona todos os elementos <select> com o atributo name="packaging[]"
+document.querySelectorAll('select[name="packaging[]"]').forEach(populateSelectPac);
 
-
+const morphology = {{ morphology|safe }};
+function populateSelectMorph(selectElement) {
+    for (const key in morphology) {
+        const option = document.createElement('option');  // Cria o elemento <option>
+        option.value = key;  // Define o valor como a chave do dicionário
+        option.text = key;  // Define o texto da opção como a chave do dicionário
+        selectElement.appendChild(option);  // Adiciona a opção ao combobox
+    }
+}
+document.querySelectorAll('select[name="morphology[]"]').forEach(populateSelectMorph);
 
 
 

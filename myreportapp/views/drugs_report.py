@@ -53,6 +53,40 @@ def drugs_report(request):
     'Fita adesiva com plástico filme': 'invólucro(s) constituído(s) por fita(s) adesiva(s) e plástico(s) encerrando',
     'Garrafa pet': 'Garrafa(s) aparentemente do tipo PET, fechada(s) por tampa própria de rosca, contendo'
     }
+
+    morphology = {
+    'erva': 'porção de fragmentos vegetais ressequidos, constituídos de folhas, folíolos, inflorescências, caules e frutos.',
+    'tijolo': 'contendo porção de fragmentos vegetais ressequidos, constituídos de folhas, folíolos, inflorescências, caules e frutos, compactados na forma de tijolo.',
+    'planta': 'contendo planta arbustiva com [XX] cm de comprimento e constituído por raiz, caule, folhas, folíolos, inflorescência e frutos',
+    'haxixe': 'contendo porção de substância de aspecto resinoso de coloração amarronzada e de morfologia irregular',
+    'cigarro íntegro': 'contendo cigarro(s) artesanal(ais) confeccionado(s) em papel, contendo fragmentos vegetais ressequidos, constituídos de folhas, folíolos, inflorescências, caules e frutos.',
+    'cigarro queimado': 'contendo cigarro(s) artesanal(ais) parcialmente queimado(s), confeccionado(s) em papel, contendo fragmentos vegetais ressequidos, constituídos de folhas, folíolos, inflorescências, caules e frutos.',
+    'pó': 'contendo porção de material sólido particulado',
+    'pedra': 'contendo porção de material sólido petrificado',
+    'líquido': 'contendo fração líquida translúcida e volátil.',
+    'resina': 'contendo porção de material resinoso',
+    'comprimido': 'contendo porção de material particulado, compactado na forma de comprimido',
+    'selo': 'contendo segmento de papel ilustrado, do tipo "picote" (selo).',
+    'outros': '[Descreva a Morfologia]',
+    'granulado': 'contendo porção de material sólido particulado com grânulos',
+    'dichavador': 'contendo dichavador, do tipo triturador de rotação manual, da marca [X]/ sem marca aparente, de [material: madeira/metal/plástico/material sintético], composto por [X] partes, apresentado resquícios/sujidades.',
+    'Semente/ fruto de maconha': 'contendo porção de material com aspecto de origem vegetal, de formato esférico, coloração amarronzada e com diâmetro médio de aproximadamente 3,0 mm (três milímetros).',
+    'K4': 'contendo segmento(s) de papel de cor [descreva a cor]',
+    'Liquidificador': 'contendo liquidificador, da marca [X]/ sem marca aparente, composto por base e recipiente com hélice de pás cortantes, apresentando resquícios/sujidades.',
+    'balança': 'contendo balança, da marca [X]/ sem marca aparente, com mostrador digital, de carga máxima nominal de [X], apresentando resquícios/sujidades.',
+    'faca': 'contendo faca, da marca [X]/ sem marca aparente, constituída por uma lâmina metálica cortante presa a um cabo de [material: madeira/metal/plástico], apresentando resquícios/sujidades.',
+    'tesoura': 'contendo tesoura, da marca [X]/ sem marca aparente, constituída por duas lâminas metálicas cortantes, unidas por um eixo, apresentando resquícios/sujidades.',
+    'embalagem plástica com resquícios': 'contendo embalagens plásticas com massa total de [x] grama(s), cada unidade dotada de dimensões aproximadas de [x] cm de comprimento por [x] cm de largura, apresentando resquícios/sujidades.',
+    'rolo de plástico filme/papel alumínio/ fita adesiva': 'contendo rolo de [plástico filme / papel alumínio / fita adesiva], da marca [X]/ sem marca aparente, apresentando resquícios/sujidades.',
+    'mochila/bolsa/mala': 'contendo [mochila / bolsa / mala], de [tecido / couro / material sintético / lona], constituída de [X] compartimentos, apresentando resquícios/sujidades.',
+    'skunk': 'contendo porção de fragmentos vegetais não compactados e constituídos principalmente de inflorescências',
+    'Pote com sujidades': 'contendo recipiente de [cerâmica, vidro, plástico, metal, louça] dotado de tampa própria, apresentando resquícios/sujidades.',
+    'cachimbo': 'contendo cachimbo [opcional: artesanal], de [material: madeira, barro, metal], constituído por um tubo delgado, apresentando fornilho em uma de suas extremidades contendo resquícios/sujidades.',
+    'Frutos maconha': 'contendo frutos do tipo aquênio, ovalados, medindo cerca de 3 mm (três milímetros) de largura por 5 mm (cinco milímetros) de comprimento, com casca brilhante, dura e finamente reticulada.',
+    'prato': 'contendo prato de [material: vidro, plástico, metal, louça], de formato [circular, quadrado], do tipo [raso, fundo] apresentando resquícios/sujidades.',
+    'peneira': 'contendo peneira de formato circular, dotada de cabo e trama [material: metálicos, de plástico], apresentando resquícios/sujidades.'
+    }
+
     
     # Contexto para renderizar o template
     context = {
@@ -65,6 +99,7 @@ def drugs_report(request):
         'user_name': user.full_name,
         'msg_about_this_form_to_user': msg_about_this_form_to_user,
         'packaging': packaging,
+        'morphology': morphology,
     }
     
     return render(request, 'drugs_report.html', context)

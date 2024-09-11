@@ -3,6 +3,12 @@
     margin-bottom: 20px !important;
 }
 
+.item-header-dark {
+    background-color: #343a40;  /* Cor de fundo escura, ajuste conforme necessário */
+    color: #ffffff;  /* Cor do texto para garantir que seja visível sobre o fundo escuro */
+    padding: 10px;  /* Ajuste o preenchimento conforme necessário */
+    border-radius: 4px;  /* Opcional: adicione bordas arredondadas */
+}
 
 .reports-links {
     display: flex;
