@@ -100,11 +100,9 @@
         <div class="item-group form-group border p-3 mb-3">
             <div class="form-row">
                 <div class="form-group col-md-3">
-                    <label for="testado-para">Testado para</label>
-                    <select id="testado-para" name="testado_para[]" class="form-control">
-                        <option value="maconha">Maconha</option>
-                        <option value="cocaina">Cocaína</option>
-                        <option value="craque">Crack</option>
+                    <label for="packaging">Invólucro</label>
+                    <select id="packaging" name="packaging[]" class="form-control">
+                        <option value="">Selecione uma opção</option>
                     </select>
                 </div>    
                 <div class="form-group col-md-3">
@@ -238,11 +236,9 @@ document.addEventListener('DOMContentLoaded', function() {
         newItem.innerHTML = `
             <div class="form-row">
                 <div class="form-group col-md-3">
-                    <label for="testado-para">Testado para</label>
-                    <select id="testado-para" name="testado_para[]" class="form-control">
-                        <option value="maconha">Maconha</option>
-                        <option value="cocaina">Cocaína</option>
-                        <option value="craque">Crack</option>
+                    <label for="packaging">Invólucro</label>
+                    <select id="packaging" name="packaging[]" class="form-control">
+                        <option value="">Selecione uma opção</option>
                     </select>
                 </div>
     
@@ -312,6 +308,11 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
     
         container.appendChild(newItem);
+
+
+        const newSelect = newItem.querySelector('#packaging');
+        populateSelect(newSelect);
+
     
         // Adiciona event listeners aos novos botões
         newItem.querySelector('.add-item').addEventListener('click', addItem);
@@ -329,7 +330,20 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-//  PRECISO CONTINUAR DESSE PONTO
+const packaging = {{ packaging|safe }};
+
+// Função para popular o combobox
+function populateSelect(selectElement) {
+    for (const key in packaging) {
+        const option = document.createElement('option');  // Cria o elemento <option>
+        option.value = key;  // Define o valor como a chave do dicionário
+        option.text = key;  // Define o texto da opção como a chave do dicionário
+        selectElement.appendChild(option);  // Adiciona a opção ao combobox
+    }
+}
+document.querySelectorAll('select[name="packaging[]"]').forEach(populateSelect);
+// Seleciona todos os elementos <select> com o atributo name="packaging[]"
+
 
 
 

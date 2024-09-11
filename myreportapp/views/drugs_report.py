@@ -35,6 +35,24 @@ def drugs_report(request):
         'assine-o com seu certificado digital. Caso o laudo seja enviado à autoridade requisitante, '
         'ele deverá ser registrado oportunamente no Sistema GDL.'
     )
+
+    packaging = {
+    'Plástico com nó': 'invólucro(s) plástico(s) fechado(s) por nó encerrando',
+    'Plástico com filme': 'invólucro(s) plástico(s) do tipo "filme" retorcido encerrando',
+    'Plástico com zip': 'invólucro(s) plástico(s) fechado(s) por pressão (tipo "zip") encerrando',
+    'Plástico com calor': 'invólucro(s) plástico(s) fechado(s) por aquecimento encerrando',
+    'Plástico com alumínio': 'invólucro(s) constituído(s) por plástico e papel alumínio encerrando',
+    'Fita adesiva': 'invólucro(s) constituído(s) por fita(s) adesiva(s) retorcida(s) encerrando',
+    'Eppendorf': 'microtubo(s) plástico(s) do tipo "Eppendorf" dotado(s) de tampa própria encerrando',
+    'Frasco vítreo': 'Frasco(s) vítreo(s) fechado(s) por batoque e tampa própria contendo',
+    'Invólucro geral': 'invólucro(s) plástico(s) encerrando',
+    'Outros': '[DESCREVA A EMBALAGEM]',
+    'Apenas papel alumínio': 'invólucro(s) constituído(s) por papel alumínio encerrando',
+    'Frasco com válvula (lança perfume)': 'Frasco(s) vítreos dotado(s) de válvula aspersora contendo',
+    'Frasco plástico': 'Frasco(s) plástico(s) fechado(s) por tampa própria contendo',
+    'Fita adesiva com plástico filme': 'invólucro(s) constituído(s) por fita(s) adesiva(s) e plástico(s) encerrando',
+    'Garrafa pet': 'Garrafa(s) aparentemente do tipo PET, fechada(s) por tampa própria de rosca, contendo'
+    }
     
     # Contexto para renderizar o template
     context = {
@@ -46,6 +64,7 @@ def drugs_report(request):
         'before_date': before_date,  # Adicionando before_date ao contexto
         'user_name': user.full_name,
         'msg_about_this_form_to_user': msg_about_this_form_to_user,
+        'packaging': packaging,
     }
     
     return render(request, 'drugs_report.html', context)
