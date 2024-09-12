@@ -235,17 +235,20 @@ document.addEventListener('DOMContentLoaded', function() {
 function addItem() {
     itemCount++;  // Incrementa o contador para o novo item
 
+    itemPackagingSelected = '';
+    itemMorphologySelected = '';
+
     const container = document.getElementById('item-container');
     const newItem = document.createElement('div');
     newItem.className = 'item-group form-group border p-3 mb-3';
     newItem.innerHTML = `
-        <div class="item-header-dark mb-2">
+        <div class="mb-2 item-header-dark">
             <h5>Item ${itemCount}</h5>  <!-- Cabeçalho com número do item -->
         </div>
         <div class="form-row">
             <div class="form-group col-md-3">
                 <label for="packaging">Invólucro</label>
-                <select class="packaging-select form-control">
+                <select name="packaging[]" class="packaging-select form-control">
                     <option value="">Selecione uma opção</option>
                 </select>
             </div>
@@ -262,7 +265,7 @@ function addItem() {
 
             <div class="form-group col-md-3">
                 <label for="morphology">Morfologia</label>
-                <select class="morphology-select form-control">
+                <select name="morphology[]" class="morphology-select form-control">
                     <option value="">Selecione uma opção</option>
                 </select>
             </div>
@@ -338,35 +341,66 @@ function addItem() {
 
 
 
+// VARIÁVEIS QUE IRÃO PREENCHER O TEXTAREA DE ACORDO COM A ESCOLHA DO USUÁRIO
+let itemPackagingSelected = '';
+let itemMorphologySelected = '';
 
-
+// COMBOBOXES COM A DESCRIÇÃO DAS EMBALAGENS
 const packaging = {{ packaging|safe }};
 function populateSelectPac(selectElement) {
+    selectElement.innerHTML = '';
     for (const key in packaging) {
-        const option = document.createElement('option');  // Cria o elemento <option>
-        option.value = key;  // Define o valor como a chave do dicionário
-        option.text = key;  // Define o texto da opção como a chave do dicionário
-        selectElement.appendChild(option);  // Adiciona a opção ao combobox
+        const option = document.createElement('option');
+        option.value = key;
+        option.text = key;
+        selectElement.appendChild(option);
     }
+    selectElement.addEventListener('change', function() {
+        updateObservations(selectElement, packaging[selectElement.value]);
+    });
 }
-document.querySelectorAll('select[name="packaging[]"]').forEach(populateSelectPac);
 
+// COMBOBOXES COM AS MORFOLOGIAS
 const morphology = {{ morphology|safe }};
 function populateSelectMorph(selectElement) {
+    selectElement.innerHTML = '';
     for (const key in morphology) {
-        const option = document.createElement('option');  // Cria o elemento <option>
-        option.value = key;  // Define o valor como a chave do dicionário
-        option.text = key;  // Define o texto da opção como a chave do dicionário
-        selectElement.appendChild(option);  // Adiciona a opção ao combobox
+        const option = document.createElement('option');
+        option.value = key;
+        option.text = key;
+        selectElement.appendChild(option);
     }
+    selectElement.addEventListener('change', function() {
+        updateObservations(selectElement, morphology[selectElement.value]);
+    });
 }
+
+document.querySelectorAll('select[name="packaging[]"]').forEach(populateSelectPac);
 document.querySelectorAll('select[name="morphology[]"]').forEach(populateSelectMorph);
 
+function updateObservations(selectElement, selectedValue) {
+    const selectName = selectElement.name;
+    if (selectName === 'packaging[]') {
+        itemPackagingSelected = selectedValue;
+    } else if (selectName === 'morphology[]') {
+        itemMorphologySelected = selectedValue;
+    }
+    const parentContainer = selectElement.closest('div.form-row').parentElement;
+    const textarea = parentContainer.querySelector('textarea[name="observacoes[]"]');
+    if (textarea) {
+        textarea.value = `${itemPackagingSelected} ${itemMorphologySelected}`;
+    }
+}
 
 
+// -- ESTOU TRABALHANDO ATÉ AQUI
+
+
+
+
+// IMAGEM DO MATERIAL RECEBIDO
 const allMaterialImg = document.querySelector('#escolher-imagem-geral');
 let selectedAllMaterialImg = null;
-
 allMaterialImg.addEventListener('change', function(event) {
     const files = event.target.files;
     if (files.length > 0) {
@@ -376,7 +410,7 @@ allMaterialImg.addEventListener('change', function(event) {
 
 
 document.addEventListener('DOMContentLoaded', function() {
-    const submitButton = document.getElementById('enviar');
+    const submitButton = document.querySelector('#enviar');
 
     submitButton.addEventListener('click', function(event) {
         event.preventDefault(); // Previne o envio do formulário para fins de teste
