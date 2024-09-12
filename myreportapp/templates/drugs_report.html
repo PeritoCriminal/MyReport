@@ -266,6 +266,7 @@ function addItem() {
 
     itemPackagingSelected = '';
     itemMorphologySelected = '';
+    itemExamResultSelected = '';
 
     const container = document.getElementById('item-container');
     const newItem = document.createElement('div');
@@ -313,61 +314,35 @@ function addItem() {
                     </div>
                 </div>
             </div>
-
-
-
-
-
-
-
-
             <div class="form-group col-md-3">
                 <label for="examresulting">Resdultado do Exame</label>
                 <select name="examresulting[]" class="exam-resulting form-control">
                     <option value="">Selecione uma opção</option>
                 </select>
             </div>
-
-
-
-
-
-
-
-
-
-
-
             <div class="form-group col-md-3">
                 <label for="lacre-entrada">Lacre de Entrada</label>
                 <input type="text" name="lacre_entrada[]" class="form-control" placeholder="Lacre de Entrada" style="text-transform: uppercase;" required>
             </div>
-
             <div class="form-group col-md-3">
                 <label for="lacre-saida">Lacre de Saída</label>
                 <input type="text" name="lacre_saida[]" class="form-control" placeholder="Lacre de Saída" style="text-transform: uppercase;" required>
             </div>
         </div>
-
-        <!-- Campo de texto para observações -->
         <div class="form-group">
             <label for="observacoes">Invlócros e Morfologia</label>
             <textarea class="form-control" name="observacoes[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
         </div>
-
         <div class="form-group">
             <label for="observations_about_return">Devolução e Contraperícia</label>
             <textarea class="form-control" name="observations_about_return[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
         </div>
-
         <div class="d-flex justify-content-between align-items-center mt-3">
             <input type="file" name="imagem[]" class="form-control-file">
-
             <div class="form-check form-group flex-grow-1 mx-3 w-100">
                 <label for="imagem-legenda_item">Legenda da Imagem</label>
                 <input type="text" class="form-control" name="imagem_legenda_item[]" value="Item examinado">
             </div>
-
             <button type="button" class="btn btn-secondary add-item">+</button>
             <button type="button" class="btn btn-danger ml-2 remove-item">-</button>
         </div>
@@ -404,6 +379,7 @@ function addItem() {
 // VARIÁVEIS QUE IRÃO PREENCHER O TEXTAREA DE ACORDO COM A ESCOLHA DO USUÁRIO
 let itemPackagingSelected = '';
 let itemMorphologySelected = '';
+let itemExamResult = '';
 
 // COMBOBOXES COM A DESCRIÇÃO DAS EMBALAGENS
 const packaging = {{ packaging|safe }};
@@ -482,15 +458,25 @@ function updateObservations(selectElement, selectedValue) {
     }
     else if (selectName === 'examresulting[]') {
         itemExamResult = selectedValue;
-        // Exibe o nome e o valor selecionado do elemento
-        alert(`Elemento = ${selectElement.name} - Valor = ${itemExamResult}`);
+        //alert(`Elemento = ${selectElement.name} - Valor = ${itemExamResult}`);
+        itemExamResultSelected = itemExamResult.trim();
     }
+
     const parentContainer = selectElement.closest('div.form-row').parentElement;
+
+    // Atualiza o textarea "observacoes[]"
     const textarea = parentContainer.querySelector('textarea[name="observacoes[]"]');
     if (textarea) {
         textarea.value = `${itemPackagingSelected} ${itemMorphologySelected}`;
     }
+
+    // Atualiza o textarea "observations_about_return[]"
+    const returnTextarea = parentContainer.querySelector('textarea[name="observations_about_return[]"]');
+    if (returnTextarea) {
+        returnTextarea.value = itemExamResultSelected;
+    }
 }
+
 
 
 // -- ESTOU TRABALHANDO ATÉ AQUI
