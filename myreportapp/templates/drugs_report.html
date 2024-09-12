@@ -125,17 +125,41 @@
             </div>    
             <div class="form-row">
                 <div class="form-group col-md-3">
-                    <div class="form-check">
-                        <input type="checkbox" name="devolvido[]" id="devolvido" class="form-check-input" checked>
-                        <label for="devolvido" class="form-check-label">Devolvido</label>
+                    <div class="d-flex flex-column">
+                        <div class="form-check">
+                            <input type="checkbox" name="devolvido[]" id="devolvido" class="form-check-input" checked>
+                            <label for="devolvido" class="form-check-label">Devolvido</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" name="contrapericia[]" id="contrapericia" class="form-check-input" checked>
+                            <label for="contrapericia" class="form-check-label">Contraperícia</label>
+                        </div>
                     </div>
-                </div>    
+                </div>
+
+
+
+
+
+
+
+
+
                 <div class="form-group col-md-3">
-                    <div class="form-check">
-                        <input type="checkbox" name="contrapericia[]" id="contrapericia" class="form-check-input" checked>
-                        <label for="contrapericia" class="form-check-label">Contraperícia</label>
-                    </div>
+                    <label for="examresulting">Resdultado do Exame</label>
+                    <select id="examresulting" name="examresulting[]" class="exam-resulting form-control">
+                        <option value="">Selecione uma opção</option>
+                    </select>
                 </div>    
+
+
+
+
+
+
+
+
+
                 <div class="form-group col-md-3">
                     <label for="lacre-entrada">Lacre de Entrada</label>
                     <input type="text" name="lacre_entrada[]" id="lacre-entrada" class="form-control" placeholder="Lacre de Entrada" style="text-transform: uppercase;" required>
@@ -148,8 +172,13 @@
     
             <!-- Campo de texto para observações -->
             <div class="form-group">
-                <label for="observacoes">Observações</label>
+                <label for="observacoes">Invólucros e Morfologia</label>
                 <textarea class="form-control" id="observacoes" name="observacoes[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="observations_about_return">Devolução e Contraperícia</label>
+                <textarea class="form-control" id="observations_about_return" name="observations_about_return[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
             </div>
     
             <div class="d-flex align-items-center">
@@ -273,18 +302,41 @@ function addItem() {
 
         <div class="form-row">
             <div class="form-group col-md-3">
-                <div class="form-check">
-                    <input type="checkbox" name="devolvido[]" class="form-check-input" checked>
-                    <label class="form-check-label">Devolvido</label>
+                <div class="d-flex flex-column">
+                    <div class="form-check">
+                        <input type="checkbox" name="devolvido[]" class="form-check-input" checked>
+                        <label for="devolvido" class="form-check-label">Devolvido</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" name="contrapericia[]" class="form-check-input" checked>
+                        <label for="contrapericia" class="form-check-label">Contraperícia</label>
+                    </div>
                 </div>
             </div>
 
+
+
+
+
+
+
+
             <div class="form-group col-md-3">
-                <div class="form-check">
-                    <input type="checkbox" name="contrapericia[]" class="form-check-input" checked>
-                    <label class="form-check-label">Contraperícia</label>
-                </div>
+                <label for="examresulting">Resdultado do Exame</label>
+                <select name="examresulting[]" class="exam-resulting form-control">
+                    <option value="">Selecione uma opção</option>
+                </select>
             </div>
+
+
+
+
+
+
+
+
+
+
 
             <div class="form-group col-md-3">
                 <label for="lacre-entrada">Lacre de Entrada</label>
@@ -299,8 +351,13 @@ function addItem() {
 
         <!-- Campo de texto para observações -->
         <div class="form-group">
-            <label for="observacoes">Observações</label>
+            <label for="observacoes">Invlócros e Morfologia</label>
             <textarea class="form-control" name="observacoes[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="observations_about_return">Devolução e Contraperícia</label>
+            <textarea class="form-control" name="observations_about_return[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
         </div>
 
         <div class="d-flex justify-content-between align-items-center mt-3">
@@ -322,6 +379,9 @@ function addItem() {
 
     const newSelectMorph = newItem.querySelector('.morphology-select');
     populateSelectMorph(newSelectMorph);
+
+    const newSelectExamREsulting = newItem.querySelector('.exam-resulting');
+    populateSelectExamResulting(newSelectExamREsulting);
 
     // Adiciona event listeners aos novos botões
     newItem.querySelector('.add-item').addEventListener('click', addItem);
@@ -375,15 +435,55 @@ function populateSelectMorph(selectElement) {
     });
 }
 
+
+
+
+
+
+
+
+// COMBOBOXES COM AS OPÇÕES DE RESULTADOS.
+const examresulting = {{ exam_resulting|safe }};
+function populateSelectExamResulting(selectElement) {
+    selectElement.innerHTML = '';
+    for (const key in examresulting) {
+        const option = document.createElement('option');
+        option.value = key;
+        option.text = key;
+        selectElement.appendChild(option);
+    }
+    selectElement.addEventListener('change', function() {
+        updateObservations(selectElement, examresulting[selectElement.value]);
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
 document.querySelectorAll('select[name="packaging[]"]').forEach(populateSelectPac);
 document.querySelectorAll('select[name="morphology[]"]').forEach(populateSelectMorph);
+document.querySelectorAll('select[name="examresulting[]"]').forEach(populateSelectExamResulting);
 
 function updateObservations(selectElement, selectedValue) {
+    console.log(selectedValue);
     const selectName = selectElement.name;
     if (selectName === 'packaging[]') {
         itemPackagingSelected = selectedValue;
     } else if (selectName === 'morphology[]') {
         itemMorphologySelected = selectedValue;
+    }
+    else if (selectName === 'examresulting[]') {
+        itemExamResult = selectedValue;
+        // Exibe o nome e o valor selecionado do elemento
+        alert(`Elemento = ${selectElement.name} - Valor = ${itemExamResult}`);
     }
     const parentContainer = selectElement.closest('div.form-row').parentElement;
     const textarea = parentContainer.querySelector('textarea[name="observacoes[]"]');

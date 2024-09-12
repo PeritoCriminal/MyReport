@@ -37,6 +37,7 @@ def drugs_report(request):
     )
 
     packaging = {
+    'Selecione uma opção':'',
     'Plástico com nó': 'invólucro(s) plástico(s) fechado(s) por nó encerrando',
     'Plástico com filme': 'invólucro(s) plástico(s) do tipo "filme" retorcido encerrando',
     'Plástico com zip': 'invólucro(s) plástico(s) fechado(s) por pressão (tipo "zip") encerrando',
@@ -55,6 +56,7 @@ def drugs_report(request):
     }
 
     morphology = {
+    'Selecione uma opção':'',
     'erva': 'porção de fragmentos vegetais ressequidos, constituídos de folhas, folíolos, inflorescências, caules e frutos.',
     'tijolo': 'contendo porção de fragmentos vegetais ressequidos, constituídos de folhas, folíolos, inflorescências, caules e frutos, compactados na forma de tijolo.',
     'planta': 'contendo planta arbustiva com [XX] cm de comprimento e constituído por raiz, caule, folhas, folíolos, inflorescência e frutos',
@@ -87,6 +89,13 @@ def drugs_report(request):
     'peneira': 'contendo peneira de formato circular, dotada de cabo e trama [material: metálicos, de plástico], apresentando resquícios/sujidades.'
     }
 
+    exam_resulting = {
+        'Selecione uma opção': '',
+        'negativo': 'NÃO FOI POSSÍVEL IDENTIFICAR presença de substâncias elencadas nas listas A, B e F da Portaria SVS/MS 344/98 e atualizações posteriores, ou na Portaria MJSP 204/2022, em sua lista III, conforme a(s) técnica(s) utilizada(s) (Portaria SPTC 42/2024)',
+        'inconclusivo': 'Os exames/análises preliminares mostraram-se INCONCLUSIVOS, sendo necessárias análises mais complexas e morosas, incompatíveis com a rapidez demandada pelos exames de constatação. O resultado deste presente item seguirá em laudo definitivo.',
+        'cocaína': 'foi DETECTADA presença da substância COCAÍNA, constante na lista F1 da Portaria SVS/MS 344/98 e atualizações posteriores',
+        'thc': 'foi DETECTADA presença da substância TETRAHIDROCANNABINOL (THC), constante na lista F2 da Portaria SVS/MS 344/98 e atualizações posteriores'
+    }
     
     # Contexto para renderizar o template
     context = {
@@ -100,6 +109,7 @@ def drugs_report(request):
         'msg_about_this_form_to_user': msg_about_this_form_to_user,
         'packaging': packaging,
         'morphology': morphology,
+        'exam_resulting': exam_resulting,
     }
     
     return render(request, 'drugs_report.html', context)
