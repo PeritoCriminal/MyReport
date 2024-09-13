@@ -101,6 +101,7 @@ def drugs_report(request):
     context = {
         'protocol_prefix': 'TOX',
         'delegacia': 'Del. Sec. Limeira Plantão',
+        'lacre_saida': 'SPTC',
         'today_date': today_date,
         'current_time': formatted_current_time,
         'before_time': formatted_before_time,

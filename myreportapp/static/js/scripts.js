@@ -3,6 +3,10 @@ function formatStringWithYear(str, date) {
     Formata a numeração do Laudo, Protocolo e Boletim, incluindo o ano do registro.
     Aplica o formato "X.XXX/AAAA".
     */
+
+    if (str.includes('/')) {
+        return str.toUpperCase();
+    }
     let _date;
     if (date instanceof Date) {
         _date = new Date(date);
@@ -70,7 +74,7 @@ function generatePreamble(designatedDate, city, director, reportingExpert, reque
 }
 
 function toNiceName(nomeDeAlguem) {
-    
+
     // Lista de preposições que devem permanecer em minúsculas quando não estiverem no início ou no fim do nome
     const preposicoes = new Set(['de', 'da', 'do', 'dos', 'das', 'e', 'ou', 'para', 'com', 'em', 'a', 'o', 'do', 'dos']);
 

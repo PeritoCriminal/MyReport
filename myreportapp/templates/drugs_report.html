@@ -97,6 +97,12 @@
                     <select id="packaging" name="packaging[]" class="form-control">
                         <option value="">Selecione uma opção</option>
                     </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="morphology">Morfologia</label>
+                    <select id="morphology" name="morphology[]" class="form-control">
+                        <option value="">Selecione uma opção</option>
+                    </select>
                 </div>    
                 <div class="form-group col-md-3">
                     <label for="massa-bruta">Massa Bruta (g)</label>
@@ -106,12 +112,7 @@
                     <label for="massa-liquida">Massa Líquida (g)</label>
                     <input type="number" step="0.01" name="massa_liquida[]" id="massa-liquida" class="form-control" placeholder="Massa Líquida" required>
                 </div>    
-                <div class="form-group col-md-3">
-                    <label for="morphology">Morfologia</label>
-                    <select id="morphology" name="morphology[]" class="form-control">
-                        <option value="">Selecione uma opção</option>
-                    </select>
-                </div>
+                
             </div>    
             <div class="form-row">
                 <div class="form-group col-md-3">
@@ -138,7 +139,7 @@
                 </div>    
                 <div class="form-group col-md-3">
                     <label for="lacre-saida">Lacre de Saída</label>
-                    <input type="text" name="lacre_saida[]" id="lacre-saida" class="form-control" placeholder="Lacre de Saída" style="text-transform: uppercase;" required>
+                    <input type="text" name="lacre_saida[]" id="lacre-saida" class="form-control" placeholder="Lacre de Saída" style="text-transform: uppercase;" required value="{{ lacre_saida }}">
                 </div>
             </div>    
             <div class="form-group">
@@ -252,7 +253,12 @@ function addItem() {
                     <option value="">Selecione uma opção</option>
                 </select>
             </div>
-
+            <div class="form-group col-md-3">
+                <label for="morphology">Morfologia</label>
+                <select name="morphology[]" class="morphology-select form-control">
+                    <option value="">Selecione uma opção</option>
+                </select>
+            </div>
             <div class="form-group col-md-3">
                 <label for="massa-bruta">Massa Bruta (g)</label>
                 <input type="number" step="0.01" name="massa_bruta[]" class="form-control" placeholder="Massa Bruta" required>
@@ -262,12 +268,7 @@ function addItem() {
                 <label for="massa-liquida">Massa Líquida (g)</label>
                 <input type="number" step="0.01" name="massa_liquida[]" class="form-control" placeholder="Massa Líquida" required>
             </div>
-            <div class="form-group col-md-3">
-                <label for="morphology">Morfologia</label>
-                <select name="morphology[]" class="morphology-select form-control">
-                    <option value="">Selecione uma opção</option>
-                </select>
-            </div>
+            
         </div>
         <div class="form-row">
             <div class="form-group col-md-3">
@@ -294,7 +295,7 @@ function addItem() {
             </div>
             <div class="form-group col-md-3">
                 <label for="lacre-saida">Lacre de Saída</label>
-                <input type="text" name="lacre_saida[]" class="form-control" placeholder="Lacre de Saída" style="text-transform: uppercase;" required>
+                <input type="text" name="lacre_saida[]" class="form-control" placeholder="Lacre de Saída" style="text-transform: uppercase;" required value="{{ lacre_saida }}">
             </div>
         </div>
         <div class="form-group">
@@ -474,152 +475,154 @@ document.addEventListener('DOMContentLoaded', function() {
 
     submitButton.addEventListener('click', function(event) {
         event.preventDefault(); // Previne o envio do formulário para fins de teste
-        
-        // Inputs para variáveis
-        let protocol = document.querySelector('#protocolo').value;
-        if (protocol.trim() === '' || protocol === 'TOX') {
-            alert('Valor para Protocolo inválido.');
-            document.querySelector('#protocolo').value = 'TOX';
-            document.querySelector('#protocolo').focus();
-            return;
-        }       
 
-        let policereport = document.querySelector('#boletim').value;
-        if (policereport.trim() === ''){
-            alert('Valor para Boletim inválido.')
-            document.querySelector('#boletim').value = '';
-            document.querySelector('#boletim').focus();
-            return;
-        }
+        formCheking();
 
-        let policestation = document.querySelector('#delegacia').value;
-        if (policestation.trim() === ''){
-            alert('Valor para Delegacia inválido.')
-            document.querySelector('#delegacia').value = '';
-            document.querySelector('#delegacia').focus();
-            return;
-        }
-
-        let authority = document.querySelector('#autoridade_requisitante').value;
-        if (authority.trim() === ''){
-            alert('Valor para Autoridade Requisitante inválido.')
-            document.querySelector('#autoridade_requisitante').value = '';
-            document.querySelector('#autoridade_requisitante').focus();
-            return;
-        }
-
-        let serviceDate;
-        try {
-            serviceDate = new Date(document.querySelector('#data_atendimento').value);
-            if (isNaN(serviceDate.getTime())) {
-                throw new Error('Data inválida.');
-            }
-        } catch (error) {
-            alert(`${error.message}`);
-            document.querySelector('#data_atendimento').focus();
-            return;
-        }
-        let serviceHour;
-        try {
-            serviceHour = new Date(`1970-01-01T${document.querySelector('#hora_atendimento').value}:00`);
-            if (isNaN(serviceHour.getTime())) {
-                throw new Error('Hora inválida.');
-            }
-        } catch (error) {
-            alert(`${error.message}`);
-            document.querySelector('#hora_atendimento').focus();
-            return;
-        }
-        let releaseDate;
-        try {
-            releaseDate = new Date(document.querySelector('#data_liberacao').value);
-            if (isNaN(releaseDate.getTime())) {
-                throw new Error('Data inválida.');
-            }
-        } catch (error) {
-            alert(`${error.message}`);
-            document.querySelector('#data_liberacao').focus();
-            return;
-        }
-        let releaseHour;
-        try {
-            releaseHour = new Date(`1970-01-01T${document.querySelector('#hora_liberacao').value}:00`);
-            if (isNaN(releaseHour.getTime())) {
-                throw new Error('Hora inválida.');
-            }
-        } catch (error) {
-            alert(`${error.message}`);
-            document.querySelector('#hora_liberacao').focus();
-            return;
-        }
-
-        let dateTimeService = new Date(
-            serviceDate.getFullYear(),
-            serviceDate.getMonth(),
-            serviceDate.getDate(),
-            serviceHour.getHours(),
-            serviceHour.getMinutes()
-        );
-        let dateTimeRelease = new Date(
-            releaseDate.getFullYear(),
-            releaseDate.getMonth(),
-            releaseDate.getDate(),
-            releaseHour.getHours(),
-            releaseHour.getMinutes()
-        );
-        if (dateTimeService > dateTimeRelease) {
-            alert('A data e hora do acionamento não pode ser superior à data e hora da liberação.');
-            document.querySelector('#data_atendimento').focus();
-            return;
-        }
-
-        let substances = [];
-        const checkboxes = document.querySelectorAll('input[name="substance"]');
-        checkboxes.forEach(checkbox => {
-            if (checkbox.checked) {
-                substances.push(checkbox.value);
-            }
-        });
-        if (substances.length === 0) {
-            alert('Nenhuma substância foi selecionada.');
-            if (checkboxes.length > 0) {
-                checkboxes[0].focus();
-            }
-            return;
-        }
-
-        let materialReceivedObservations = document.querySelector('#observacoes_material_total').value.trim();
-        
-        let labelAllMaterialImg = document.querySelector('#imagem-legenda').value;        
-        
-        let listOfPeople = document.querySelectorAll('input[name="people_involved[]"]');
-        let involvedPeople = [];
-        listOfPeople.forEach(person => {
-            if (person.value) { 
-                involvedPeople.push(person.value);
-            }
-        });
-
-        //  CONTINUAR DESSE PONTO EM DIANTE. 
-
-        alert(`${protocol}\n${policereport}\n
-        ${policestation}\n${authority}\n${serviceDate}\n
-        ${releaseDate}\n${serviceHour}\n${releaseHour}\n
-        ${substances}\n${materialReceivedObservations}\n
-        ${selectedAllMaterialImg}\n${labelAllMaterialImg}\n
-        ${involvedPeople.join(', ')}`);
-
-        teste('Tudo ok até aqui'); // aqui funciona
-
-        let testando = toNiceName('marCOS DE OLIVira capristo das DorES DOS SONHOS'); //Aqui não
-        alert(testando);
-
-        teste('Não ok aqui'); // aqui não
-        
-        // E ACABAR DE PREENCHER ESSA CAIXA DE DIÁLOGO        
-        
     });
-});
+});   
+
+
+function formCheking(){
+    let protocol = document.querySelector('#protocolo').value;
+    if (protocol.trim() === '' || protocol === 'TOX') {
+        alert('Valor para Protocolo inválido.');
+        document.querySelector('#protocolo').value = 'TOX';
+        document.querySelector('#protocolo').focus();
+        return;
+    }       
+
+    let policereport = document.querySelector('#boletim').value;
+    if (policereport.trim() === ''){
+        alert('Valor para Boletim inválido.')
+        document.querySelector('#boletim').value = '';
+        document.querySelector('#boletim').focus();
+        return;
+    }
+
+    let policestation = document.querySelector('#delegacia').value;
+    if (policestation.trim() === ''){
+        alert('Valor para Delegacia inválido.')
+        document.querySelector('#delegacia').value = '';
+        document.querySelector('#delegacia').focus();
+        return;
+    }
+
+    let authority = document.querySelector('#autoridade_requisitante').value;
+    if (authority.trim() === ''){
+        alert('Valor para Autoridade Requisitante inválido.')
+        document.querySelector('#autoridade_requisitante').value = '';
+        document.querySelector('#autoridade_requisitante').focus();
+        return;
+    }
+
+    let serviceDate;
+    try {
+        serviceDate = new Date(document.querySelector('#data_atendimento').value);
+        if (isNaN(serviceDate.getTime())) {
+            throw new Error('Data inválida.');
+        }
+    } catch (error) {
+        alert(`${error.message}`);
+        document.querySelector('#data_atendimento').focus();
+        return;
+    }
+    let serviceHour;
+    try {
+        serviceHour = new Date(`1970-01-01T${document.querySelector('#hora_atendimento').value}:00`);
+        if (isNaN(serviceHour.getTime())) {
+            throw new Error('Hora inválida.');
+        }
+    } catch (error) {
+        alert(`${error.message}`);
+        document.querySelector('#hora_atendimento').focus();
+        return;
+    }
+    let releaseDate;
+    try {
+        releaseDate = new Date(document.querySelector('#data_liberacao').value);
+        if (isNaN(releaseDate.getTime())) {
+            throw new Error('Data inválida.');
+        }
+    } catch (error) {
+        alert(`${error.message}`);
+        document.querySelector('#data_liberacao').focus();
+        return;
+    }
+    let releaseHour;
+    try {
+        releaseHour = new Date(`1970-01-01T${document.querySelector('#hora_liberacao').value}:00`);
+        if (isNaN(releaseHour.getTime())) {
+            throw new Error('Hora inválida.');
+        }
+    } catch (error) {
+        alert(`${error.message}`);
+        document.querySelector('#hora_liberacao').focus();
+        return;
+    }
+
+    let dateTimeService = new Date(
+        serviceDate.getFullYear(),
+        serviceDate.getMonth(),
+        serviceDate.getDate(),
+        serviceHour.getHours(),
+        serviceHour.getMinutes()
+    );
+    let dateTimeRelease = new Date(
+        releaseDate.getFullYear(),
+        releaseDate.getMonth(),
+        releaseDate.getDate(),
+        releaseHour.getHours(),
+        releaseHour.getMinutes()
+    );
+    if (dateTimeService > dateTimeRelease) {
+        alert('A data e hora do acionamento não pode ser superior à data e hora da liberação.');
+        document.querySelector('#data_atendimento').focus();
+        return;
+    }
+
+    let substances = [];
+    const checkboxes = document.querySelectorAll('input[name="substance"]');
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            substances.push(checkbox.value);
+        }
+    });
+    if (substances.length === 0) {
+        alert('Nenhuma substância foi selecionada.');
+        if (checkboxes.length > 0) {
+            checkboxes[0].focus();
+        }
+        return;
+    }
+
+    let materialReceivedObservations = document.querySelector('#observacoes_material_total').value.trim();
+    
+    let labelAllMaterialImg = document.querySelector('#imagem-legenda').value;        
+    
+    let listOfPeople = document.querySelectorAll('input[name="people_involved[]"]');
+    let involvedPeople = [];
+    listOfPeople.forEach(person => {
+        if (person.value) { 
+            involvedPeople.push(person.value);
+        }
+    });
+
+    let protocolNumber = formatStringWithYear(protocol, serviceDate);
+    let policeReportNumber = formatStringWithYear(policereport, serviceDate);
+
+    alert(`${protocolNumber}\n${policeReportNumber}\n
+    ${policestation}\n${authority}\n${serviceDate}\n
+    ${releaseDate}\n${serviceHour}\n${releaseHour}\n
+    ${substances}\n${materialReceivedObservations}\n
+    ${selectedAllMaterialImg}\n${labelAllMaterialImg}\n
+    ${involvedPeople.join(', ')}`);
+
+    teste('Tudo ok até aqui');
+
+    
+    // E ACABAR DE PREENCHER ESSA CAIXA DE DIÁLOGO        
+    
+}
 
 
 </script>
