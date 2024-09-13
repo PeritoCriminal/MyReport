@@ -69,6 +69,33 @@ function generatePreamble(designatedDate, city, director, reportingExpert, reque
     return preamble;
 }
 
+function toNiceName(nomeDeAlguem) {
+    
+    // Lista de preposições que devem permanecer em minúsculas quando não estiverem no início ou no fim do nome
+    const preposicoes = new Set(['de', 'da', 'do', 'dos', 'das', 'e', 'ou', 'para', 'com', 'em', 'a', 'o', 'do', 'dos']);
+
+    // Divide o nome em palavras
+    const palavras = nomeDeAlguem.split(/\s+/);
+
+    // Converte as palavras de acordo com as regras
+    const palavrasFormatadas = palavras.map((palavra, index) => {
+        // Converte a palavra para minúscula
+        const palavraFormatada = palavra.toLowerCase();
+
+        // Se a palavra é uma preposição e não está no início ou no fim do nome, mantém em minúsculas
+        if (preposicoes.has(palavraFormatada) && index !== 0 && index !== palavras.length - 1) {
+            return palavraFormatada;
+        } else {
+            // Caso contrário, capitaliza a primeira letra
+            return palavraFormatada.charAt(0).toUpperCase() + palavraFormatada.slice(1);
+        }
+    });
+
+    // Junta as palavras formatadas em uma string
+    return palavrasFormatadas.join(' ');
+}
+
+
 
 function teste(texto) {
     alert(texto)

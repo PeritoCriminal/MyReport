@@ -3,17 +3,12 @@
 {% block title %}Entorpecentes - Constatação Provisória{% endblock title %}
 
 {% block content %}
-<h2 class="titulo-2">Entorpecentes - Constatação Provisória</h2>
-<br>
 
-<!-- Formulário Drug_report
-    Os valores dos campos serão tratados para depois serem postados.
--->
+    <h2 class="titulo-2">Entorpecentes - Constatação Provisória</h2>
+
 <form id="drug-report-form">
-    <div class="alert alert-warning">
-                   
+    <div class="alert alert-warning">                   
         {{ msg_about_this_form_to_user|safe }}
-
     </div>
     <div class="item-group form-group border p-3 mb-3">
         <div class="form-group d-flex justify-content-between">
@@ -67,15 +62,11 @@
                     <input class="form-check-input" type="checkbox" id="checkboxCrack" name="substance" value="crack" checked>
                     <label class="form-check-label" for="checkboxCrack">Crack</label>
                 </div>
-            </div>
-            
-            <!-- Observações - Caixa de texto opcional -->
+            </div>            
             <div class="form-group">
                 <label for="observacoes_material_total">Observações</label>
                 <textarea class="form-control" id="observacoes_material_total" name="observacoes_material_total" rows="3" placeholder="Opcional."></textarea>
             </div>
-        
-            <!-- Input file com legenda -->
             <div class="form-group d-flex align-items-center justify-content-between">
                 <div class="form-check form-check-inline">
                     <input type="file" class="form-control-file" id="escolher-imagem-geral" name="escolher_imagem[]" accept="image/*">
@@ -85,8 +76,7 @@
                     <input type="text" class="form-control" id="imagem-legenda" name="imagem_legenda" value="Material recebido.">
                 </div>
             </div>
-        </div>
-        
+        </div>        
     </div>
     <div id="people-involved-container">
         <label>Pessoas Envolvidas</label>
@@ -99,7 +89,7 @@
         <label>Itens</label>    
         <div class="item-group form-group border p-3 mb-3">
             <div class="item-header-dark mb-2">
-                <h5>Item 1</h5>
+                <h5 name="item_header[]">Item Único</h5>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-3">
@@ -136,30 +126,12 @@
                         </div>
                     </div>
                 </div>
-
-
-
-
-
-
-
-
-
                 <div class="form-group col-md-3">
                     <label for="examresulting">Resdultado do Exame</label>
                     <select id="examresulting" name="examresulting[]" class="exam-resulting form-control">
                         <option value="">Selecione uma opção</option>
                     </select>
-                </div>    
-
-
-
-
-
-
-
-
-
+                </div>
                 <div class="form-group col-md-3">
                     <label for="lacre-entrada">Lacre de Entrada</label>
                     <input type="text" name="lacre_entrada[]" id="lacre-entrada" class="form-control" placeholder="Lacre de Entrada" style="text-transform: uppercase;" required>
@@ -169,40 +141,27 @@
                     <input type="text" name="lacre_saida[]" id="lacre-saida" class="form-control" placeholder="Lacre de Saída" style="text-transform: uppercase;" required>
                 </div>
             </div>    
-    
-            <!-- Campo de texto para observações -->
             <div class="form-group">
                 <label for="observacoes">Invólucros e Morfologia</label>
                 <textarea class="form-control" id="observacoes" name="observacoes[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
             </div>
-
             <div class="form-group">
-                <label for="observations_about_return">Devolução e Contraperícia</label>
+                <label for="observations_about_return">Resultado do Exame</label>
                 <textarea class="form-control" id="observations_about_return" name="observations_about_return[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
-            </div>
-    
+            </div>    
             <div class="d-flex align-items-center">
-                <!-- Input para seleção de imagem -->
                 <input type="file" class="form-control-file" id="escolher-imagem" name="escolher_imagem[]" accept="image/*">
-                
                 <div class="form-check form-group flex-grow-1 mx-3 w-100">
                     <label for="imagem-legenda_item">Legenda da Imagem</label>
                     <input type="text" class="form-control" id="imagem-legenda_item" name="imagem_legenda_item[]" value="Item examinado">
                 </div>
-                
-                <!-- Botão alinhado à direita -->
                 <button type="button" class="btn btn-secondary ml-auto add-item">+</button>
             </div>
-            
         </div>
     </div>
-
 </div>
 </div>
-
-<!-- Novo item-group com inputs de imagem e legendas -->
 <div class="item-group form-group border p-3 mb-3">
-    <!-- Material Devolvido -->
     <div class="form-group d-flex justify-content-between">
         <div class="form-check form-group">
             <label for="material-devolvido">Material Devolvido</label>
@@ -213,8 +172,6 @@
             <input type="text" class="form-control" id="material-devolvido-legenda" name="material_devolvido_legenda" value="Material devolvido após exame.">
         </div>
     </div>
-
-    <!-- Contraperícia -->
     <div class="form-group d-flex justify-content-between">
         <div class="form-check form-group">
             <label for="contrapericia-imagem">Contraperícia</label>
@@ -226,16 +183,12 @@
         </div>
     </div>
 </div>
-
 <div class="form-group">
     <label for="conclusao">Conclusão</label>
     <textarea class="form-control" id="conclusao" name="conclusao" rows="4" placeholder="Digite a conclusão aqui..."></textarea>
 </div>
-
     <button type="submit" class="btn btn-primary" id='enviar'>Enviar</button>
-    
 </form>
-
 <script>
 // Adicionar novos campos para pessoas envolvidas
 document.getElementById('people-involved-container').addEventListener('click', function (event) {
@@ -257,23 +210,40 @@ document.getElementById('people-involved-container').addEventListener('click', f
 });
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 document.addEventListener('DOMContentLoaded', function() {
-    // Função para adicionar um novo item
-    let itemCount = 1;  // Contador global para itens
+    updateItemHeaders();
+    //let itemCount = 1;
 
 function addItem() {
-    itemCount++;  // Incrementa o contador para o novo item
-
     itemPackagingSelected = '';
     itemMorphologySelected = '';
     itemExamResultSelected = '';
-
     const container = document.getElementById('item-container');
     const newItem = document.createElement('div');
     newItem.className = 'item-group form-group border p-3 mb-3';
     newItem.innerHTML = `
         <div class="mb-2 item-header-dark">
-            <h5>Item ${itemCount}</h5>  <!-- Cabeçalho com número do item -->
+            <h5 name="item_header[]">Item n</h5>
         </div>
         <div class="form-row">
             <div class="form-group col-md-3">
@@ -292,7 +262,6 @@ function addItem() {
                 <label for="massa-liquida">Massa Líquida (g)</label>
                 <input type="number" step="0.01" name="massa_liquida[]" class="form-control" placeholder="Massa Líquida" required>
             </div>
-
             <div class="form-group col-md-3">
                 <label for="morphology">Morfologia</label>
                 <select name="morphology[]" class="morphology-select form-control">
@@ -300,7 +269,6 @@ function addItem() {
                 </select>
             </div>
         </div>
-
         <div class="form-row">
             <div class="form-group col-md-3">
                 <div class="d-flex flex-column">
@@ -334,7 +302,7 @@ function addItem() {
             <textarea class="form-control" name="observacoes[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
         </div>
         <div class="form-group">
-            <label for="observations_about_return">Devolução e Contraperícia</label>
+            <label for="observations_about_return">Resultado dos Exames</label>
             <textarea class="form-control" name="observations_about_return[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
         </div>
         <div class="d-flex justify-content-between align-items-center mt-3">
@@ -347,7 +315,6 @@ function addItem() {
             <button type="button" class="btn btn-danger ml-2 remove-item">-</button>
         </div>
     `;
-
     container.appendChild(newItem);
     const newSelectPac = newItem.querySelector('.packaging-select');
     populateSelectPac(newSelectPac);
@@ -362,7 +329,9 @@ function addItem() {
     newItem.querySelector('.add-item').addEventListener('click', addItem);
     newItem.querySelector('.remove-item').addEventListener('click', function() {
         newItem.remove();
+        updateItemHeaders();
     });
+    updateItemHeaders();
 }
     
     // Inicializa event listeners no item original
@@ -373,8 +342,6 @@ function addItem() {
         }
     });
 });
-
-
 
 // VARIÁVEIS QUE IRÃO PREENCHER O TEXTAREA DE ACORDO COM A ESCOLHA DO USUÁRIO
 let itemPackagingSelected = '';
@@ -411,13 +378,6 @@ function populateSelectMorph(selectElement) {
     });
 }
 
-
-
-
-
-
-
-
 // COMBOBOXES COM AS OPÇÕES DE RESULTADOS.
 const examresulting = {{ exam_resulting|safe }};
 function populateSelectExamResulting(selectElement) {
@@ -432,18 +392,6 @@ function populateSelectExamResulting(selectElement) {
         updateObservations(selectElement, examresulting[selectElement.value]);
     });
 }
-
-
-
-
-
-
-
-
-
-
-
-
 document.querySelectorAll('select[name="packaging[]"]').forEach(populateSelectPac);
 document.querySelectorAll('select[name="morphology[]"]').forEach(populateSelectMorph);
 document.querySelectorAll('select[name="examresulting[]"]').forEach(populateSelectExamResulting);
@@ -478,6 +426,32 @@ function updateObservations(selectElement, selectedValue) {
 }
 
 
+
+
+
+
+
+
+
+function updateItemHeaders() {
+    // Seleciona todos os elementos <h5> com o nome "item_header[]"
+    //alert('h5');
+    const items = document.querySelectorAll('h5[name="item_header[]"');
+    
+    // Conta o número de elementos encontrados
+    const count = items.length;
+    
+    // Verifica se há apenas uma ocorrência
+    if (count === 1) {
+        items[0].innerHTML = 'Item Único';
+    } else {
+        // Atualiza o texto para cada item com o formato "Item X"
+        items.forEach((item, index) => {
+            item.innerHTML = `Item ${index + 1}`;
+        });
+    }
+    //alert('h5');
+}
 
 // -- ESTOU TRABALHANDO ATÉ AQUI
 
@@ -634,11 +608,19 @@ document.addEventListener('DOMContentLoaded', function() {
         ${substances}\n${materialReceivedObservations}\n
         ${selectedAllMaterialImg}\n${labelAllMaterialImg}\n
         ${involvedPeople.join(', ')}`);
+
+        teste('Tudo ok até aqui'); // aqui funciona
+
+        let testando = toNiceName('marCOS DE OLIVira capristo das DorES DOS SONHOS'); //Aqui não
+        alert(testando);
+
+        teste('Não ok aqui'); // aqui não
         
         // E ACABAR DE PREENCHER ESSA CAIXA DE DIÁLOGO        
         
     });
 });
+
 
 </script>
 
