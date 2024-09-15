@@ -426,32 +426,16 @@ function updateObservations(selectElement, selectedValue) {
     }
 }
 
-
-
-
-
-
-
-
-
 function updateItemHeaders() {
-    // Seleciona todos os elementos <h5> com o nome "item_header[]"
-    //alert('h5');
-    const items = document.querySelectorAll('h5[name="item_header[]"');
-    
-    // Conta o número de elementos encontrados
-    const count = items.length;
-    
-    // Verifica se há apenas uma ocorrência
+    const items = document.querySelectorAll('h5[name="item_header[]"');    
+    const count = items.length;    
     if (count === 1) {
         items[0].innerHTML = 'Item Único';
     } else {
-        // Atualiza o texto para cada item com o formato "Item X"
         items.forEach((item, index) => {
             item.innerHTML = `Item ${index + 1}`;
         });
     }
-    //alert('h5');
 }
 
 // -- ESTOU TRABALHANDO ATÉ AQUI
@@ -560,22 +544,8 @@ function formCheking(){
         return;
     }
 
-    let dateTimeService = new Date(
-        serviceDate.getFullYear(),
-        serviceDate.getMonth(),
-        serviceDate.getDate(),
-        serviceHour.getHours(),
-        serviceHour.getMinutes()
-    );
-    let dateTimeRelease = new Date(
-        releaseDate.getFullYear(),
-        releaseDate.getMonth(),
-        releaseDate.getDate(),
-        releaseHour.getHours(),
-        releaseHour.getMinutes()
-    );
-    if (dateTimeService > dateTimeRelease) {
-        alert('A data e hora do acionamento não pode ser superior à data e hora da liberação.');
+    if (!beforeThan(serviceDate, serviceHour, releaseDate, releaseHour)){
+        alert('A data e hora do acionamento deve ser inferior à data e hora da liberação.');
         document.querySelector('#data_atendimento').focus();
         return;
     }
@@ -587,6 +557,7 @@ function formCheking(){
             substances.push(checkbox.value);
         }
     });
+
     if (substances.length === 0) {
         alert('Nenhuma substância foi selecionada.');
         if (checkboxes.length > 0) {
@@ -597,20 +568,32 @@ function formCheking(){
 
     let materialReceivedObservations = document.querySelector('#observacoes_material_total').value.trim();
     
-    let labelAllMaterialImg = document.querySelector('#imagem-legenda').value;        
-    
+    let labelAllMaterialImg = document.querySelector('#imagem-legenda').value;  
+
     let listOfPeople = document.querySelectorAll('input[name="people_involved[]"]');
     let involvedPeople = [];
+    let firstEmptyInput = null;    
     listOfPeople.forEach(person => {
-        if (person.value) { 
-            involvedPeople.push(person.value);
+        person.value = person.value.trim();    
+        if (person.value) {
+            involvedPeople.push(toNiceName(person.value));
+        } else if (!firstEmptyInput) {
+            firstEmptyInput = person;
         }
     });
+    if (involvedPeople.length === 0) {
+        alert('Por favor, preencha pelo menos um nome de pessoa envolvida.');        
+        if (firstEmptyInput) {
+            firstEmptyInput.focus();
+            return;
+        }
+    }
+    
+    protocol = formatStringWithYear(protocol, serviceDate);
+    policeReport = formatStringWithYear(policereport, serviceDate);
+    authority = toNiceName(authority);
 
-    let protocolNumber = formatStringWithYear(protocol, serviceDate);
-    let policeReportNumber = formatStringWithYear(policereport, serviceDate);
-
-    alert(`${protocolNumber}\n${policeReportNumber}\n
+    alert(`${protocol}\n${policeReport}\n
     ${policestation}\n${authority}\n${serviceDate}\n
     ${releaseDate}\n${serviceHour}\n${releaseHour}\n
     ${substances}\n${materialReceivedObservations}\n

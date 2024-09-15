@@ -99,6 +99,25 @@ function toNiceName(nomeDeAlguem) {
     return palavrasFormatadas.join(' ');
 }
 
+function beforeThan(priorDate, priorHour, lastDate, lastHour) {
+    let beforeDateTime = new Date(
+        priorDate.getFullYear(),
+        priorDate.getMonth(),
+        priorDate.getDate(),
+        priorHour.getHours(),
+        priorHour.getMinutes()
+    );
+    
+    let lastDateTime = new Date(
+        lastDate.getFullYear(),
+        lastDate.getMonth(),
+        lastDate.getDate(),
+        lastHour.getHours(),
+        lastHour.getMinutes()
+    );
+    
+    return beforeDateTime < lastDateTime;
+}
 
 
 function teste(texto) {
