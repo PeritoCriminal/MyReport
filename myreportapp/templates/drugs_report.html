@@ -147,8 +147,8 @@
                 <textarea class="form-control" id="observacoes" name="observacoes[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
             </div>
             <div class="form-group">
-                <label for="observations_about_return">Resultado do Exame</label>
-                <textarea class="form-control" id="observations_about_return" name="observations_about_return[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
+                <label for="resultOfExams_">Resultado do Exame</label>
+                <textarea class="form-control" id="resultOfExams_" name="resultOfExams_[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
             </div>    
             <div class="d-flex align-items-center">
                 <input type="file" class="form-control-file" id="escolher-imagem" name="escolher_imagem[]" accept="image/*">
@@ -303,8 +303,8 @@ function addItem() {
             <textarea class="form-control" name="observacoes[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
         </div>
         <div class="form-group">
-            <label for="observations_about_return">Resultado dos Exames</label>
-            <textarea class="form-control" name="observations_about_return[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
+            <label for="resultOfExams_">Resultado dos Exames</label>
+            <textarea class="form-control" name="resultOfExams_[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
         </div>
         <div class="d-flex justify-content-between align-items-center mt-3">
             <input type="file" name="imagem[]" class="form-control-file">
@@ -419,8 +419,8 @@ function updateObservations(selectElement, selectedValue) {
         textarea.value = `${itemPackagingSelected} ${itemMorphologySelected}`;
     }
 
-    // Atualiza o textarea "observations_about_return[]"
-    const returnTextarea = parentContainer.querySelector('textarea[name="observations_about_return[]"]');
+    // Atualiza o textarea "resultOfExams_[]"
+    const returnTextarea = parentContainer.querySelector('textarea[name="resultOfExams_[]"]');
     if (returnTextarea) {
         returnTextarea.value = itemExamResultSelected;
     }
@@ -582,7 +582,7 @@ function formCheking(){
         }
     });
     if (listOfEnvolvedPeople.length === 0) {
-        alert('Por favor, preencha pelo menos um nome de pessoa envolvida.');        
+        alert('Preencha pelo menos um campo para o nome de pessoa envolvida.');        
         if (firstEmptyInput) {
             firstEmptyInput.focus();
             return;
@@ -637,15 +637,79 @@ function formCheking(){
 
     // CRIAR E POPULAR AS LISTAS AQUI
 
+    let listItensLabels = [];
+    let itemLabel = document.querySelectorAll('h5[name="item_header[]"]');    
+    itemLabel.forEach(item => {
+        listItensLabels.push(item.textContent);        
+    });
+    console.log(listItensLabels);
+
     let listOfPackagings = [];
     packaging.forEach(packaging => {
         listOfPackagings.push(packaging.value);
     });
+    console.log(listOfPackagings);
+
+    let listOfMorphology = [];
+    let morphology = document.querySelectorAll('select[name="morphology[]"]');
+    morphology.forEach(morthology =>{
+        listOfMorphology.push(morthology.value);
+    });
+    console.log(listOfMorphology);
+
+    let listOfGrossMass = [];
+    grossMass.forEach(grossmass =>{
+        listOfGrossMass.push(grossmass.value);
+    });
+    console.log(listOfGrossMass);
+
+    let listOfLiquidMass = [];
+    liquidMass.forEach(liquidMass =>{
+        listOfLiquidMass.push(liquidMass.value);
+    });
+    console.log(listOfLiquidMass);
+
+    let listOfReturned = [];
+    let returned = document.querySelectorAll('input[name="devolvido[]"]');
+    returned.forEach(returned =>{
+        listOfReturned.push(returned.checked);
+    });
+    console.log(listOfReturned);
+
+    let listOfCounterProof = [];
+    let counterproof = document.querySelectorAll('input[name="contrapericia[]"]');
+    counterproof.forEach(counterproof =>{
+        listOfCounterProof.push(counterproof.checked);
+    });
+    console.log(listOfCounterProof);
+
+    let listOfEntranceSeal = [];
+    let entranceseal = document.querySelectorAll('input[name="lacre_entrada[]"]');
+    entranceseal.forEach(entranceseal=>{
+        listOfEntranceSeal.push(entranceseal.value);
+    });
+    console.log(listOfEntranceSeal);
+
+    let listOfExitseal = [];
+    let exitseal = document.querySelectorAll('input[name="lacre_saida[]"]');
+    exitseal.forEach(exitseal=>{
+        listOfExitseal.push(exitseal.value);
+    });
+    console.log(listOfExitseal);
+
+
     let packagingAndMorphology = document.querySelectorAll('textarea[name="observacoes[]"]');
     let listOfpackagingAndMorphology = [];
     packagingAndMorphology.forEach((packmorph, index) =>{
         listOfpackagingAndMorphology.push(`("Item ${index + 1}":${packmorph.value.trim()})`);
     });
+
+
+
+
+
+
+
     
     protocol = formatStringWithYear(protocol, serviceDate);
     policeReport = formatStringWithYear(policereport, serviceDate);
