@@ -571,23 +571,88 @@ function formCheking(){
     let labelAllMaterialImg = document.querySelector('#imagem-legenda').value;  
 
     let listOfPeople = document.querySelectorAll('input[name="people_involved[]"]');
-    let involvedPeople = [];
+    let listOfEnvolvedPeople = [];
     let firstEmptyInput = null;    
     listOfPeople.forEach(person => {
         person.value = person.value.trim();    
         if (person.value) {
-            involvedPeople.push(toNiceName(person.value));
+            listOfEnvolvedPeople.push(toNiceName(person.value));
         } else if (!firstEmptyInput) {
             firstEmptyInput = person;
         }
     });
-    if (involvedPeople.length === 0) {
+    if (listOfEnvolvedPeople.length === 0) {
         alert('Por favor, preencha pelo menos um nome de pessoa envolvida.');        
         if (firstEmptyInput) {
             firstEmptyInput.focus();
             return;
         }
     }
+
+
+
+
+    let listOfPackaging = document.querySelectorAll('select[name="packaging[]"]');    
+    let numberOfItems = listOfPackaging.length;
+    alert(numberOfItems);
+
+    let listOfGrossMass = document.querySelectorAll('input[name="massa_bruta[]"]');
+    let listOfLiquidMass = document.querySelectorAll('input[name="massa_liquida[]"]');
+
+
+
+
+
+
+//  TRABALHANDO AQUI, IMPLEMENTAR AS VERIIFCAÇÕES NECESSÁRIAS DOS INPUTS
+
+
+
+
+
+
+
+    for (let i = 1; i <= numberOfItems; i++) {
+        // TRATAR OS IMPUTS AQUI
+        //alert(listOfPackaging[i - 1].value);  // Usar i - 1 para acessar o índice correto
+        if (listOfGrossMass[i - 1].value === ''){
+            alert('Campo Massa Bruta não pode estar vazio.');
+            listOfGrossMass[i - 1].focus();
+            return;
+        }
+        if (listOfLiquidMass[i - 1].value === ''){
+            alert('Campo Massa Líquida não pode estar vazio.');
+            listOfLiquidMass[i - 1].focus();
+            return;
+        }
+        listOfGrossMass[i - 1].value = listOfGrossMass[i - 1].value.replace(',', '.');
+        listOfLiquidMass[i - 1].value = listOfLiquidMass[i - 1].value.replace(',', '.');
+        if (listOfGrossMass[i - 1].value < listOfLiquidMass[i - 1].value){
+            alert('Massa Bruta não pode ser inferior a Massa Líquida.');
+            listOfGrossMass[i - 1].focus;
+            return;
+        }
+                
+    }
+
+
+    // CRIAR E POPULAR AS LISTAS AQUI
+
+    let listOfPackagings = [];
+    listOfPackaging.forEach(packaging => {
+        listOfPackagings.push(packaging.value);
+    });
+
+
+
+
+
+
+
+
+
+
+
     
     protocol = formatStringWithYear(protocol, serviceDate);
     policeReport = formatStringWithYear(policereport, serviceDate);
@@ -598,7 +663,7 @@ function formCheking(){
     ${releaseDate}\n${serviceHour}\n${releaseHour}\n
     ${substances}\n${materialReceivedObservations}\n
     ${selectedAllMaterialImg}\n${labelAllMaterialImg}\n
-    ${involvedPeople.join(', ')}`);
+    ${listOfEnvolvedPeople.join(', ')}\n${listOfPackagings.join(' ,')}`);
 
     teste('Tudo ok até aqui');
 
