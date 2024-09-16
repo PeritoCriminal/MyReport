@@ -10,6 +10,8 @@
     <div class="alert alert-warning">                   
         {{ msg_about_this_form_to_user|safe }}
     </div>
+
+    <!-- DADOS GERAIS DO FORMULÁRIO / ANÁLOGOS A CLASS ABSTRACT DO MODELS, COM EXCESSÃO DOS CHECKS DAS SUBSTANCIAS EXAMINADAS -->
     <div class="item-group form-group border p-3 mb-3">
         <div class="form-group d-flex justify-content-between">
             <div class="form-group">
@@ -64,20 +66,22 @@
                 </div>
             </div>            
             <div class="form-group">
-                <label for="observacoes_material_total">Observações</label>
-                <textarea class="form-control" id="observacoes_material_total" name="observacoes_material_total" rows="3" placeholder="Opcional."></textarea>
+                <label for="allMaterialObservations">Observações</label>
+                <textarea class="form-control" id="allMaterialObservations" name="allMaterialObservations" rows="3" placeholder="Opcional."></textarea>
             </div>
             <div class="form-group d-flex align-items-center justify-content-between">
                 <div class="form-check form-check-inline">
-                    <input type="file" class="form-control-file" id="escolher-imagem-geral" name="escolher_imagem[]" accept="image/*">
+                    <input type="file" class="form-control-file" id="imgOfAllMaterialReceived" name="imgOfAllMaterialReceived" accept="image/*">
                 </div>
                 <div class="form-check form-group w-100">
                     <label for="imagem-legenda">Legenda da imagem</label>
-                    <input type="text" class="form-control" id="imagem-legenda" name="imagem_legenda" value="Material recebido.">
+                    <input type="text" class="form-control" id="labelOfImgOfAllMaterialReceived" name="labelOfImgOfAllMaterialReceived" value="Material recebido.">
                 </div>
             </div>
         </div>        
     </div>
+
+    <!-- PESSOAS ENVOLVIDAS / PELO MENOS UMA É OBRIGATÓRIO, AS DEMAIS GERADAS DINAMICAMENTE A CRITÉIO DO USUÁRIO -->
     <div id="people-involved-container">
         <label>Pessoas Envolvidas</label>
         <div class="form-group d-flex align-items-center">
@@ -85,6 +89,8 @@
             <button type="button" class="btn btn-secondary ml-2 add-person">+</button>
         </div>
     </div>
+
+    <!-- ITENS EXAMINADOS / ESPECÍFICOS DA CLASSE MODEL DRUGS QUE EXTENDE DA CALSSE BASE / PELO MENOS UM É OBRIGATÓRIO, OUTROS ACRESCIDOS DINAMICAMENTE -->
     <div id="item-container">
         <label>Itens</label>    
         <div class="item-group form-group border p-3 mb-3">
@@ -111,8 +117,7 @@
                 <div class="form-group col-md-3">
                     <label for="massa-liquida">Massa Líquida (g)</label>
                     <input type="number" step="0.01" name="massa_liquida[]" id="massa-liquida" class="form-control" placeholder="Massa Líquida" required>
-                </div>    
-                
+                </div>                    
             </div>    
             <div class="form-row">
                 <div class="form-group col-md-3">
@@ -128,7 +133,7 @@
                     </div>
                 </div>
                 <div class="form-group col-md-3">
-                    <label for="examresulting">Resdultado do Exame</label>
+                    <label for="examresulting">Resultado do Exame</label>
                     <select id="examresulting" name="examresulting[]" class="exam-resulting form-control">
                         <option value="">Selecione uma opção</option>
                     </select>
@@ -143,15 +148,15 @@
                 </div>
             </div>    
             <div class="form-group">
-                <label for="observacoes">Invólucros e Morfologia</label>
-                <textarea class="form-control" id="observacoes" name="observacoes[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
+                <label for="packagingAndMorphologiObservations">Invólucros e Morfologia</label>
+                <textarea class="form-control" id="packagingAndMorphologiObservations" name="packagingAndMorphologiObservations[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
             </div>
             <div class="form-group">
-                <label for="resultOfExams_">Resultado do Exame</label>
-                <textarea class="form-control" id="resultOfExams_" name="resultOfExams_[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
+                <label for="resultOfExams">Resultado do Exame</label>
+                <textarea class="form-control" id="resultOfExams" name="resultOfExams[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
             </div>    
             <div class="d-flex align-items-center">
-                <input type="file" class="form-control-file" id="escolher-imagem" name="escolher_imagem[]" accept="image/*">
+                <input type="file" class="form-control-file" id="imgOfExaminatedItem" name="imgOfExaminatedItem[]" accept="image/*">
                 <div class="form-check form-group flex-grow-1 mx-3 w-100">
                     <label for="imagem-legenda_item">Legenda da Imagem</label>
                     <input type="text" class="form-control" id="imagem-legenda_item" name="imagem_legenda_item[]" value="Item examinado">
@@ -299,18 +304,18 @@ function addItem() {
             </div>
         </div>
         <div class="form-group">
-            <label for="observacoes">Invlócros e Morfologia</label>
-            <textarea class="form-control" name="observacoes[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
+            <label for="packagingAndMorphologiObservations">Invlócros e Morfologia</label>
+            <textarea class="form-control" name="packagingAndMorphologiObservations[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
         </div>
         <div class="form-group">
-            <label for="resultOfExams_">Resultado dos Exames</label>
-            <textarea class="form-control" name="resultOfExams_[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
+            <label for="resultOfExams">Resultado dos Exames</label>
+            <textarea class="form-control" name="resultOfExams[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
         </div>
         <div class="d-flex justify-content-between align-items-center mt-3">
-            <input type="file" name="imagem[]" class="form-control-file">
+            <input type="file" name="imgOfExaminatedItem[]" class="form-control-file">
             <div class="form-check form-group flex-grow-1 mx-3 w-100">
-                <label for="imagem-legenda_item">Legenda da Imagem</label>
-                <input type="text" class="form-control" name="imagem_legenda_item[]" value="Item examinado">
+                <label for="labelOfImgOfExaminatedItem">Legenda da Imagem</label>
+                <input type="text" class="form-control" name="labelOfImgOfExaminatedItem[]" value="Item examinado">
             </div>
             <button type="button" class="btn btn-secondary add-item">+</button>
             <button type="button" class="btn btn-danger ml-2 remove-item">-</button>
@@ -337,11 +342,13 @@ function addItem() {
     
     // Inicializa event listeners no item original
     document.querySelector('.add-item').addEventListener('click', addItem);
-    document.querySelector('.remove-item').addEventListener('click', function() {
-        if (document.querySelectorAll('.item-group').length > 1) {
-            this.closest('.item-group').remove();
+    document.addEventListener('click', function(event) {
+        if (event.target.matches('.remove-item')) {
+            if (document.querySelectorAll('.item-group').length > 1) {
+                event.target.closest('.item-group').remove();
+            }
         }
-    });
+    });    
 });
 
 // VARIÁVEIS QUE IRÃO PREENCHER O TEXTAREA DE ACORDO COM A ESCOLHA DO USUÁRIO
@@ -413,16 +420,16 @@ function updateObservations(selectElement, selectedValue) {
 
     const parentContainer = selectElement.closest('div.form-row').parentElement;
 
-    // Atualiza o textarea "observacoes[]"
-    const textarea = parentContainer.querySelector('textarea[name="observacoes[]"]');
+    // Atualiza o textarea "packagingAndMorphologiObservations[]"
+    const textarea = parentContainer.querySelector('textarea[name="packagingAndMorphologiObservations[]"]');
     if (textarea) {
         textarea.value = `${itemPackagingSelected} ${itemMorphologySelected}`;
     }
 
-    // Atualiza o textarea "resultOfExams_[]"
-    const returnTextarea = parentContainer.querySelector('textarea[name="resultOfExams_[]"]');
+    // Atualiza o textarea "resultOfExams[]"
+    const returnTextarea = parentContainer.querySelector('textarea[name="resultOfExams[]"]');
     if (returnTextarea) {
-        returnTextarea.value = itemExamResultSelected;
+        returnTextarea.value = itemExamResult;
     }
 }
 
@@ -444,7 +451,7 @@ function updateItemHeaders() {
 
 
 // IMAGEM DO MATERIAL RECEBIDO
-const allMaterialImg = document.querySelector('#escolher-imagem-geral');
+const allMaterialImg = document.querySelector('#imgOfAllMaterialReceived');
 let selectedAllMaterialImg = null;
 allMaterialImg.addEventListener('change', function(event) {
     const files = event.target.files;
@@ -566,9 +573,9 @@ function formCheking(){
         return;
     }
 
-    let materialReceivedObservations = document.querySelector('#observacoes_material_total').value.trim();
+    let materialReceivedObservations = document.querySelector('#allMaterialObservations').value.trim();
     
-    let labelAllMaterialImg = document.querySelector('#imagem-legenda').value;  
+    let labelAllMaterialImg = document.querySelector('#labelOfImgOfAllMaterialReceived').value;  
 
     let people_involved = document.querySelectorAll('input[name="people_involved[]"]');
     let listOfEnvolvedPeople = [];
@@ -697,12 +704,19 @@ function formCheking(){
     });
     console.log(listOfExitseal);
 
-
-    let packagingAndMorphology = document.querySelectorAll('textarea[name="observacoes[]"]');
+    let packagingAndMorphology = document.querySelectorAll('textarea[name="packagingAndMorphologiObservations[]"]');
     let listOfpackagingAndMorphology = [];
     packagingAndMorphology.forEach((packmorph, index) =>{
         listOfpackagingAndMorphology.push(`("Item ${index + 1}":${packmorph.value.trim()})`);
     });
+    console.log(listOfpackagingAndMorphology);
+
+    let resultOfExams = document.querySelectorAll('textarea[name="resultOfExams[]"]');
+    let listOfResultOfExams = [];
+    resultOfExams.forEach((reusltOfExams) =>{
+        listOfResultOfExams.push(`("Resultado das análises:":${reusltOfExams.value.trim()})`);
+    });
+    console.log(listOfResultOfExams);
 
 
 
@@ -714,7 +728,7 @@ function formCheking(){
     protocol = formatStringWithYear(protocol, serviceDate);
     policeReport = formatStringWithYear(policereport, serviceDate);
     authority = toNiceName(authority);
-
+/*
     alert(`${protocol}\n${policeReport}\n
     ${policestation}\n${authority}\n${serviceDate}\n
     ${releaseDate}\n${serviceHour}\n${releaseHour}\n
@@ -722,7 +736,7 @@ function formCheking(){
     ${selectedAllMaterialImg}\n${labelAllMaterialImg}\n
     ${listOfEnvolvedPeople.join(', ')}\n${listOfPackagings.join(' ,')}\n
     ${listOfpackagingAndMorphology}`);
-
+*/
     teste('Tudo ok até aqui');
 
     
