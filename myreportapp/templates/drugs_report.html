@@ -11,7 +11,7 @@
         {{ msg_about_this_form_to_user|safe }}
     </div>
 
-    <!-- DADOS GERAIS DO FORMULÁRIO / ANÁLOGOS A CLASS ABSTRACT DO MODELS, COM EXCESSÃO DOS CHECKS DAS SUBSTANCIAS EXAMINADAS -->
+    <!-- DADOS GERAIS DO FORMULÁRIO / ANÁLOGOS A CLASS ABSTRACT DO MODELS, MENOS PARA OS CHECKS DAS SUBSTANCIAS EXAMINADAS -->
     <div class="item-group form-group border p-3 mb-3">
         <div class="form-group d-flex justify-content-between">
             <div class="form-group">
@@ -215,27 +215,6 @@ document.getElementById('people-involved-container').addEventListener('click', f
     }
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 document.addEventListener('DOMContentLoaded', function() {
     updateItemHeaders();
     //let itemCount = 1;
@@ -405,7 +384,6 @@ document.querySelectorAll('select[name="morphology[]"]').forEach(populateSelectM
 document.querySelectorAll('select[name="examresulting[]"]').forEach(populateSelectExamResulting);
 
 function updateObservations(selectElement, selectedValue) {
-    console.log(selectedValue);
     const selectName = selectElement.name;
     if (selectName === 'packaging[]') {
         itemPackagingSelected = selectedValue;
@@ -414,7 +392,6 @@ function updateObservations(selectElement, selectedValue) {
     }
     else if (selectName === 'examresulting[]') {
         itemExamResult = selectedValue;
-        //alert(`Elemento = ${selectElement.name} - Valor = ${itemExamResult}`);
         itemExamResultSelected = itemExamResult.trim();
     }
 
@@ -445,7 +422,8 @@ function updateItemHeaders() {
     }
 }
 
-// -- ESTOU TRABALHANDO ATÉ AQUI
+
+
 
 
 
@@ -461,17 +439,20 @@ allMaterialImg.addEventListener('change', function(event) {
 });
 
 
+
+
+
+
+
+
+
 document.addEventListener('DOMContentLoaded', function() {
     const submitButton = document.querySelector('#enviar');
-
     submitButton.addEventListener('click', function(event) {
-        event.preventDefault(); // Previne o envio do formulário para fins de teste
-
+        event.preventDefault();
         formCheking();
-
     });
 });   
-
 
 function formCheking(){
     let protocol = document.querySelector('#protocolo').value;
@@ -517,6 +498,7 @@ function formCheking(){
         document.querySelector('#data_atendimento').focus();
         return;
     }
+
     let serviceHour;
     try {
         serviceHour = new Date(`1970-01-01T${document.querySelector('#hora_atendimento').value}:00`);
@@ -539,6 +521,7 @@ function formCheking(){
         document.querySelector('#data_liberacao').focus();
         return;
     }
+
     let releaseHour;
     try {
         releaseHour = new Date(`1970-01-01T${document.querySelector('#hora_liberacao').value}:00`);
@@ -596,30 +579,15 @@ function formCheking(){
         }
     }
 
-
-
-
     let packaging = document.querySelectorAll('select[name="packaging[]"]');    
     let numberOfItems = packaging.length;
-    alert(numberOfItems);
-
     let grossMass = document.querySelectorAll('input[name="massa_bruta[]"]');
     let liquidMass = document.querySelectorAll('input[name="massa_liquida[]"]');
 
-
-
-
-//  TRABALHANDO AQUI, IMPLEMENTAR AS VERIIFCAÇÕES NECESSÁRIAS DOS INPUTS
-
-
-
-
-
-
+//  IMPLEMENTAR AS VERIIFCAÇÕES NECESSÁRIAS DOS INPUTS
 
     for (let i = 1; i <= numberOfItems; i++) {
         // TRATAR OS IMPUTS AQUI
-        //alert(listOfPackaging[i - 1].value);  // Usar i - 1 para acessar o índice correto
         if (grossMass[i - 1].value === ''){
             alert('Campo Massa Bruta não pode estar vazio.');
             grossMass[i - 1].focus();
@@ -635,99 +603,96 @@ function formCheking(){
 
         if (parseFloat(grossMass[i - 1].value) < parseFloat(liquidMass[i - 1].value)) {
             alert('Massa Bruta não pode ser inferior a Massa Líquida.');
-            grossMass[i - 1].focus(); // Chama o método focus corretamente
+            grossMass[i - 1].focus();
             return;
-        }
-                
+        }                
     }
 
+    // ATRIBUIR ÀS VARIÁVEIS / CRIAR E POPULAR AS LISTAS AQUI
 
-    // CRIAR E POPULAR AS LISTAS AQUI
+    protocol = formatStringWithYear(protocol, serviceDate);
+    policereport = formatStringWithYear(policereport, serviceDate);
+    authority = toNiceName(authority);
 
     let listItensLabels = [];
     let itemLabel = document.querySelectorAll('h5[name="item_header[]"]');    
     itemLabel.forEach(item => {
         listItensLabels.push(item.textContent);        
     });
-    console.log(listItensLabels);
 
     let listOfPackagings = [];
     packaging.forEach(packaging => {
         listOfPackagings.push(packaging.value);
     });
-    console.log(listOfPackagings);
 
     let listOfMorphology = [];
     let morphology = document.querySelectorAll('select[name="morphology[]"]');
     morphology.forEach(morthology =>{
         listOfMorphology.push(morthology.value);
     });
-    console.log(listOfMorphology);
 
     let listOfGrossMass = [];
     grossMass.forEach(grossmass =>{
         listOfGrossMass.push(grossmass.value);
     });
-    console.log(listOfGrossMass);
 
     let listOfLiquidMass = [];
     liquidMass.forEach(liquidMass =>{
         listOfLiquidMass.push(liquidMass.value);
     });
-    console.log(listOfLiquidMass);
 
     let listOfReturned = [];
     let returned = document.querySelectorAll('input[name="devolvido[]"]');
     returned.forEach(returned =>{
         listOfReturned.push(returned.checked);
     });
-    console.log(listOfReturned);
 
     let listOfCounterProof = [];
     let counterproof = document.querySelectorAll('input[name="contrapericia[]"]');
     counterproof.forEach(counterproof =>{
         listOfCounterProof.push(counterproof.checked);
     });
-    console.log(listOfCounterProof);
 
     let listOfEntranceSeal = [];
     let entranceseal = document.querySelectorAll('input[name="lacre_entrada[]"]');
     entranceseal.forEach(entranceseal=>{
         listOfEntranceSeal.push(entranceseal.value);
     });
-    console.log(listOfEntranceSeal);
 
     let listOfExitseal = [];
     let exitseal = document.querySelectorAll('input[name="lacre_saida[]"]');
     exitseal.forEach(exitseal=>{
         listOfExitseal.push(exitseal.value);
     });
-    console.log(listOfExitseal);
 
     let packagingAndMorphology = document.querySelectorAll('textarea[name="packagingAndMorphologiObservations[]"]');
     let listOfpackagingAndMorphology = [];
     packagingAndMorphology.forEach((packmorph, index) =>{
         listOfpackagingAndMorphology.push(`("Item ${index + 1}":${packmorph.value.trim()})`);
     });
-    console.log(listOfpackagingAndMorphology);
 
     let resultOfExams = document.querySelectorAll('textarea[name="resultOfExams[]"]');
     let listOfResultOfExams = [];
     resultOfExams.forEach((reusltOfExams) =>{
         listOfResultOfExams.push(`("Resultado das análises:":${reusltOfExams.value.trim()})`);
     });
+
+    // VERIFICAÇÃO PELO CONSOLE
+    console.log(protocol);
+    console.log(policereport);
+    console.log(authority);
+    console.log(listItensLabels);
+    console.log(listOfPackagings);
+    console.log(listOfMorphology);
+    console.log(listOfGrossMass);
+    console.log(listOfLiquidMass);
+    console.log(listOfReturned);
+    console.log(listOfCounterProof);
+    console.log(listOfEntranceSeal);
+    console.log(listOfExitseal);
+    console.log(listOfpackagingAndMorphology);
     console.log(listOfResultOfExams);
 
-
-
-
-
-
-
-    
-    protocol = formatStringWithYear(protocol, serviceDate);
-    policeReport = formatStringWithYear(policereport, serviceDate);
-    authority = toNiceName(authority);
 /*
     alert(`${protocol}\n${policeReport}\n
     ${policestation}\n${authority}\n${serviceDate}\n
