@@ -23,10 +23,6 @@ class BaseReport(models.Model):
 
     class Meta:
         abstract = True
-
-    def format_report_number(self):
-        year = self.designated_date.year
-        return f"{self.report_number}/{year}"
     
     def generate_objective(self):
         objective_text = f"Objetivo do exame, de acordo com a requisição: {self.exam_objective}."

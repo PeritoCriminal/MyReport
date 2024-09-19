@@ -6,7 +6,8 @@
 
     <h2 class="titulo-2">Entorpecentes - Constatação Provisória</h2>
 
-<form id="drug-report-form">
+<form id="drug-report-form" method="post" action="{% url 'drugs_report' %}">
+    {% csrf_token %}
     <div class="alert alert-warning">                   
         {{ msg_about_this_form_to_user|safe }}
     </div>
@@ -217,7 +218,6 @@ document.getElementById('people-involved-container').addEventListener('click', f
 
 document.addEventListener('DOMContentLoaded', function() {
     updateItemHeaders();
-    //let itemCount = 1;
 
 function addItem() {
     itemPackagingSelected = '';
@@ -448,11 +448,44 @@ allMaterialImg.addEventListener('change', function(event) {
 
 document.addEventListener('DOMContentLoaded', function() {
     const submitButton = document.querySelector('#enviar');
+    const form = document.querySelector('#drug-report-form');
+
+    if (!form) {
+        console.error('Formulário não encontrado!');
+        return;
+    }
+
+
+
+
+
+
+
+
+
+
     submitButton.addEventListener('click', function(event) {
-        event.preventDefault();
-        formCheking();
+        event.preventDefault();  // Evita o envio automático do formulário
+        if(!formCheking()){
+            alert('Ops! Deu erro!');
+            return;
+        }else{  
+            alert('Formulário foi verificado');
+            form.submit();  // Submete o formulário manualmente após validação
+        };
     });
-});   
+});
+
+
+
+
+
+
+
+
+
+
+
 
 function formCheking(){
     let protocol = document.querySelector('#protocolo').value;
@@ -460,7 +493,7 @@ function formCheking(){
         alert('Valor para Protocolo inválido.');
         document.querySelector('#protocolo').value = 'TOX';
         document.querySelector('#protocolo').focus();
-        return;
+        return false;
     }       
 
     let policereport = document.querySelector('#boletim').value;
@@ -468,7 +501,7 @@ function formCheking(){
         alert('Valor para Boletim inválido.')
         document.querySelector('#boletim').value = '';
         document.querySelector('#boletim').focus();
-        return;
+        return false;
     }
 
     let policestation = document.querySelector('#delegacia').value;
@@ -476,7 +509,7 @@ function formCheking(){
         alert('Valor para Delegacia inválido.')
         document.querySelector('#delegacia').value = '';
         document.querySelector('#delegacia').focus();
-        return;
+        return false;
     }
 
     let authority = document.querySelector('#autoridade_requisitante').value;
@@ -484,76 +517,88 @@ function formCheking(){
         alert('Valor para Autoridade Requisitante inválido.')
         document.querySelector('#autoridade_requisitante').value = '';
         document.querySelector('#autoridade_requisitante').focus();
-        return;
+        return false;
     }
 
-    let serviceDate;
+    let serviceDate, serviceHour, releaseDate, releaseHour;
+
     try {
         serviceDate = new Date(document.querySelector('#data_atendimento').value);
         if (isNaN(serviceDate.getTime())) {
-            throw new Error('Data inválida.');
+            throw new Error('Data de atendimento inválida.');
         }
     } catch (error) {
         alert(`${error.message}`);
         document.querySelector('#data_atendimento').focus();
-        return;
+        return false;
     }
-
-    let serviceHour;
+    
     try {
         serviceHour = new Date(`1970-01-01T${document.querySelector('#hora_atendimento').value}:00`);
         if (isNaN(serviceHour.getTime())) {
-            throw new Error('Hora inválida.');
+            throw new Error('Hora de atendimento inválida.');
         }
     } catch (error) {
         alert(`${error.message}`);
         document.querySelector('#hora_atendimento').focus();
-        return;
+        return false;
     }
-    let releaseDate;
+    
     try {
         releaseDate = new Date(document.querySelector('#data_liberacao').value);
         if (isNaN(releaseDate.getTime())) {
-            throw new Error('Data inválida.');
+            throw new Error('Data de liberação inválida.');
         }
     } catch (error) {
         alert(`${error.message}`);
         document.querySelector('#data_liberacao').focus();
-        return;
+        return false;
     }
-
-    let releaseHour;
+    
     try {
         releaseHour = new Date(`1970-01-01T${document.querySelector('#hora_liberacao').value}:00`);
         if (isNaN(releaseHour.getTime())) {
-            throw new Error('Hora inválida.');
+            throw new Error('Hora de liberação inválida.');
         }
     } catch (error) {
         alert(`${error.message}`);
         document.querySelector('#hora_liberacao').focus();
-        return;
+        return false;
     }
-
-    if (!beforeThan(serviceDate, serviceHour, releaseDate, releaseHour)){
-        alert('A data e hora do acionamento deve ser inferior à data e hora da liberação.');
+    
+    // Verifica se a data de acionamento é inferior à de liberação
+    if (!beforeThan(serviceDate, serviceHour, releaseDate, releaseHour)) {
+        alert('A data e hora do acionamento devem ser anteriores à data e hora da liberação.');
         document.querySelector('#data_atendimento').focus();
-        return;
+        return false;
     }
+    
+    // Função que compara datas e horas
+    function beforeThan(serviceDate, serviceHour, releaseDate, releaseHour) {
+        const serviceDateTime = new Date(serviceDate);
+        serviceDateTime.setHours(serviceHour.getHours(), serviceHour.getMinutes());
+    
+        const releaseDateTime = new Date(releaseDate);
+        releaseDateTime.setHours(releaseHour.getHours(), releaseHour.getMinutes());
+    
+        return serviceDateTime < releaseDateTime;
+    }
+    
 
-    let substances = [];
+    let allSubstances = [];
     const checkboxes = document.querySelectorAll('input[name="substance"]');
     checkboxes.forEach(checkbox => {
         if (checkbox.checked) {
-            substances.push(checkbox.value);
+            allSubstances.push(checkbox.value);
         }
     });
 
-    if (substances.length === 0) {
+    if (allSubstances.length === 0) {
         alert('Nenhuma substância foi selecionada.');
         if (checkboxes.length > 0) {
             checkboxes[0].focus();
         }
-        return;
+        return false;
     }
 
     let materialReceivedObservations = document.querySelector('#allMaterialObservations').value.trim();
@@ -575,10 +620,9 @@ function formCheking(){
         alert('Preencha pelo menos um campo para o nome de pessoa envolvida.');        
         if (firstEmptyInput) {
             firstEmptyInput.focus();
-            return;
+            return false;
         }
     }
-
     let packaging = document.querySelectorAll('select[name="packaging[]"]');    
     let numberOfItems = packaging.length;
     let grossMass = document.querySelectorAll('input[name="massa_bruta[]"]');
@@ -591,12 +635,12 @@ function formCheking(){
         if (grossMass[i - 1].value === ''){
             alert('Campo Massa Bruta não pode estar vazio.');
             grossMass[i - 1].focus();
-            return;
+            return false;
         }
         if (liquidMass[i - 1].value === ''){
             alert('Campo Massa Líquida não pode estar vazio.');
             liquidMass[i - 1].focus();
-            return;
+            return false;
         }
         grossMass[i - 1].value = grossMass[i - 1].value.replace(',', '.');
         liquidMass[i - 1].value = liquidMass[i - 1].value.replace(',', '.');
@@ -604,7 +648,7 @@ function formCheking(){
         if (parseFloat(grossMass[i - 1].value) < parseFloat(liquidMass[i - 1].value)) {
             alert('Massa Bruta não pode ser inferior a Massa Líquida.');
             grossMass[i - 1].focus();
-            return;
+            return false;
         }                
     }
 
@@ -680,7 +724,15 @@ function formCheking(){
     // VERIFICAÇÃO PELO CONSOLE
     console.log(protocol);
     console.log(policereport);
+    console.log(policestation);
     console.log(authority);
+    console.log(serviceDate);
+    console.log(serviceHour);
+    console.log(releaseDate);
+    console.log(releaseHour);
+    console.log(allSubstances);
+    console.log(materialReceivedObservations);
+    console.log(listOfEnvolvedPeople);
     console.log(listItensLabels);
     console.log(listOfPackagings);
     console.log(listOfMorphology);
@@ -693,17 +745,17 @@ function formCheking(){
     console.log(listOfpackagingAndMorphology);
     console.log(listOfResultOfExams);
 
-/*
-    alert(`${protocol}\n${policeReport}\n
-    ${policestation}\n${authority}\n${serviceDate}\n
-    ${releaseDate}\n${serviceHour}\n${releaseHour}\n
-    ${substances}\n${materialReceivedObservations}\n
-    ${selectedAllMaterialImg}\n${labelAllMaterialImg}\n
-    ${listOfEnvolvedPeople.join(', ')}\n${listOfPackagings.join(' ,')}\n
-    ${listOfpackagingAndMorphology}`);
-*/
+    /*
+        alert(`${protocol}\n${policeReport}\n
+        ${policestation}\n${authority}\n${serviceDate}\n
+        ${releaseDate}\n${serviceHour}\n${releaseHour}\n
+        ${substances}\n${materialReceivedObservations}\n
+        ${selectedAllMaterialImg}\n${labelAllMaterialImg}\n
+        ${listOfEnvolvedPeople.join(', ')}\n${listOfPackagings.join(' ,')}\n
+        ${listOfpackagingAndMorphology}`);
+    */
     teste('Tudo ok até aqui');
-
+    return true;
     
     // E ACABAR DE PREENCHER ESSA CAIXA DE DIÁLOGO        
     
