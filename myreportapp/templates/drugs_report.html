@@ -609,6 +609,7 @@ function formCheking(){
     people_involved.forEach(person => {
         person.value = person.value.trim();    
         if (person.value) {
+            person.value = toNiceName(person.value);
             listOfEnvolvedPeople.push(toNiceName(person.value));
         } else if (!firstEmptyInput) {
             firstEmptyInput = person;
