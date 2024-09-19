@@ -54,15 +54,15 @@
             <label>Substâncias Examinadas:</label>
             <div class="form-group d-flex align-items-center justify-content-between">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="checkboxMaconha" name="substance" value="maconha" checked>
+                    <input class="form-check-input" type="checkbox" id="checkboxMaconha" name="substance[]" value="maconha" checked>
                     <label class="form-check-label" for="checkboxMaconha">Maconha</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="checkboxCocaina" name="substance" value="cocaina" checked>
+                    <input class="form-check-input" type="checkbox" id="checkboxCocaina" name="substance[]" value="cocaina" checked>
                     <label class="form-check-label" for="checkboxCocaina">Cocaína</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="checkboxCrack" name="substance" value="crack" checked>
+                    <input class="form-check-input" type="checkbox" id="checkboxCrack" name="substance[]" value="crack" checked>
                     <label class="form-check-label" for="checkboxCrack">Crack</label>
                 </div>
             </div>            
@@ -486,7 +486,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-
 function formCheking(){
     let protocol = document.querySelector('#protocolo').value;
     if (protocol.trim() === '' || protocol === 'TOX') {
@@ -521,7 +520,6 @@ function formCheking(){
     }
 
     let serviceDate, serviceHour, releaseDate, releaseHour;
-
     try {
         serviceDate = new Date(document.querySelector('#data_atendimento').value);
         if (isNaN(serviceDate.getTime())) {
@@ -586,7 +584,7 @@ function formCheking(){
     
 
     let allSubstances = [];
-    const checkboxes = document.querySelectorAll('input[name="substance"]');
+    const checkboxes = document.querySelectorAll('input[name="substance[]"]');
     checkboxes.forEach(checkbox => {
         if (checkbox.checked) {
             allSubstances.push(checkbox.value);
@@ -654,9 +652,10 @@ function formCheking(){
 
     // ATRIBUIR ÀS VARIÁVEIS / CRIAR E POPULAR AS LISTAS AQUI
 
-    protocol = formatStringWithYear(protocol, serviceDate);
-    policereport = formatStringWithYear(policereport, serviceDate);
-    authority = toNiceName(authority);
+    document.querySelector('#protocolo').value = formatStringWithYear(protocol, serviceDate);
+    document.querySelector('#boletim').value = formatStringWithYear(policereport, serviceDate);
+    document.querySelector('#autoridade_requisitante').value = toNiceName(authority);
+    document.querySelector('#delegacia').value = toNiceName(policestation);
 
     let listItensLabels = [];
     let itemLabel = document.querySelectorAll('h5[name="item_header[]"]');    

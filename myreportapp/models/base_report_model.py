@@ -4,6 +4,7 @@ class BaseReport(models.Model):
     date_register = models.DateField('Data do Registro', auto_now_add=True)
     report_number = models.CharField('Número do Laudo', max_length=20, default='indefinido')
     protocol_number = models.CharField('Número do Protocolo', max_length=20, default='indefinido')
+    occurring_number = models.CharField('Número do Boletim', max_length=20, default='indefinido')
     designated_date = models.DateField('Data de Designação', auto_now=False)
     exam_objective = models.CharField('Objetivo do Exame', max_length=300, default='indefinido')
     occurrence_nature = models.CharField('Natureza da Ocorrência', max_length=300, default='indefinido')
