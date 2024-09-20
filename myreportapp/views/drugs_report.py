@@ -60,6 +60,9 @@ def drugs_report(request):
                 listOfExitseal=request.POST.getlist('lacre_saida[]'),
                 listOfpackagingAndMorphology=request.POST.getlist('packagingAndMorphologiObservations[]'),
                 listOfResultOfExams=request.POST.getlist('resultOfExams[]'),
+                examImages=request.POST.getlist('imageItemExaminatedBase64[]'),
+                examImageCaptions=request.POST.getlist('labelOfImgItemExaminatedReceived[]'),
+            
             )
             # print(f'Verificar o que está no post: {request.POST}')
             new_report.save()

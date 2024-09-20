@@ -23,15 +23,15 @@ class DrugReport(BaseReport):
     listOfReturneds = models.TextField(blank=True, verbose_name='Material retornado e contraperícia', default='')
 
     # Lista de imagens e legendas
-    examImages = models.ImageField(upload_to='exam_images/', blank=True, verbose_name='Imagens dos exames')
-    examImageCaptions = models.TextField(blank=True, verbose_name='Legendas das imagens dos exames', default='')
+    examImages = models.TextField(blank=True, verbose_name='imagem do item examinado', default='')
+    examImageCaptions = models.TextField(blank=True, verbose_name='Legendas da imagem do item examinado', default='')
 
     # Imagem dos itens retornados e legenda
-    returnedItemsImage = models.ImageField(upload_to='returned_items_images/', blank=True, verbose_name='Imagem dos itens retornados')
-    returnedItemsCaption = models.TextField(blank=True, verbose_name='Legenda dos itens retornados', default='')
+    returnedItemsImage = models.TextField(blank=True, verbose_name='imagem do Material Retornado', default='')
+    returnedItemsCaption = models.TextField(blank=True, verbose_name='Legenda do Material retornado', default='')
 
     # Imagem da contraperícia e legenda
-    counterProofImage = models.ImageField(upload_to='counterproof_images/', blank=True, verbose_name='Imagem da contraperícia')
+    counterProofImage = models.TextField(blank=True, verbose_name='imagem do material separado para contraperícia', default='')
     counterProofCaption = models.TextField(blank=True, verbose_name='Legenda da contraperícia', default='')
 
     def save(self, *args, **kwargs):

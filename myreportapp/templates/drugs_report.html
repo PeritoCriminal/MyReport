@@ -170,11 +170,30 @@
                 <textarea class="form-control" id="resultOfExams" name="resultOfExams[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
             </div>    
             <div class="d-flex align-items-center">
+
+
+
+<!--
                 <input type="file" class="form-control-file" id="imgOfExaminatedItem" name="imgOfExaminatedItem[]" accept="image/*">
                 <div class="form-check form-group flex-grow-1 mx-3 w-100">
                     <label for="imagem-legenda_item">Legenda da Imagem</label>
                     <input type="text" class="form-control" id="imagem-legenda_item" name="imagem_legenda_item[]" value="Item examinado">
                 </div>
+
+
+-->
+
+
+                <input type="hidden" id="imageItemExaminatedBase64" name="imageItemExaminatedBase64[]">  <!-- Input invisível para armazenar a imagem em Base64 -->
+                <input type="file" id = "uploadItemExaminatedImage" name="uploadItemExaminatedImage[]">
+                <div class="form-check form-group flex-grow-1 mx-3 w-100">
+                    <label for="imagem-legenda_item">Legenda da Imagem</label>
+                    <input type="text" class="form-control" id="labelOfImgItemExaminatedReceived" name="labelOfImgItemExaminatedReceived[]" value="Material recebido.">
+                </div>
+
+
+
+
                 <button type="button" class="btn btn-secondary ml-auto add-item">+</button>
             </div>
         </div>
@@ -209,15 +228,63 @@
 </div>
     <button type="submit" class="btn btn-primary" id='enviar'>Enviar</button>
 </form>
+
+
+
 <script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 document.querySelector('#uploadGeneralImage').addEventListener('change', function(event) {
     const file = event.target.files[0];  // Captura o arquivo de imagem selecionado
     if (!file) return;  // Se não houver arquivo, não faz nada
 
     // Chama a função handleImageResize passando o arquivo
-    handleImageResize(file);
+    handleImageResize(file, 'imageGeneralBase64');
 });
+
+document.querySelector('#uploadItemExaminatedImage').addEventListener('change', function(event) {
+    const file = event.target.files[0];  // Captura o arquivo de imagem selecionado
+    if (!file) return;  // Se não houver arquivo, não faz nada
+
+    // Chama a função handleImageResize passando o arquivo
+    handleImageResize(file, 'imageItemExaminatedBase64');
+});
+
+
+/*
+
+ <input type="hidden" id="imageItemExaminatedBase64" name="imageItemExaminatedBase64[]">  <!-- Input invisível para armazenar a imagem em Base64 -->
+                <input type="file" id = "uploadItemExaminatedImage" name="uploadItemExaminatedImage[]">
+                <div class="form-check form-group flex-grow-1 mx-3 w-100">
+                    <label for="imagem-legenda_item">Legenda da Imagem</label>
+                    <input type="text" class="form-control" id="labelOfImgItemExaminatedReceived" name="labelOfImgItemExaminatedReceived[]" value="Material recebido.">
+                </div>
+
+
+*/
+
+
+
+//const imgExamiatedItensToUpload = document.querySelectorAll('input[name="uploadItemExaminatedImage[]"]');
+
+
+
+
+
+
 
 
 
@@ -315,11 +382,24 @@ function addItem() {
             <textarea class="form-control" name="resultOfExams[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
         </div>
         <div class="d-flex justify-content-between align-items-center mt-3">
-            <input type="file" name="imgOfExaminatedItem[]" class="form-control-file">
+
+
+
+
+
+
+            <input type="hidden" name="imageItemExaminatedBase64[]" calss="imageItemExaminatedBase64Input">  <!-- Input invisível para armazenar a imagem em Base64 -->
+            <input type="file" name="uploadItemExaminatedImage[]" class="uploadItemExaminatedImageInput">
             <div class="form-check form-group flex-grow-1 mx-3 w-100">
-                <label for="labelOfImgOfExaminatedItem">Legenda da Imagem</label>
-                <input type="text" class="form-control" name="labelOfImgOfExaminatedItem[]" value="Item examinado">
+                <label for="imagem-legenda_item">Legenda da Imagem</label>
+                <input type="text" class="form-control" name="labelOfImgItemExaminatedReceived[]" value="Item examinado.">
             </div>
+
+
+
+
+
+
             <button type="button" class="btn btn-secondary add-item">+</button>
             <button type="button" class="btn btn-danger ml-2 remove-item">-</button>
         </div>
@@ -340,10 +420,41 @@ function addItem() {
         newItem.remove();
         updateItemHeaders();
     });
+
+    const hiddenInputFile = newItem.querySelector('.imageItemExaminatedBase64Input');
+
+    // Adiciona o event listener ao input de upload de imagem
+    newItem.querySelector('.uploadItemExaminatedImageInput').addEventListener('change', function(event) {
+        const file = event.target.files[0];  // Obtém o arquivo selecionado
+        if (!file) {
+            alert('nenhum arquivo selecionado');
+            return;  // Se nenhum arquivo foi selecionado, sai da função
+        }
+        alert(`O arquivo foi selecionado ${file.name}`)
+    
+        // Chama a função para redimensionar a imagem e passar o resultado ao input hidden
+        handleImageResize(file, hiddenInputFile);
+    });
+
     updateItemHeaders();
 }
     
     // Inicializa event listeners no item original
+
+    /*
+    
+    document.querySelector('#uploadItemExaminatedImage').addEventListener('change', function(event) {
+    const file = event.target.files[0];  // Captura o arquivo de imagem selecionado
+    if (!file) return;  // Se não houver arquivo, não faz nada
+
+    // Chama a função handleImageResize passando o arquivo
+    handleImageResize(file, 'imageItemExaminatedBase64');
+});
+    
+    */
+
+
+
     document.querySelector('.add-item').addEventListener('click', addItem);
     document.addEventListener('click', function(event) {
         if (event.target.matches('.remove-item')) {
@@ -493,7 +604,6 @@ document.addEventListener('DOMContentLoaded', function() {
     submitButton.addEventListener('click', function(event) {
         event.preventDefault();  // Evita o envio automático do formulário
         if(!formCheking()){
-            alert('Ops! Deu erro!');
             return;
         }else{  
             alert('Formulário foi verificado');
@@ -654,6 +764,24 @@ function formCheking(){
     let liquidMass = document.querySelectorAll('input[name="massa_liquida[]"]');
 
 //  IMPLEMENTAR AS VERIIFCAÇÕES NECESSÁRIAS DOS INPUTS
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
 
     for (let i = 1; i <= numberOfItems; i++) {
         // TRATAR OS IMPUTS AQUI
