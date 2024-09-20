@@ -13,12 +13,15 @@ def drugs_report(request):
 
     if request.method == 'POST':
         # TESTE  -  Até agora dando Null para todos ... OU SEJA, OS VAORES DAS VARIÁEIS DO TEMPLATE NÃO ESTÃO CHEGANDO AQUI.
-        print('Protocol:', request.POST.get('protocol'))
-        print('Release Date:', request.POST.get('releaseDate'))
-        print('Service Hour:', request.POST.get('serviceHour'))
+        # print('Protocol:', request.POST.get('protocol'))
+        # print('Release Date:', request.POST.get('releaseDate'))
+        # print('Service Hour:', request.POST.get('serviceHour'))
 
 
         try:
+            materialImage = request.FILES.get('imgOfAllMaterialReceived')  # Obtém a imagem do formulário
+            materialImageCaption = request.POST.get('labelOfImgOfAllMaterialReceived')
+
             new_report = DrugReport(
                 report_number='000/00',
                 protocol_number=request.POST.get('protocolo'),
@@ -41,8 +44,12 @@ def drugs_report(request):
                 draftsman='Não se aplica',
                 allSubstances=request.POST.getlist('substance[]'),
                 materialReceivedObservations=request.POST.get('allMaterialObservations'),
+
+                materialImage=request.POST.get('imageGeneralBase64'),
+                materialImageCaption=request.POST.get('labelOfImgOfAllMaterialReceived'),
+
                 listOfEnvolvedPeople=request.POST.getlist('people_involved[]'),
-                # listItensLabels=request.POST.getlist('item_header[]'), eliminar isso é inútl
+                #listItensLabels=request.POST.getlist('item_header[]'), eliminar isso é inútl
                 listOfPackagings=request.POST.getlist('packaging[]'),
                 listOfMorphology=request.POST.getlist('morphology[]'),
                 listOfGrossMass=[float(x) for x in request.POST.getlist('massa_bruta[]') if x],
@@ -54,7 +61,7 @@ def drugs_report(request):
                 listOfpackagingAndMorphology=request.POST.getlist('packagingAndMorphologiObservations[]'),
                 listOfResultOfExams=request.POST.getlist('resultOfExams[]'),
             )
-            print(f'Verificar o que está no post: {request.POST}')
+            # print(f'Verificar o que está no post: {request.POST}')
             new_report.save()
 
             return HttpResponse('Relatório criado com sucesso!')

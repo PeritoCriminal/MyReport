@@ -6,10 +6,10 @@
 
     <h2 class="titulo-2">Entorpecentes - Constatação Provisória</h2>
 
-<form id="drug-report-form" method="post" action="{% url 'drugs_report' %}">
+<form id="drug-report-form" method="post" action="{% url 'drugs_report' %}" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="alert alert-warning">                   
-        {{ msg_about_this_form_to_user|safe }}
+        {{ msg_about_this_form_to_user | safe }}
     </div>
 
     <!-- DADOS GERAIS DO FORMULÁRIO / ANÁLOGOS A CLASS ABSTRACT DO MODELS, MENOS PARA OS CHECKS DAS SUBSTANCIAS EXAMINADAS -->
@@ -71,6 +71,8 @@
                 <textarea class="form-control" id="allMaterialObservations" name="allMaterialObservations" rows="3" placeholder="Opcional."></textarea>
             </div>
             <div class="form-group d-flex align-items-center justify-content-between">
+
+                <!--
                 <div class="form-check form-check-inline">
                     <input type="file" class="form-control-file" id="imgOfAllMaterialReceived" name="imgOfAllMaterialReceived" accept="image/*">
                 </div>
@@ -78,6 +80,17 @@
                     <label for="imagem-legenda">Legenda da imagem</label>
                     <input type="text" class="form-control" id="labelOfImgOfAllMaterialReceived" name="labelOfImgOfAllMaterialReceived" value="Material recebido.">
                 </div>
+
+                <input type="file" id="uploadImage" onchange="handleImageResize(event)" />
+                <img id="preview" src="" alt="Preview" />
+
+                    -->
+
+                    <input type="hidden" id="imageGeneralBase64" name="imageGeneralBase64">  <!-- Input invisível para armazenar a imagem em Base64 -->
+                    <input type="file" id="uploadGeneralImage" name="uploadGeneralImage">
+                    <input type="text" class="form-control" id="labelOfImgOfAllMaterialReceived" name="labelOfImgOfAllMaterialReceived" value="Material recebido.">
+
+
             </div>
         </div>        
     </div>
@@ -197,6 +210,17 @@
     <button type="submit" class="btn btn-primary" id='enviar'>Enviar</button>
 </form>
 <script>
+
+document.querySelector('#uploadGeneralImage').addEventListener('change', function(event) {
+    const file = event.target.files[0];  // Captura o arquivo de imagem selecionado
+    if (!file) return;  // Se não houver arquivo, não faz nada
+
+    // Chama a função handleImageResize passando o arquivo
+    handleImageResize(file);
+});
+
+
+
 // Adicionar novos campos para pessoas envolvidas
 document.getElementById('people-involved-container').addEventListener('click', function (event) {
     if (event.target.classList.contains('add-person')) {
@@ -429,6 +453,8 @@ function updateItemHeaders() {
 
 
 // IMAGEM DO MATERIAL RECEBIDO
+
+/*
 const allMaterialImg = document.querySelector('#imgOfAllMaterialReceived');
 let selectedAllMaterialImg = null;
 allMaterialImg.addEventListener('change', function(event) {
@@ -438,7 +464,7 @@ allMaterialImg.addEventListener('change', function(event) {
     }
 });
 
-
+*/
 
 
 
@@ -601,7 +627,7 @@ function formCheking(){
 
     let materialReceivedObservations = document.querySelector('#allMaterialObservations').value.trim();
     
-    let labelAllMaterialImg = document.querySelector('#labelOfImgOfAllMaterialReceived').value;  
+    //let labelAllMaterialImg = document.querySelector('#labelOfImgOfAllMaterialReceived').value;  
 
     let people_involved = document.querySelectorAll('input[name="people_involved[]"]');
     let listOfEnvolvedPeople = [];

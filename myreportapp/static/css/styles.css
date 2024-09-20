@@ -36,3 +36,8 @@ div.item-header-dark {
     margin-right: 15px;
     margin-top: 15px;
 }
+
+input::placeholder {
+    color: #ff0000;
+    font-weight: bold;
+}

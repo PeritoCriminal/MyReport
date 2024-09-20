@@ -6,7 +6,7 @@ class DrugReport(BaseReport):
     materialReceivedObservations = models.TextField(blank=True, verbose_name='Observações sobre o material recebido', default='')
 
     # Imagem do material e sua respectiva legenda
-    materialImage = models.ImageField(upload_to='material_images/', blank=True, verbose_name='Fotografia do material')
+    materialImage = models.TextField(blank=True, verbose_name='imagem do Material Recebido', default='')
     materialImageCaption = models.TextField(blank=True, verbose_name='Legenda da fotografia do material', default='')
 
     listOfEnvolvedPeople = models.TextField(blank=True, verbose_name='Pessoas envolvidas', default='')

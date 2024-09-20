@@ -119,6 +119,43 @@ function beforeThan(priorDate, priorHour, lastDate, lastHour) {
     return beforeDateTime < lastDateTime;
 }
 
+function handleImageResize(file) {
+    resizeImage(file, 1200, 800, function(resizedBase64) {
+        // Armazena a string Base64 no input hidden
+        document.getElementById('imageGeneralBase64').value = resizedBase64;
+    });
+}
+
+
+function resizeImage(file, maxWidth, maxHeight, callback) {
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() {
+            // Calcula o novo tamanho da imagem
+            const ratio = Math.min(maxWidth / img.width, maxHeight / img.height);
+            const width = img.width * ratio;
+            const height = img.height * ratio;
+
+            // Cria um canvas para redimensionar a imagem
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            // Converte o canvas para Base64
+            const resizedBase64 = canvas.toDataURL('image/jpeg', 0.95);  // Ajusta a qualidade para 95%
+            callback(resizedBase64);  // Retorna a imagem redimensionada como Base64
+        };
+        img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+
+
 
 function teste(texto) {
     alert(texto)
