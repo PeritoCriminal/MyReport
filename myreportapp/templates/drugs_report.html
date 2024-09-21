@@ -203,7 +203,9 @@
 
 <script>
 
-// FUNÇÕES NO ARQUIVO scripts.js  ----  DEvem ser apagadas depois
+// FUNÇÕES NO ARQUIVO scripts.js  ----  DEvem ser apagadas depois 
+
+/*
 function setupImageUpload(uploadInputId, hiddenInputId) {
     document.querySelector(uploadInputId).addEventListener('change', function (event) {
         const file = event.target.files[0];
@@ -220,9 +222,29 @@ function setupImageUpload(uploadInputId, hiddenInputId) {
     });
 }
 
+*/
+
 //  FIM DAS FUNÇÕES EM scripts.js
 
 //TESTES DE FUNÇÕES NOVAS
+
+function optionsAboutTwoLogicals(boolean1 = true, boolean2 = true, inputTextArea) {
+    let textAboutToLogicals;
+
+    if (boolean1 && boolean2) {
+        textAboutToLogicals = 'Dois trues';
+    } else if (boolean1 && !boolean2) {
+        textAboutToLogicals = `primeiro é ${boolean1} e segundo é ${boolean2}`;
+    } else if (!boolean1 && boolean2) {
+        textAboutToLogicals = `primeiro é ${boolean1} e segundo é ${boolean2}`;
+    } else {
+        textAboutToLogicals = 'Nenhum é true.';
+    }
+    inputTextArea.value = textAboutToLogicals;
+    //return textAboutToLogicals;
+}
+
+
 
 function handleLiquidMassChange(numericInput, counterproofCheckbox, returnedCheckbox) {
     const value = parseFloat(numericInput.value);
@@ -338,7 +360,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             <div class="form-group">
                 <label for="returnedOrCounterproof">Retorno e Contraperícia</label>
-                <textarea class="form-control" name="returnedOrCounterproof[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
+                <textarea class="form-control returned-or-counterproof" name="returnedOrCounterproof[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
             </div>
 
 
@@ -381,20 +403,31 @@ document.addEventListener('DOMContentLoaded', function() {
             handleImageResize(file, hiddenInputFile);        
         });
         //thisLiquidMass = newItem.querySelector('.liquid-mass-value');
+        const thisreturnedOrCounterproof = newItem.querySelector('.returned-or-counterproof');
         const thisCounterproof = newItem.querySelector('.form-check-input-counterproof');
         const thisReturned = newItem.querySelector('.form-check-input-returned');
         newItem.querySelector('.liquid-mass-value').addEventListener('change', function() {
             handleLiquidMassChange(this, thisCounterproof, thisReturned);
+            optionsAboutTwoLogicals(thisReturned.checked, thisCounterproof.checked, thisreturnedOrCounterproof);
         });
-        
 
+        thisCounterproof.addEventListener('change', function(){
+            optionsAboutTwoLogicals(thisReturned.checked, thisCounterproof.checked, thisreturnedOrCounterproof);
+        });
+
+        thisReturned.addEventListener('change', function(){
+            optionsAboutTwoLogicals(thisReturned.checked, thisCounterproof.checked, thisreturnedOrCounterproof);
+        });
 
         updateItemHeaders();
     }
 
     document.querySelector('#massa-liquida').addEventListener('change', function(){
         handleLiquidMassChange(this, document.querySelector('#contrapericia') , document.querySelector('#devolvido'));
+        optionsAboutTwoLogicals(document.querySelector('#devolvido').checked, document.querySelector('#contrapericia').checked, document.querySelector('#returnedOrCounterproof'));
     });
+
+
 
     document.querySelector('.add-item').addEventListener('click', addItem);
     document.addEventListener('click', function(event) {
@@ -782,25 +815,14 @@ function formCheking(){
     console.log(listOfExitseal);
     console.log(listOfpackagingAndMorphology);
     console.log(listOfResultOfExams);
+           
+    setupImageUpload('#uploadGeneralImage', '#imageGeneralBase64');
+    setupImageUpload('#uploadItemExaminatedImage', '#imageItemExaminatedBase64');
 
-    /*
-        alert(`${protocol}\n${policeReport}\n
-        ${policestation}\n${authority}\n${serviceDate}\n
-        ${releaseDate}\n${serviceHour}\n${releaseHour}\n
-        ${substances}\n${materialReceivedObservations}\n
-        ${selectedAllMaterialImg}\n${labelAllMaterialImg}\n
-        ${listOfEnvolvedPeople.join(', ')}\n${listOfPackagings.join(' ,')}\n
-        ${listOfpackagingAndMorphology}`);
-    */
     teste('Tudo ok até aqui');
     return true;
-    
-    // E ACABAR DE PREENCHER ESSA CAIXA DE DIÁLOGO        
-    
 }
 
-setupImageUpload('#uploadGeneralImage', '#imageGeneralBase64');
-setupImageUpload('#uploadItemExaminatedImage', '#imageItemExaminatedBase64');
 
 </script>
 

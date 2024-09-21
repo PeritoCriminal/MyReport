@@ -142,7 +142,6 @@ function setupImageUpload(uploadInputId, hiddenInputId) {
     });
 }
 
-
 function resizeImage(file, maxWidth, maxHeight, callback) {
     const reader = new FileReader();
     reader.onload = function (event) {
