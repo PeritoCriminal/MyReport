@@ -38,6 +38,5 @@ div.item-header-dark {
 }
 
 input::placeholder {
-    color: #ff0000;
-    font-weight: bold;
+    color: blueviolet;
 }

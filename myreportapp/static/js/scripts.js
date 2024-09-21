@@ -107,7 +107,7 @@ function beforeThan(priorDate, priorHour, lastDate, lastHour) {
         priorHour.getHours(),
         priorHour.getMinutes()
     );
-    
+
     let lastDateTime = new Date(
         lastDate.getFullYear(),
         lastDate.getMonth(),
@@ -115,23 +115,39 @@ function beforeThan(priorDate, priorHour, lastDate, lastHour) {
         lastHour.getHours(),
         lastHour.getMinutes()
     );
-    
+
     return beforeDateTime < lastDateTime;
 }
 
 function handleImageResize(file, hiddenInputElement) {
-    resizeImage(file, 1200, 800, function(resizedBase64) {
+    resizeImage(file, 1200, 800, function (resizedBase64) {
         // Armazena a string Base64 no input hidden
         hiddenInputElement.value = resizedBase64;
+    });
+}
+
+function setupImageUpload(uploadInputId, hiddenInputId) {
+    document.querySelector(uploadInputId).addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        if (!file) {
+            alert('Nenhum arquivo selecionado.');
+            return;
+        }
+        const hiddenInputElement = document.querySelector(hiddenInputId);
+        if (!hiddenInputElement) {
+            alert('Input hidden não encontrado.');
+            return;
+        }
+        handleImageResize(file, hiddenInputElement);
     });
 }
 
 
 function resizeImage(file, maxWidth, maxHeight, callback) {
     const reader = new FileReader();
-    reader.onload = function(event) {
+    reader.onload = function (event) {
         const img = new Image();
-        img.onload = function() {
+        img.onload = function () {
             // Calcula o novo tamanho da imagem
             const ratio = Math.min(maxWidth / img.width, maxHeight / img.height);
             const width = img.width * ratio;

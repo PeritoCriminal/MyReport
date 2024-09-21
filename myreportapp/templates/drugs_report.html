@@ -71,31 +71,12 @@
                 <textarea class="form-control" id="allMaterialObservations" name="allMaterialObservations" rows="3" placeholder="Opcional."></textarea>
             </div>
             <div class="form-group d-flex align-items-center justify-content-between">
-
-                <!--
-                <div class="form-check form-check-inline">
-                    <input type="file" class="form-control-file" id="imgOfAllMaterialReceived" name="imgOfAllMaterialReceived" accept="image/*">
-                </div>
-                <div class="form-check form-group w-100">
-                    <label for="imagem-legenda">Legenda da imagem</label>
-                    <input type="text" class="form-control" id="labelOfImgOfAllMaterialReceived" name="labelOfImgOfAllMaterialReceived" value="Material recebido.">
-                </div>
-
-                <input type="file" id="uploadImage" onchange="handleImageResize(event)" />
-                <img id="preview" src="" alt="Preview" />
-
-                    -->
-
-                    <input type="hidden" id="imageGeneralBase64" name="imageGeneralBase64">  <!-- Input invisível para armazenar a imagem em Base64 -->
-                    <input type="file" id="uploadGeneralImage" name="uploadGeneralImage">
-                    <input type="text" class="form-control" id="labelOfImgOfAllMaterialReceived" name="labelOfImgOfAllMaterialReceived" value="Material recebido.">
-
-
+                <input type="hidden" id="imageGeneralBase64" name="imageGeneralBase64">
+                <input type="file" id="uploadGeneralImage" name="uploadGeneralImage">
+                <input type="text" class="form-control" id="labelOfImgOfAllMaterialReceived" name="labelOfImgOfAllMaterialReceived" value="Material recebido.">
             </div>
         </div>        
     </div>
-
-    <!-- PESSOAS ENVOLVIDAS / PELO MENOS UMA É OBRIGATÓRIO, AS DEMAIS GERADAS DINAMICAMENTE A CRITÉIO DO USUÁRIO -->
     <div id="people-involved-container">
         <label>Pessoas Envolvidas</label>
         <div class="form-group d-flex align-items-center">
@@ -130,7 +111,7 @@
                 </div>    
                 <div class="form-group col-md-3">
                     <label for="massa-liquida">Massa Líquida (g)</label>
-                    <input type="number" step="0.01" name="massa_liquida[]" id="massa-liquida" class="form-control" placeholder="Massa Líquida" required>
+                    <input type="number" step="0.01" name="massa_liquida[]" id="massa-liquida" class="form-control" placeholder="Massa Líquida" min="0" required>
                 </div>                    
             </div>    
             <div class="form-row">
@@ -169,31 +150,22 @@
                 <label for="resultOfExams">Resultado do Exame</label>
                 <textarea class="form-control" id="resultOfExams" name="resultOfExams[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
             </div>    
+
+
+            <div class="form-group">
+                <label for="returnedOrCounterproof">Retorno e Contraperícia</label>
+                <textarea class="form-control" id="returnedOrCounterproof" name="returnedOrCounterproof[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
+            </div>
+
+
+
             <div class="d-flex align-items-center">
-
-
-
-<!--
-                <input type="file" class="form-control-file" id="imgOfExaminatedItem" name="imgOfExaminatedItem[]" accept="image/*">
-                <div class="form-check form-group flex-grow-1 mx-3 w-100">
-                    <label for="imagem-legenda_item">Legenda da Imagem</label>
-                    <input type="text" class="form-control" id="imagem-legenda_item" name="imagem_legenda_item[]" value="Item examinado">
-                </div>
-
-
--->
-
-
                 <input type="hidden" id="imageItemExaminatedBase64" name="imageItemExaminatedBase64[]">  <!-- Input invisível para armazenar a imagem em Base64 -->
                 <input type="file" id = "uploadItemExaminatedImage" name="uploadItemExaminatedImage[]">
                 <div class="form-check form-group flex-grow-1 mx-3 w-100">
                     <label for="imagem-legenda_item">Legenda da Imagem</label>
-                    <input type="text" class="form-control" id="labelOfImgItemExaminatedReceived" name="labelOfImgItemExaminatedReceived[]" value="Material recebido.">
+                    <input type="text" class="form-control" id="labelOfImgItemExaminatedReceived" name="labelOfImgItemExaminatedReceived[]" value="Item examinado.">
                 </div>
-
-
-
-
                 <button type="button" class="btn btn-secondary ml-auto add-item">+</button>
             </div>
         </div>
@@ -229,76 +201,46 @@
     <button type="submit" class="btn btn-primary" id='enviar'>Enviar</button>
 </form>
 
-
-
 <script>
 
-    document.querySelector('#uploadGeneralImage').addEventListener('change', function(event) {
-        const file = event.target.files[0];  // Captura o arquivo de imagem selecionado
+// FUNÇÕES NO ARQUIVO scripts.js  ----  DEvem ser apagadas depois
+function setupImageUpload(uploadInputId, hiddenInputId) {
+    document.querySelector(uploadInputId).addEventListener('change', function (event) {
+        const file = event.target.files[0];
         if (!file) {
             alert('Nenhum arquivo selecionado.');
-            return;  // Se não houver arquivo, não faz nada
+            return;
         }
-    
-        // Obtém o elemento hidden que armazenará a string Base64
-        const hiddenInputElement = document.querySelector('#imageGeneralBase64');
-        
+        const hiddenInputElement = document.querySelector(hiddenInputId);
         if (!hiddenInputElement) {
             alert('Input hidden não encontrado.');
             return;
         }
-    
-        // Chama a função handleImageResize passando o arquivo e o elemento hidden
         handleImageResize(file, hiddenInputElement);
     });
-    
+}
 
-    document.querySelector('#uploadItemExaminatedImage').addEventListener('change', function(event) {
-        const file = event.target.files[0];  // Captura o arquivo de imagem selecionado
-        if (!file) {
-            alert('Nenhum arquivo selecionado.');
-            return;  // Se não houver arquivo, não faz nada
-        }
-    
-        // Obtém o elemento hidden que armazenará a string Base64
-        const hiddenInputElement = document.querySelector('#imageItemExaminatedBase64');
-    
-        if (!hiddenInputElement) {
-            alert('Input hidden não encontrado.');
-            return;
-        }
-    
-        // Chama a função handleImageResize passando o arquivo e o elemento hidden
-        handleImageResize(file, hiddenInputElement);
-    });
-    
+//  FIM DAS FUNÇÕES EM scripts.js
 
+//TESTES DE FUNÇÕES NOVAS
 
-/*
+function handleLiquidMassChange(numericInput, counterproofCheckbox, returnedCheckbox) {
+    const value = parseFloat(numericInput.value);
+    if (value < 0.5) {
+        returnedCheckbox.checked = false;
+        counterproofCheckbox.checked = false;
+    } else if (value < 3) {
+        returnedCheckbox.checked = false;
+        counterproofCheckbox.checked = true;
+    } else {
+        returnedCheckbox.checked = true;
+        counterproofCheckbox.checked = true;
+    }
+}
 
- <input type="hidden" id="imageItemExaminatedBase64" name="imageItemExaminatedBase64[]">  <!-- Input invisível para armazenar a imagem em Base64 -->
-                <input type="file" id = "uploadItemExaminatedImage" name="uploadItemExaminatedImage[]">
-                <div class="form-check form-group flex-grow-1 mx-3 w-100">
-                    <label for="imagem-legenda_item">Legenda da Imagem</label>
-                    <input type="text" class="form-control" id="labelOfImgItemExaminatedReceived" name="labelOfImgItemExaminatedReceived[]" value="Material recebido.">
-                </div>
+//FIM DE TESTES PARA NOVAS FUNÇÕES
 
-
-*/
-
-
-
-//const imgExamiatedItensToUpload = document.querySelectorAll('input[name="uploadItemExaminatedImage[]"]');
-
-
-
-
-
-
-
-
-
-// Adicionar novos campos para pessoas envolvidas
+// NOVOS CAMPOS PARA PESSOAS ENVOLVIDAS
 document.getElementById('people-involved-container').addEventListener('click', function (event) {
     if (event.target.classList.contains('add-person')) {
         var container = document.getElementById('people-involved-container');
@@ -320,149 +262,139 @@ document.getElementById('people-involved-container').addEventListener('click', f
 document.addEventListener('DOMContentLoaded', function() {
     updateItemHeaders();
 
-function addItem() {
-    itemPackagingSelected = '';
-    itemMorphologySelected = '';
-    itemExamResultSelected = '';
-    const container = document.getElementById('item-container');
-    const newItem = document.createElement('div');
-    newItem.className = 'item-group form-group border p-3 mb-3';
-    newItem.innerHTML = `
-        <div class="mb-2 item-header-dark">
-            <h5 name="item_header[]">Item n</h5>
-        </div>
-        <div class="form-row">
-            <div class="form-group col-md-3">
-                <label for="packaging">Invólucro</label>
-                <select name="packaging[]" class="packaging-select form-control">
-                    <option value="">Selecione uma opção</option>
-                </select>
+    // ADICIONAR NOVOS ITENS DE EXAME
+    function addItem() {
+        itemPackagingSelected = '';
+        itemMorphologySelected = '';
+        itemExamResultSelected = '';
+        const container = document.getElementById('item-container');
+        const newItem = document.createElement('div');
+        newItem.className = 'item-group form-group border p-3 mb-3';
+        newItem.innerHTML = `
+            <div class="mb-2 item-header-dark">
+                <h5 name="item_header[]">Item n</h5>
             </div>
-            <div class="form-group col-md-3">
-                <label for="morphology">Morfologia</label>
-                <select name="morphology[]" class="morphology-select form-control">
-                    <option value="">Selecione uma opção</option>
-                </select>
-            </div>
-            <div class="form-group col-md-3">
-                <label for="massa-bruta">Massa Bruta (g)</label>
-                <input type="number" step="0.01" name="massa_bruta[]" class="form-control" placeholder="Massa Bruta" required>
-            </div>
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label for="packaging">Invólucro</label>
+                    <select name="packaging[]" class="packaging-select form-control">
+                        <option value="">Selecione uma opção</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="morphology">Morfologia</label>
+                    <select name="morphology[]" class="morphology-select form-control">
+                        <option value="">Selecione uma opção</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="massa-bruta">Massa Bruta (g)</label>
+                    <input type="number" step="0.01" name="massa_bruta[]" class="form-control" placeholder="Massa Bruta" required>
+                </div>
 
-            <div class="form-group col-md-3">
-                <label for="massa-liquida">Massa Líquida (g)</label>
-                <input type="number" step="0.01" name="massa_liquida[]" class="form-control" placeholder="Massa Líquida" required>
+                <div class="form-group col-md-3">
+                    <label for="massa-liquida">Massa Líquida (g)</label>
+                    <input type="number" step="0.01" name="massa_liquida[]" class="form-control liquid-mass-value" placeholder="Massa Líquida" required>
+                </div>
+                
             </div>
-            
-        </div>
-        <div class="form-row">
-            <div class="form-group col-md-3">
-                <div class="d-flex flex-column">
-                    <div class="form-check">
-                        <input type="checkbox" name="devolvido[]" class="form-check-input" checked>
-                        <label for="devolvido" class="form-check-label">Devolvido</label>
-                    </div>
-                    <div class="form-check">
-                        <input type="checkbox" name="contrapericia[]" class="form-check-input" checked>
-                        <label for="contrapericia" class="form-check-label">Contraperícia</label>
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <div class="d-flex flex-column">
+                        <div class="form-check">
+                            <input type="checkbox" name="devolvido[]" class="form-check-input form-check-input-returned" checked>
+                            <label for="devolvido" class="form-check-label">Devolvido</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" name="contrapericia[]" class="form-check-input form-check-input-counterproof" checked>
+                            <label for="contrapericia" class="form-check-label">Contraperícia</label>
+                        </div>
                     </div>
                 </div>
+                <div class="form-group col-md-3">
+                    <label for="examresulting">Resdultado do Exame</label>
+                    <select name="examresulting[]" class="exam-resulting form-control">
+                        <option value="">Selecione uma opção</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="lacre-entrada">Lacre de Entrada</label>
+                    <input type="text" name="lacre_entrada[]" class="form-control" placeholder="Lacre de Entrada" style="text-transform: uppercase;" required>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="lacre-saida">Lacre de Saída</label>
+                    <input type="text" name="lacre_saida[]" class="form-control" placeholder="Lacre de Saída" style="text-transform: uppercase;" required value="{{ lacre_saida }}">
+                </div>
             </div>
-            <div class="form-group col-md-3">
-                <label for="examresulting">Resdultado do Exame</label>
-                <select name="examresulting[]" class="exam-resulting form-control">
-                    <option value="">Selecione uma opção</option>
-                </select>
+            <div class="form-group">
+                <label for="packagingAndMorphologiObservations">Invólucros e Morfologia</label>
+                <textarea class="form-control" name="packagingAndMorphologiObservations[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
             </div>
-            <div class="form-group col-md-3">
-                <label for="lacre-entrada">Lacre de Entrada</label>
-                <input type="text" name="lacre_entrada[]" class="form-control" placeholder="Lacre de Entrada" style="text-transform: uppercase;" required>
+            <div class="form-group">
+                <label for="resultOfExams">Resultado dos Exames</label>
+                <textarea class="form-control" name="resultOfExams[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
             </div>
-            <div class="form-group col-md-3">
-                <label for="lacre-saida">Lacre de Saída</label>
-                <input type="text" name="lacre_saida[]" class="form-control" placeholder="Lacre de Saída" style="text-transform: uppercase;" required value="{{ lacre_saida }}">
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="packagingAndMorphologiObservations">Invlócros e Morfologia</label>
-            <textarea class="form-control" name="packagingAndMorphologiObservations[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
-        </div>
-        <div class="form-group">
-            <label for="resultOfExams">Resultado dos Exames</label>
-            <textarea class="form-control" name="resultOfExams[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
-        </div>
-        <div class="d-flex justify-content-between align-items-center mt-3">
 
 
-
-
-
-
-            <input type="hidden" name="imageItemExaminatedBase64[]" class="imageItemExaminatedBase64Input">  <!-- Input invisível para armazenar a imagem em Base64 -->
-            <input type="file" name="uploadItemExaminatedImage[]" class="uploadItemExaminatedImageInput">
-            <div class="form-check form-group flex-grow-1 mx-3 w-100">
-                <label for="imagem-legenda_item">Legenda da Imagem</label>
-                <input type="text" class="form-control" name="labelOfImgItemExaminatedReceived[]" value="Item examinado.">
+            <div class="form-group">
+                <label for="returnedOrCounterproof">Retorno e Contraperícia</label>
+                <textarea class="form-control" name="returnedOrCounterproof[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
             </div>
 
 
 
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <input type="hidden" name="imageItemExaminatedBase64[]" class="imageItemExaminatedBase64Input">  <!-- Input invisível para armazenar a imagem em Base64 -->
+                <input type="file" name="uploadItemExaminatedImage[]" class="uploadItemExaminatedImageInput">
+                <div class="form-check form-group flex-grow-1 mx-3 w-100">
+                    <label for="imagem-legenda_item">Legenda da Imagem</label>
+                    <input type="text" class="form-control" name="labelOfImgItemExaminatedReceived[]" value="Item examinado.">
+                </div>
+                <button type="button" class="btn btn-secondary add-item">+</button>
+                <button type="button" class="btn btn-danger ml-2 remove-item">-</button>
+            </div>
+        `;
 
+        container.appendChild(newItem);
+        const newSelectPac = newItem.querySelector('.packaging-select');
+        populateSelectPac(newSelectPac);
 
+        const newSelectMorph = newItem.querySelector('.morphology-select');
+        populateSelectMorph(newSelectMorph);
 
-            <button type="button" class="btn btn-secondary add-item">+</button>
-            <button type="button" class="btn btn-danger ml-2 remove-item">-</button>
-        </div>
-    `;
-    container.appendChild(newItem);
-    const newSelectPac = newItem.querySelector('.packaging-select');
-    populateSelectPac(newSelectPac);
+        const newSelectExamREsulting = newItem.querySelector('.exam-resulting');
+        populateSelectExamResulting(newSelectExamREsulting);
 
-    const newSelectMorph = newItem.querySelector('.morphology-select');
-    populateSelectMorph(newSelectMorph);
+        newItem.querySelector('.add-item').addEventListener('click', addItem);
+        newItem.querySelector('.remove-item').addEventListener('click', function() {
+            newItem.remove();
+            updateItemHeaders();
+        });
 
-    const newSelectExamREsulting = newItem.querySelector('.exam-resulting');
-    populateSelectExamResulting(newSelectExamREsulting);
-
-    // Adiciona event listeners aos novos botões
-    newItem.querySelector('.add-item').addEventListener('click', addItem);
-    newItem.querySelector('.remove-item').addEventListener('click', function() {
-        newItem.remove();
-        updateItemHeaders();
-    });
-
-    newItem.querySelector('.uploadItemExaminatedImageInput').addEventListener('change', function(event) {
-        const file = event.target.files[0];  // Obtém o arquivo selecionado
-        if (!file) {
-            alert('Nenhum arquivo selecionado');
-            return;
-        }
-    
-        // Obtém o input hidden correspondente (hiddenInputFile já foi selecionado anteriormente)
-        const hiddenInputFile = newItem.querySelector('.imageItemExaminatedBase64Input');
+        newItem.querySelector('.uploadItemExaminatedImageInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (!file) {
+                alert('Nenhum arquivo selecionado');
+                return;
+            }
+            const hiddenInputFile = newItem.querySelector('.imageItemExaminatedBase64Input');
+            handleImageResize(file, hiddenInputFile);        
+        });
+        //thisLiquidMass = newItem.querySelector('.liquid-mass-value');
+        const thisCounterproof = newItem.querySelector('.form-check-input-counterproof');
+        const thisReturned = newItem.querySelector('.form-check-input-returned');
+        newItem.querySelector('.liquid-mass-value').addEventListener('change', function() {
+            handleLiquidMassChange(this, thisCounterproof, thisReturned);
+        });
         
-        // Chama a função para redimensionar a imagem e passar o resultado ao input hidden
-        handleImageResize(file, hiddenInputFile);
+
+
+        updateItemHeaders();
+    }
+
+    document.querySelector('#massa-liquida').addEventListener('change', function(){
+        handleLiquidMassChange(this, document.querySelector('#contrapericia') , document.querySelector('#devolvido'));
     });
-
-    updateItemHeaders();
-}
-    
-    // Inicializa event listeners no item original
-
-    /*
-    
-    document.querySelector('#uploadItemExaminatedImage').addEventListener('change', function(event) {
-    const file = event.target.files[0];  // Captura o arquivo de imagem selecionado
-    if (!file) return;  // Se não houver arquivo, não faz nada
-
-    // Chama a função handleImageResize passando o arquivo
-    handleImageResize(file, 'imageItemExaminatedBase64');
-});
-    
-    */
-
-
 
     document.querySelector('.add-item').addEventListener('click', addItem);
     document.addEventListener('click', function(event) {
@@ -566,32 +498,6 @@ function updateItemHeaders() {
     }
 }
 
-
-
-
-
-
-
-// IMAGEM DO MATERIAL RECEBIDO
-
-/*
-const allMaterialImg = document.querySelector('#imgOfAllMaterialReceived');
-let selectedAllMaterialImg = null;
-allMaterialImg.addEventListener('change', function(event) {
-    const files = event.target.files;
-    if (files.length > 0) {
-        selectedAllMaterialImg = files[0];
-    }
-});
-
-*/
-
-
-
-
-
-
-
 document.addEventListener('DOMContentLoaded', function() {
     const submitButton = document.querySelector('#enviar');
     const form = document.querySelector('#drug-report-form');
@@ -600,15 +506,6 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Formulário não encontrado!');
         return;
     }
-
-
-
-
-
-
-
-
-
 
     submitButton.addEventListener('click', function(event) {
         event.preventDefault();  // Evita o envio automático do formulário
@@ -620,16 +517,6 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     });
 });
-
-
-
-
-
-
-
-
-
-
 
 function formCheking(){
     let protocol = document.querySelector('#protocolo').value;
@@ -714,19 +601,7 @@ function formCheking(){
         alert('A data e hora do acionamento devem ser anteriores à data e hora da liberação.');
         document.querySelector('#data_atendimento').focus();
         return false;
-    }
-    
-    // Função que compara datas e horas
-    function beforeThan(serviceDate, serviceHour, releaseDate, releaseHour) {
-        const serviceDateTime = new Date(serviceDate);
-        serviceDateTime.setHours(serviceHour.getHours(), serviceHour.getMinutes());
-    
-        const releaseDateTime = new Date(releaseDate);
-        releaseDateTime.setHours(releaseHour.getHours(), releaseHour.getMinutes());
-    
-        return serviceDateTime < releaseDateTime;
-    }
-    
+    }    
 
     let allSubstances = [];
     const checkboxes = document.querySelectorAll('input[name="substance[]"]');
@@ -794,13 +669,13 @@ function formCheking(){
 
     for (let i = 1; i <= numberOfItems; i++) {
         // TRATAR OS IMPUTS AQUI
-        if (grossMass[i - 1].value === ''){
-            alert('Campo Massa Bruta não pode estar vazio.');
+        if (grossMass[i - 1].value === '' || grossMass[i - 1].value < 0 ){
+            alert('Campo Massa Bruta não pode estar vazio nem pode ser menor que 0.');
             grossMass[i - 1].focus();
             return false;
         }
-        if (liquidMass[i - 1].value === ''){
-            alert('Campo Massa Líquida não pode estar vazio.');
+        if (liquidMass[i - 1].value === '' || liquidMass[i - 1].value < 0){
+            alert('Campo Massa Líquida não pode estar vazio nem pode ser menor que 0.');
             liquidMass[i - 1].focus();
             return false;
         }
@@ -924,6 +799,8 @@ function formCheking(){
     
 }
 
+setupImageUpload('#uploadGeneralImage', '#imageGeneralBase64');
+setupImageUpload('#uploadItemExaminatedImage', '#imageItemExaminatedBase64');
 
 </script>
 
