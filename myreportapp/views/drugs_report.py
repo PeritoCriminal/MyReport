@@ -62,6 +62,12 @@ def drugs_report(request):
                 listOfResultOfExams=request.POST.getlist('resultOfExams[]'),
                 examImages=request.POST.getlist('imageItemExaminatedBase64[]'),
                 examImageCaptions=request.POST.getlist('labelOfImgItemExaminatedReceived[]'),
+                
+                returnedItemsImage=request.POST.get('material-devolvidoBase64'),
+                returnedItemsCaption=request.POST.get('material_devolvido_legenda'),
+                counterProofImage=request.POST.get('contrapericia-imagemoBase64'),
+                counterProofCaption=request.POST.get('contrapericia_legenda'),
+
             )
 
             # print(f'Verificar o que está no post: {request.POST}')

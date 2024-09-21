@@ -1,9 +1,6 @@
-function formatStringWithYear(str, date) {
-    /*
-    Formata a numeração do Laudo, Protocolo e Boletim, incluindo o ano do registro.
-    Aplica o formato "X.XXX/AAAA".
-    */
-
+/*  Formata a numeração do Laudo, Protocolo e Boletim, incluindo o ano do registro.
+    Aplica o formato "X.XXX/AAAA".*/
+function formatStringWithYear(str, date) {    
     if (str.includes('/')) {
         return str.toUpperCase();
     }
@@ -73,31 +70,21 @@ function generatePreamble(designatedDate, city, director, reportingExpert, reque
     return preamble;
 }
 
+// Dá uma aparencia melhor aos nomes digitados pelo usuário, no padrão da língua formal.
 function toNiceName(nomeDeAlguem) {
-
-    // Lista de preposições que devem permanecer em minúsculas quando não estiverem no início ou no fim do nome
     const preposicoes = new Set(['de', 'da', 'do', 'dos', 'das', 'e', 'ou', 'para', 'com', 'em', 'a', 'o', 'do', 'dos']);
-
-    // Divide o nome em palavras
     const palavras = nomeDeAlguem.split(/\s+/);
-
-    // Converte as palavras de acordo com as regras
     const palavrasFormatadas = palavras.map((palavra, index) => {
-        // Converte a palavra para minúscula
         const palavraFormatada = palavra.toLowerCase();
-
-        // Se a palavra é uma preposição e não está no início ou no fim do nome, mantém em minúsculas
         if (preposicoes.has(palavraFormatada) && index !== 0 && index !== palavras.length - 1) {
             return palavraFormatada;
         } else {
-            // Caso contrário, capitaliza a primeira letra
             return palavraFormatada.charAt(0).toUpperCase() + palavraFormatada.slice(1);
         }
     });
-
-    // Junta as palavras formatadas em uma string
     return palavrasFormatadas.join(' ');
 }
+
 
 function beforeThan(priorDate, priorHour, lastDate, lastHour) {
     let beforeDateTime = new Date(
@@ -115,7 +102,6 @@ function beforeThan(priorDate, priorHour, lastDate, lastHour) {
         lastHour.getHours(),
         lastHour.getMinutes()
     );
-
     return beforeDateTime < lastDateTime;
 }
 
@@ -123,22 +109,6 @@ function handleImageResize(file, hiddenInputElement) {
     resizeImage(file, 1200, 800, function (resizedBase64) {
         // Armazena a string Base64 no input hidden
         hiddenInputElement.value = resizedBase64;
-    });
-}
-
-function setupImageUpload(uploadInputId, hiddenInputId) {
-    document.querySelector(uploadInputId).addEventListener('change', function (event) {
-        const file = event.target.files[0];
-        if (!file) {
-            alert('Nenhum arquivo selecionado.');
-            return;
-        }
-        const hiddenInputElement = document.querySelector(hiddenInputId);
-        if (!hiddenInputElement) {
-            alert('Input hidden não encontrado.');
-            return;
-        }
-        handleImageResize(file, hiddenInputElement);
     });
 }
 

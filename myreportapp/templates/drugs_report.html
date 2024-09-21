@@ -71,8 +71,8 @@
                 <textarea class="form-control" id="allMaterialObservations" name="allMaterialObservations" rows="3" placeholder="Opcional."></textarea>
             </div>
             <div class="form-group d-flex align-items-center justify-content-between">
-                <input type="hidden" id="imageGeneralBase64" name="imageGeneralBase64">
-                <input type="file" id="uploadGeneralImage" name="uploadGeneralImage">
+                <input type="hidden" id="imageGeneralBase64" name="imageGeneralBase64" class="imageGeneralBase64">
+                <input type="file" id="uploadGeneralImage" name="uploadGeneralImage" class="uploadGeneralImage">
                 <input type="text" class="form-control" id="labelOfImgOfAllMaterialReceived" name="labelOfImgOfAllMaterialReceived" value="Material recebido.">
             </div>
         </div>        
@@ -84,7 +84,6 @@
             <button type="button" class="btn btn-secondary ml-2 add-person">+</button>
         </div>
     </div>
-
     <!-- ITENS EXAMINADOS / ESPECÍFICOS DA CLASSE MODEL DRUGS QUE EXTENDE DA CALSSE BASE / PELO MENOS UM É OBRIGATÓRIO, OUTROS ACRESCIDOS DINAMICAMENTE -->
     <div id="item-container">
         <label>Itens</label>    
@@ -160,8 +159,8 @@
 
 
             <div class="d-flex align-items-center">
-                <input type="hidden" id="imageItemExaminatedBase64" name="imageItemExaminatedBase64[]">  <!-- Input invisível para armazenar a imagem em Base64 -->
-                <input type="file" id = "uploadItemExaminatedImage" name="uploadItemExaminatedImage[]">
+                <input type="hidden" id="imageItemExaminatedBase64" class="imageItemExaminatedBase64" name="imageItemExaminatedBase64[]">  <!-- Input invisível para armazenar a imagem em Base64 -->
+                <input type="file" id = "uploadItemExaminatedImage" class="uploadItemExaminatedImage" name="uploadItemExaminatedImage[]">
                 <div class="form-check form-group flex-grow-1 mx-3 w-100">
                     <label for="imagem-legenda_item">Legenda da Imagem</label>
                     <input type="text" class="form-control" id="labelOfImgItemExaminatedReceived" name="labelOfImgItemExaminatedReceived[]" value="Item examinado.">
@@ -176,7 +175,10 @@
     <div class="form-group d-flex justify-content-between">
         <div class="form-check form-group">
             <label for="material-devolvido">Material Devolvido</label>
-            <input type="file" class="form-control-file" id="material-devolvido" name="material_devolvido" accept="image/*">
+        
+            <input type="hidden" id="material-devolvidoBase64" name="material-devolvidoBase64" class='material_devolvidoBase64'>  <!-- Input invisível para armazenar a imagem em Base64 -->
+
+            <input type="file" class="form-control-file" id="material-devolvido" name="material_devolvido" class='material_devolvido' accept="image/*">
         </div>
         <div class="form-check form-group w-100">
             <label for="material-devolvido-legenda">Legenda da imagem</label>
@@ -186,7 +188,10 @@
     <div class="form-group d-flex justify-content-between">
         <div class="form-check form-group">
             <label for="contrapericia-imagem">Contraperícia</label>
-            <input type="file" class="form-control-file" id="contrapericia-imagem" name="contrapericia_imagem" accept="image/*">
+           
+            <input type="hidden" id="contrapericia-imagemBase64" name="contrapericia-imagemoBase64" class='contrapericia-imagemoBase64'>  <!-- Input invisível para armazenar a imagem em Base64 -->
+           
+            <input type="file" class="form-control-file" id="contrapericia-imagem" name="contrapericia_imagem" class='contrapericia_imagem' accept="image/*">
         </div>
         <div class="form-check form-group w-100">
             <label for="contrapericia-legenda">Legenda da imagem</label>
@@ -220,9 +225,26 @@ function setupImageUpload(uploadInputId, hiddenInputId) {
         }
         handleImageResize(file, hiddenInputElement);
     });
+}*/
+
+function setupImageUpload(selectorInput, selectorHiddenInput) {
+    const inputElement = document.querySelector(selectorInput);
+    const hiddenInputElement = document.querySelector(selectorHiddenInput);
+
+    if (inputElement) {
+        inputElement.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (!file) {
+                alert('Nenhum arquivo selecionado');
+                return;
+            }
+            handleImageResize(file, hiddenInputElement);
+        });
+    } else {
+        console.error(`Elemento com o seletor ${selectorInput} não foi encontrado.`);
+    }
 }
 
-*/
 
 //  FIM DAS FUNÇÕES EM scripts.js
 
@@ -283,6 +305,12 @@ document.getElementById('people-involved-container').addEventListener('click', f
 
 document.addEventListener('DOMContentLoaded', function() {
     updateItemHeaders();
+
+    setupImageUpload('#uploadGeneralImage', '#imageGeneralBase64');
+    setupImageUpload('#uploadItemExaminatedImage', '#imageItemExaminatedBase64');    
+    setupImageUpload('#material-devolvido', '#material-devolvidoBase64');
+    setupImageUpload('#contrapericia-imagem', '#contrapericia-imagemBase64');
+
 
     // ADICIONAR NOVOS ITENS DE EXAME
     function addItem() {
@@ -816,9 +844,6 @@ function formCheking(){
     console.log(listOfpackagingAndMorphology);
     console.log(listOfResultOfExams);
            
-    setupImageUpload('#uploadGeneralImage', '#imageGeneralBase64');
-    setupImageUpload('#uploadItemExaminatedImage', '#imageItemExaminatedBase64');
-
     teste('Tudo ok até aqui');
     return true;
 }
