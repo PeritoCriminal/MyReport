@@ -62,12 +62,14 @@ def drugs_report(request):
                 listOfResultOfExams=request.POST.getlist('resultOfExams[]'),
                 examImages=request.POST.getlist('imageItemExaminatedBase64[]'),
                 examImageCaptions=request.POST.getlist('labelOfImgItemExaminatedReceived[]'),
-            
             )
+
             # print(f'Verificar o que está no post: {request.POST}')
             new_report.save()
 
-            return HttpResponse('Relatório criado com sucesso!')
+            num_images = len(new_report.examImages)
+
+            return HttpResponse(f'Relatório criado com sucesso! Imagens dos itens examinados = {num_images}')
         except Exception as e:
             return HttpResponse(f'Erro ao criar relatório: {str(e)}')  # ESSE ERRO ESTÁ SENDO EXIBIDO
 

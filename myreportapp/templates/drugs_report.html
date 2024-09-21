@@ -233,35 +233,45 @@
 
 <script>
 
+    document.querySelector('#uploadGeneralImage').addEventListener('change', function(event) {
+        const file = event.target.files[0];  // Captura o arquivo de imagem selecionado
+        if (!file) {
+            alert('Nenhum arquivo selecionado.');
+            return;  // Se não houver arquivo, não faz nada
+        }
+    
+        // Obtém o elemento hidden que armazenará a string Base64
+        const hiddenInputElement = document.querySelector('#imageGeneralBase64');
+        
+        if (!hiddenInputElement) {
+            alert('Input hidden não encontrado.');
+            return;
+        }
+    
+        // Chama a função handleImageResize passando o arquivo e o elemento hidden
+        handleImageResize(file, hiddenInputElement);
+    });
+    
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-document.querySelector('#uploadGeneralImage').addEventListener('change', function(event) {
-    const file = event.target.files[0];  // Captura o arquivo de imagem selecionado
-    if (!file) return;  // Se não houver arquivo, não faz nada
-
-    // Chama a função handleImageResize passando o arquivo
-    handleImageResize(file, 'imageGeneralBase64');
-});
-
-document.querySelector('#uploadItemExaminatedImage').addEventListener('change', function(event) {
-    const file = event.target.files[0];  // Captura o arquivo de imagem selecionado
-    if (!file) return;  // Se não houver arquivo, não faz nada
-
-    // Chama a função handleImageResize passando o arquivo
-    handleImageResize(file, 'imageItemExaminatedBase64');
-});
+    document.querySelector('#uploadItemExaminatedImage').addEventListener('change', function(event) {
+        const file = event.target.files[0];  // Captura o arquivo de imagem selecionado
+        if (!file) {
+            alert('Nenhum arquivo selecionado.');
+            return;  // Se não houver arquivo, não faz nada
+        }
+    
+        // Obtém o elemento hidden que armazenará a string Base64
+        const hiddenInputElement = document.querySelector('#imageItemExaminatedBase64');
+    
+        if (!hiddenInputElement) {
+            alert('Input hidden não encontrado.');
+            return;
+        }
+    
+        // Chama a função handleImageResize passando o arquivo e o elemento hidden
+        handleImageResize(file, hiddenInputElement);
+    });
+    
 
 
 /*
@@ -388,7 +398,7 @@ function addItem() {
 
 
 
-            <input type="hidden" name="imageItemExaminatedBase64[]" calss="imageItemExaminatedBase64Input">  <!-- Input invisível para armazenar a imagem em Base64 -->
+            <input type="hidden" name="imageItemExaminatedBase64[]" class="imageItemExaminatedBase64Input">  <!-- Input invisível para armazenar a imagem em Base64 -->
             <input type="file" name="uploadItemExaminatedImage[]" class="uploadItemExaminatedImageInput">
             <div class="form-check form-group flex-grow-1 mx-3 w-100">
                 <label for="imagem-legenda_item">Legenda da Imagem</label>
@@ -421,17 +431,16 @@ function addItem() {
         updateItemHeaders();
     });
 
-    const hiddenInputFile = newItem.querySelector('.imageItemExaminatedBase64Input');
-
-    // Adiciona o event listener ao input de upload de imagem
     newItem.querySelector('.uploadItemExaminatedImageInput').addEventListener('change', function(event) {
         const file = event.target.files[0];  // Obtém o arquivo selecionado
         if (!file) {
-            alert('nenhum arquivo selecionado');
-            return;  // Se nenhum arquivo foi selecionado, sai da função
+            alert('Nenhum arquivo selecionado');
+            return;
         }
-        alert(`O arquivo foi selecionado ${file.name}`)
     
+        // Obtém o input hidden correspondente (hiddenInputFile já foi selecionado anteriormente)
+        const hiddenInputFile = newItem.querySelector('.imageItemExaminatedBase64Input');
+        
         // Chama a função para redimensionar a imagem e passar o resultado ao input hidden
         handleImageResize(file, hiddenInputFile);
     });

@@ -119,10 +119,10 @@ function beforeThan(priorDate, priorHour, lastDate, lastHour) {
     return beforeDateTime < lastDateTime;
 }
 
-function handleImageResize(file, name_input) {
+function handleImageResize(file, hiddenInputElement) {
     resizeImage(file, 1200, 800, function(resizedBase64) {
         // Armazena a string Base64 no input hidden
-        document.getElementById(name_input).value = resizedBase64;
+        hiddenInputElement.value = resizedBase64;
     });
 }
 
