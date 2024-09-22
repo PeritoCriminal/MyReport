@@ -61,12 +61,13 @@ def drugs_report(request):
                 listOfpackagingAndMorphology=request.POST.getlist('packagingAndMorphologiObservations[]'),
                 listOfResultOfExams=request.POST.getlist('resultOfExams[]'),
                 examImages=request.POST.getlist('imageItemExaminatedBase64[]'),
-                examImageCaptions=request.POST.getlist('labelOfImgItemExaminatedReceived[]'),
-                
+                examImageCaptions=request.POST.getlist('labelOfImgItemExaminatedReceived[]'),                
                 returnedItemsImage=request.POST.get('material-devolvidoBase64'),
                 returnedItemsCaption=request.POST.get('material_devolvido_legenda'),
                 counterProofImage=request.POST.get('contrapericia-imagemoBase64'),
                 counterProofCaption=request.POST.get('contrapericia_legenda'),
+                considerations = request.POST.get('considerations'),
+                conclusion = request.POST.get('conclusao'),
 
             )
 

@@ -21,6 +21,8 @@ class BaseReport(models.Model):
     assistant_expert = models.CharField('Perito Assistente', max_length=100, blank=True, null=True, default='indefinido')
     photographer = models.CharField('Fotógrafo', max_length=100, blank=True, null=True, default='indefinido')
     draftsman = models.CharField('Desenhista', max_length=100, blank=True, null=True, default='indefinido')
+    considerations = models.TextField(blank=True, verbose_name='Considerações', default='')
+    conclusion = models.TextField(blank=True, verbose_name='Conclusão', default='')
 
     class Meta:
         abstract = True

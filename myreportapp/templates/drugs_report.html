@@ -200,6 +200,10 @@
     </div>
 </div>
 <div class="form-group">
+    <label for="considerations">Considerações</label>
+    <textarea class="form-control" id="considerations" name="considerations" rows="4" placeholder="Digite suas considerações aqui..."></textarea>
+</div>
+<div class="form-group">
     <label for="conclusao">Conclusão</label>
     <textarea class="form-control" id="conclusao" name="conclusao" rows="4" placeholder="Digite a conclusão aqui..."></textarea>
 </div>
@@ -210,22 +214,6 @@
 
 // FUNÇÕES NO ARQUIVO scripts.js  ----  DEvem ser apagadas depois 
 
-/*
-function setupImageUpload(uploadInputId, hiddenInputId) {
-    document.querySelector(uploadInputId).addEventListener('change', function (event) {
-        const file = event.target.files[0];
-        if (!file) {
-            alert('Nenhum arquivo selecionado.');
-            return;
-        }
-        const hiddenInputElement = document.querySelector(hiddenInputId);
-        if (!hiddenInputElement) {
-            alert('Input hidden não encontrado.');
-            return;
-        }
-        handleImageResize(file, hiddenInputElement);
-    });
-}*/
 
 function setupImageUpload(selectorInput, selectorHiddenInput) {
     const inputElement = document.querySelector(selectorInput);
@@ -373,7 +361,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <div class="form-group col-md-3">
                     <label for="lacre-saida">Lacre de Saída</label>
-                    <input type="text" name="lacre_saida[]" class="form-control" placeholder="Lacre de Saída" style="text-transform: uppercase;" required value="{{ lacre_saida }}">
+                    <input type="text" name="lacre_saida[]" class="form-control lacre_saida" placeholder="Lacre de Saída" style="text-transform: uppercase;" required value="{{ lacre_saida }}">
                 </div>
             </div>
             <div class="form-group">
@@ -446,6 +434,32 @@ document.addEventListener('DOMContentLoaded', function() {
         thisReturned.addEventListener('change', function(){
             optionsAboutTwoLogicals(thisReturned.checked, thisCounterproof.checked, thisreturnedOrCounterproof);
         });
+
+        newItem.querySelector('.lacre_saida').addEventListener('focus', function(event){
+            const sealInputs = document.querySelectorAll('input[name="lacre_saida[]"]');
+            const currentInput = event.target;  // O input que recebeu o foco
+        
+            // Verifica se há inputs anteriores ao atual
+            const currentIndex = Array.from(sealInputs).indexOf(currentInput);
+            if (currentIndex > 0) {
+                const firstValue = sealInputs[0].value;  // Valor do primeiro input
+                let allEqual = true;
+        
+                // Verifica se todos os inputs anteriores têm o mesmo valor que o primeiro
+                for (let i = 1; i < currentIndex; i++) {
+                    if (sealInputs[i].value !== firstValue) {
+                        allEqual = false;
+                        break;
+                    }
+                }
+        
+                // Se todos forem iguais ao primeiro, atribui o valor ao input atual
+                if (allEqual) {
+                    currentInput.value = firstValue;
+                }
+            }
+        });
+        
 
         updateItemHeaders();
     }
@@ -710,24 +724,6 @@ function formCheking(){
 
 //  IMPLEMENTAR AS VERIIFCAÇÕES NECESSÁRIAS DOS INPUTS
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
     for (let i = 1; i <= numberOfItems; i++) {
         // TRATAR OS IMPUTS AQUI
         if (grossMass[i - 1].value === '' || grossMass[i - 1].value < 0 ){
@@ -747,7 +743,23 @@ function formCheking(){
             alert('Massa Bruta não pode ser inferior a Massa Líquida.');
             grossMass[i - 1].focus();
             return false;
-        }                
+        } 
+        
+        let lacreEntrada = document.querySelectorAll('input[name="lacre_entrada[]"]');
+        let lacreSaida = document.querySelectorAll('input[name="lacre_saida[]"]');
+        
+        if (lacreEntrada[i - 1].value.trim() ==''){
+            alert('Lacre de Entrada não pode ser nulo.');
+            lacreEntrada[i - 1].focus();
+            return false;
+        };
+
+        if (lacreSaida[i - 1].value =='' || lacreSaida[i - 1].value =='SPTC' ){
+            alert('Valor inválido para Lacre de Saída.');
+            lacreSaida[i - 1].focus();
+            return false;
+        };
+        
     }
 
     // ATRIBUIR ÀS VARIÁVEIS / CRIAR E POPULAR AS LISTAS AQUI
