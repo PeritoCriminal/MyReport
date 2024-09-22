@@ -3,6 +3,7 @@ from django.db import models
 class BaseReport(models.Model):
     date_register = models.DateField('Data do Registro', auto_now_add=True)
     report_number = models.CharField('Número do Laudo', max_length=20, default='indefinido')
+    city = models.CharField('Número do Laudo', max_length=50, default='Limeira')
     protocol_number = models.CharField('Número do Protocolo', max_length=20, default='indefinido')
     occurring_number = models.CharField('Número do Boletim', max_length=20, default='indefinido')
     designated_date = models.DateField('Data de Designação', auto_now=False)
@@ -35,8 +36,8 @@ class BaseReport(models.Model):
         occurrence_nature_text = f"Natureza da ocorrência, de acordo com a requisição: {self.occurrence_nature}."
         return occurrence_nature_text
     
-    def generate_preamble(self):
-        designated_date_formatted = self.designated_date.strftime("%d-%m-%Y")
+    def generate_preamble(self): 
+        """designated_date_formatted = self.designated_date.strftime("%d-%m-%Y")
         preamble = (
             f"Em {designated_date_formatted}, na cidade de {self.city} e no Instituto de Criminalística, "
             f"da Superintendência da Polícia Técnico-Científica, da Secretaria de Segurança Pública do Estado de São Paulo, "
@@ -44,5 +45,14 @@ class BaseReport(models.Model):
             f"pelo Diretor deste Instituto de Criminalística, o Perito Criminal {self.director}, foi designado o perito criminal "
             f"{self.reporting_expert} para proceder ao Exame Pericial especificado em requisição de exame assinada pela Autoridade Policial, "
             f"o Delegado de Polícia {self.requesting_authority}."
-        )        
+        )        """
+        #designated_date_formatted = '12-02-2024'
+        preamble = (
+            f"Em {self.designated_date}, na cidade de {self.city} e no Instituto de Criminalística, "
+            f"da Superintendência da Polícia Técnico-Científica, da Secretaria de Segurança Pública do Estado de São Paulo, "
+            f"em conformidade com o disposto no art. 178 do Decreto-Lei 3689 de 3-10-1941 e Decreto-Lei 42847 de 9-2-1998, "
+            f"pelo Diretor deste Instituto de Criminalística, o Perito Criminal {self.director}, foi designado o perito criminal "
+            f"{self.reporting_expert} para proceder ao Exame Pericial especificado em requisição de exame assinada pela Autoridade Policial, "
+            f"o Delegado de Polícia {self.requesting_authority}."
+        )
         return preamble

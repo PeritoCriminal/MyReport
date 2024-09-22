@@ -4,28 +4,21 @@ from django.http import HttpResponse
 from ..models.drugs_report_model import DrugReport
 from ..models.custom_user_model import UserRegistrationModel
 from datetime import datetime, timedelta
-from django.core.exceptions import ValidationError
+from docx import Document
+from io import BytesIO
 
 @login_required(login_url='/login/')
 def drugs_report(request):
     user = request.user
     user_data = UserRegistrationModel.objects.get(username=user.username)
 
-    if request.method == 'POST':
-        # TESTE  -  Até agora dando Null para todos ... OU SEJA, OS VAORES DAS VARIÁEIS DO TEMPLATE NÃO ESTÃO CHEGANDO AQUI.
-        # print('Protocol:', request.POST.get('protocol'))
-        # print('Release Date:', request.POST.get('releaseDate'))
-        # print('Service Hour:', request.POST.get('serviceHour'))
-
-
-        try:
-            materialImage = request.FILES.get('imgOfAllMaterialReceived')  # Obtém a imagem do formulário
-            materialImageCaption = request.POST.get('labelOfImgOfAllMaterialReceived')
-
+    if request.method == 'POST':        
+        try:            
             new_report = DrugReport(
                 report_number='000/00',
+                city=user_data.city,
                 protocol_number=request.POST.get('protocolo'),
-                designated_date='2024-09-19',#request.POST.get('releaseDate'),
+                designated_date=request.POST.get('data_atendimento'),
                 exam_objective='Constatação Provisória',
                 occurrence_nature='Entorpecente',
                 occurring_number=request.POST.get('boletim'),
@@ -44,18 +37,15 @@ def drugs_report(request):
                 draftsman='Não se aplica',
                 allSubstances=request.POST.getlist('substance[]'),
                 materialReceivedObservations=request.POST.get('allMaterialObservations'),
-
                 materialImage=request.POST.get('imageGeneralBase64'),
                 materialImageCaption=request.POST.get('labelOfImgOfAllMaterialReceived'),
-
                 listOfEnvolvedPeople=request.POST.getlist('people_involved[]'),
-                #listItensLabels=request.POST.getlist('item_header[]'), eliminar isso é inútl
                 listOfPackagings=request.POST.getlist('packaging[]'),
                 listOfMorphology=request.POST.getlist('morphology[]'),
                 listOfGrossMass=[float(x) for x in request.POST.getlist('massa_bruta[]') if x],
                 listOfLiquidMass=[float(x) for x in request.POST.getlist('massa_liquida[]') if x],
-                listOfReturned=[x == 'on' for x in request.POST.getlist('devolvido[]')],
-                listOfCounterProof=[x == 'on' for x in request.POST.getlist('contrapericia[]')],
+                listOfReturned=request.POST.get('listOfReturndCheckBoxes'),
+                listOfCounterProof=request.POST.get('listOfCounterproofCheckBoxes'),
                 listOfEntranceSeal=request.POST.getlist('lacre_entrada[]'),
                 listOfExitseal=request.POST.getlist('lacre_saida[]'),
                 listOfpackagingAndMorphology=request.POST.getlist('packagingAndMorphologiObservations[]'),
@@ -68,34 +58,47 @@ def drugs_report(request):
                 counterProofCaption=request.POST.get('contrapericia_legenda'),
                 considerations = request.POST.get('considerations'),
                 conclusion = request.POST.get('conclusao'),
-
             )
-
-            # print(f'Verificar o que está no post: {request.POST}')
             new_report.save()
 
-            num_images = len(new_report.examImages)
+            doc = Document()
 
-            return HttpResponse(f'Relatório criado com sucesso! Imagens dos itens examinados = {num_images}')
+            # Gera o preâmbulo usando o método do model
+            preamble_text = new_report.generate_preamble()
+    
+            # Adiciona o preâmbulo ao documento
+            doc.add_paragraph(preamble_text)
+
+            # Adiciona título e conteúdo ao documento
+            doc.add_heading('Relatório de Exame de Drogas', 0)
+            doc.add_paragraph(f'Número do Relatório: {new_report.report_number}')
+            doc.add_paragraph(f'Protocolo: {new_report.protocol_number}')
+            doc.add_paragraph(f'Data de Designação: {new_report.designated_date}')
+            # Adicione outros campos conforme necessário
+
+            # Salva o documento em um buffer de memória
+            doc_buffer = BytesIO()
+            doc.save(doc_buffer)
+            doc_buffer.seek(0)
+
+            response = HttpResponse(doc_buffer, content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+            response['Content-Disposition'] = 'attachment; filename=Relatorio_Drogas.docx'
+            
+            return response
+            #return HttpResponse(f'Relatório criado com sucesso!')
         except Exception as e:
-            return HttpResponse(f'Erro ao criar relatório: {str(e)}')  # ESSE ERRO ESTÁ SENDO EXIBIDO
-
+            return HttpResponse(f'Erro ao criar relatório: {str(e)}')
     now = datetime.now()
-
     minutes = (now.minute // 15) * 15
     rounded_time = now.replace(minute=minutes, second=0, microsecond=0)
     formatted_current_time = rounded_time.strftime('%H:%M')
-
     before_time = rounded_time - timedelta(hours=1.5)
     formatted_before_time = before_time.strftime('%H:%M')
-
     today_date = now.date()
-
     if before_time.day != now.day:
         before_date = today_date - timedelta(days=1)  
     else:
         before_date = today_date  
-
     msg_about_this_form_to_user = (
         f'{user_data.full_name},<br>Este formulário serve como uma alternativa '
         'caso o Sistema GDL não esteja disponível. Preencha todos os campos com atenção, '
@@ -177,6 +180,9 @@ def drugs_report(request):
         'morphology': morphology,
         'exam_resulting': exam_resulting,
         'conterproof_returndmaterial': conterproof_returndmaterial,
-    }
-    
+        'alert': '(Este Laudo é de caráter provisório e não confirma necessariamente o resultado da identificação que será enviado no Laudo Definitivo)',
+    } 
+
     return render(request, 'drugs_report.html', context)
+
+# Devo criar meu docx aqui?

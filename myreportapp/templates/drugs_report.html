@@ -169,45 +169,46 @@
             </div>
         </div>
     </div>
-</div>
-</div>
-<div class="item-group form-group border p-3 mb-3">
-    <div class="form-group d-flex justify-content-between">
-        <div class="form-check form-group">
-            <label for="material-devolvido">Material Devolvido</label>
-        
-            <input type="hidden" id="material-devolvidoBase64" name="material-devolvidoBase64" class='material_devolvidoBase64'>  <!-- Input invisível para armazenar a imagem em Base64 -->
 
-            <input type="file" class="form-control-file" id="material-devolvido" name="material_devolvido" class='material_devolvido' accept="image/*">
+    <div class="item-group form-group border p-3 mb-3">
+        <div class="form-group d-flex justify-content-between">
+            <div class="form-check form-group">
+                <label for="material-devolvido">Material Devolvido</label>
+            
+                <input type="hidden" id="material-devolvidoBase64" name="material-devolvidoBase64" class='material_devolvidoBase64'>  <!-- Input invisível para armazenar a imagem em Base64 -->
+
+                <input type="file" class="form-control-file" id="material-devolvido" name="material_devolvido" class='material_devolvido' accept="image/*">
+            </div>
+            <div class="form-check form-group w-100">
+                <label for="material-devolvido-legenda">Legenda da imagem</label>
+                <input type="text" class="form-control" id="material-devolvido-legenda" name="material_devolvido_legenda" value="Material devolvido após exame.">
+            </div>
         </div>
-        <div class="form-check form-group w-100">
-            <label for="material-devolvido-legenda">Legenda da imagem</label>
-            <input type="text" class="form-control" id="material-devolvido-legenda" name="material_devolvido_legenda" value="Material devolvido após exame.">
+        <div class="form-group d-flex justify-content-between">
+            <div class="form-check form-group">
+                <label for="contrapericia-imagem">Contraperícia</label>
+            
+                <input type="hidden" id="contrapericia-imagemBase64" name="contrapericia-imagemoBase64" class='contrapericia-imagemoBase64'>  <!-- Input invisível para armazenar a imagem em Base64 -->
+            
+                <input type="file" class="form-control-file" id="contrapericia-imagem" name="contrapericia_imagem" class='contrapericia_imagem' accept="image/*">
+            </div>
+            <div class="form-check form-group w-100">
+                <label for="contrapericia-legenda">Legenda da imagem</label>
+                <input type="text" class="form-control" id="contrapericia-legenda" name="contrapericia_legenda" value="Material separado para contraperícia.">
+            </div>
         </div>
     </div>
-    <div class="form-group d-flex justify-content-between">
-        <div class="form-check form-group">
-            <label for="contrapericia-imagem">Contraperícia</label>
-           
-            <input type="hidden" id="contrapericia-imagemBase64" name="contrapericia-imagemoBase64" class='contrapericia-imagemoBase64'>  <!-- Input invisível para armazenar a imagem em Base64 -->
-           
-            <input type="file" class="form-control-file" id="contrapericia-imagem" name="contrapericia_imagem" class='contrapericia_imagem' accept="image/*">
-        </div>
-        <div class="form-check form-group w-100">
-            <label for="contrapericia-legenda">Legenda da imagem</label>
-            <input type="text" class="form-control" id="contrapericia-legenda" name="contrapericia_legenda" value="Material separado para contraperícia.">
-        </div>
+    <div class="form-group">
+        <label for="considerations">Considerações</label>
+        <textarea class="form-control" id="considerations" name="considerations" rows="4" placeholder="Digite suas considerações aqui...">{{ alert }}</textarea>
     </div>
-</div>
-<div class="form-group">
-    <label for="considerations">Considerações</label>
-    <textarea class="form-control" id="considerations" name="considerations" rows="4" placeholder="Digite suas considerações aqui..."></textarea>
-</div>
-<div class="form-group">
-    <label for="conclusao">Conclusão</label>
-    <textarea class="form-control" id="conclusao" name="conclusao" rows="4" placeholder="Digite a conclusão aqui..."></textarea>
-</div>
+    <div class="form-group">
+        <label for="conclusao">Conclusão</label>
+        <textarea class="form-control" id="conclusao" name="conclusao" rows="4" placeholder="Digite a conclusão aqui..."></textarea>
+    </div>
     <button type="submit" class="btn btn-primary" id='enviar'>Enviar</button>
+    <input type="hidden" id="listOfReturndCheckBoxes" name="listOfReturndCheckBoxes">
+    <input type="hidden" id="listOfCounterproofCheckBoxes" name="listOfCounterproofCheckBoxes">
 </form>
 
 <script>
@@ -467,6 +468,15 @@ document.addEventListener('DOMContentLoaded', function() {
         optionsAboutTwoLogicals(document.querySelector('#devolvido').checked, document.querySelector('#contrapericia').checked, document.querySelector('#returnedOrCounterproof'));
     });
 
+    document.querySelector('#devolvido').addEventListener('change', function(){
+        optionsAboutTwoLogicals(document.querySelector('#devolvido').checked, document.querySelector('#contrapericia').checked, document.querySelector('#returnedOrCounterproof'));
+    });
+
+    document.querySelector('#contrapericia').addEventListener('change', function(){
+        optionsAboutTwoLogicals(document.querySelector('#devolvido').checked, document.querySelector('#contrapericia').checked, document.querySelector('#returnedOrCounterproof'));
+    });
+    //document.querySelector('#contrapericia')
+
 
 
     document.querySelector('.add-item').addEventListener('click', addItem);
@@ -528,43 +538,11 @@ function populateSelectExamResulting(selectElement) {
         updateObservations(selectElement, examresulting[selectElement.value]);
     });
 }
-
-
-
-
-
-
-
-
-
 let conterproofReturndMaterial = {
     {% for key, value in conterproof_returndmaterial.items %}
         "{{ key }}": "{{ value }}",
     {% endfor %}
 };
-
-
-/*
-function textToConterproofAndReturn(bol_conterproof, bool_returnd, elementTextArea) {
-    let key;
-    if (!bol_conterproof && !bool_returnd) {
-        key = 'ff';
-    } else if (!bol_conterproof && bool_returnd) {
-        key = 'fv';
-    } else {
-        key = 'vv';
-    }
-
-    // Definir o valor correspondente ao textarea
-    elementTextArea.value = conterproofReturndMaterial[key];
-}
-
-*/
-
-
-
-
-
 
 document.querySelectorAll('select[name="packaging[]"]').forEach(populateSelectPac);
 document.querySelectorAll('select[name="morphology[]"]').forEach(populateSelectMorph);
@@ -837,12 +815,14 @@ function formCheking(){
     returned.forEach(returned =>{
         listOfReturned.push(returned.checked);
     });
+    document.querySelector('#listOfReturndCheckBoxes').value=JSON.stringify(listOfReturned);
 
     let listOfCounterProof = [];
     let counterproof = document.querySelectorAll('input[name="contrapericia[]"]');
     counterproof.forEach(counterproof =>{
         listOfCounterProof.push(counterproof.checked);
     });
+    document.querySelector('#listOfCounterproofCheckBoxes').value=JSON.stringify(listOfCounterProof);
 
     let listOfEntranceSeal = [];
     let entranceseal = document.querySelectorAll('input[name="lacre_entrada[]"]');
