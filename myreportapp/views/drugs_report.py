@@ -150,9 +150,17 @@ def drugs_report(request):
         'embalagem plástica': 'contendo embalagem plástica com massa total de [X] gramas e [descrição do material].'
     }
     exam_resulting = {  #FALTA IMPLENTAR OS TEXTOS DOS VALORES
-        'cocaina': 'coca',
-        'maconha': 'maconha',
-        'crack': 'cocaina',
+        'Selecione uma opção': '',
+        'Negativo': 'NÃO FOI POSSÍVEL IDENTIFICAR presença de substâncias elencadas nas listas A, B e F da Portaria SVS/MS 344/98 e atualizações posteriores, ou na Portaria MJSP 204/2022, em sua lista III, conforme a(s) técnica(s) utilizada(s) (Portaria SPTC 42/2024).',
+        'Inconclusivo': 'Os exames/análises preliminares mostraram-se INCONCLUSIVOS, sendo necessárias análises mais complexas e morosas, incompatíveis com a rapidez demandada pelos exames de constatação. O resultado deste presente item seguirá em laudo definitivo.',
+        'Cocaina': 'foi DETECTADA presença da substância COCAÍNA, constante na lista F1 da Portaria SVS/MS 344/98 e atualizações posteriores',
+        'Maconha': 'foi DETECTADA presença da substância TETRAHIDROCANNABINOL (THC), constante na lista F2 da Portaria SVS/MS 344/98 e atualizações posteriores',
+        }
+    
+    conterproof_returndmaterial = {
+        'ff':'todo o material disponível foi utilizado nas análises do presente Laudo. Face a sua exiguidade não foi possível armazenar amostra de contraperícia.',
+        'fv':'todo o material foi aqui retirado para análises, sendo o remanescente destas análises armazenado sob a forma de contraperícia.',
+        'vv':'uma amostra de aproximadamente 2 g (dois gramas) foi aqui retirada para análises, sendo o remanescente destas análises armazenado sob a forma de contraperícia.'
     }
 
     context = {
@@ -168,6 +176,7 @@ def drugs_report(request):
         'packaging': packaging,
         'morphology': morphology,
         'exam_resulting': exam_resulting,
+        'conterproof_returndmaterial': conterproof_returndmaterial,
     }
     
     return render(request, 'drugs_report.html', context)

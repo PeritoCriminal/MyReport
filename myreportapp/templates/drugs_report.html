@@ -238,20 +238,18 @@ function setupImageUpload(selectorInput, selectorHiddenInput) {
 
 //TESTES DE FUNÇÕES NOVAS
 
-function optionsAboutTwoLogicals(boolean1 = true, boolean2 = true, inputTextArea) {
-    let textAboutToLogicals;
-
-    if (boolean1 && boolean2) {
-        textAboutToLogicals = 'Dois trues';
-    } else if (boolean1 && !boolean2) {
-        textAboutToLogicals = `primeiro é ${boolean1} e segundo é ${boolean2}`;
-    } else if (!boolean1 && boolean2) {
-        textAboutToLogicals = `primeiro é ${boolean1} e segundo é ${boolean2}`;
+function optionsAboutTwoLogicals(bool_returnd = true, bol_conterproof = true, elementTextArea) {
+    let key;
+    if (!bol_conterproof && !bool_returnd) {
+        key = 'ff';
+    } else if (bol_conterproof && !bool_returnd) {
+        key = 'fv';
     } else {
-        textAboutToLogicals = 'Nenhum é true.';
+        key = 'vv';
     }
-    inputTextArea.value = textAboutToLogicals;
-    //return textAboutToLogicals;
+
+    // Definir o valor correspondente ao textarea
+    elementTextArea.value = conterproofReturndMaterial[key];
 }
 
 
@@ -530,6 +528,44 @@ function populateSelectExamResulting(selectElement) {
         updateObservations(selectElement, examresulting[selectElement.value]);
     });
 }
+
+
+
+
+
+
+
+
+
+let conterproofReturndMaterial = {
+    {% for key, value in conterproof_returndmaterial.items %}
+        "{{ key }}": "{{ value }}",
+    {% endfor %}
+};
+
+
+/*
+function textToConterproofAndReturn(bol_conterproof, bool_returnd, elementTextArea) {
+    let key;
+    if (!bol_conterproof && !bool_returnd) {
+        key = 'ff';
+    } else if (!bol_conterproof && bool_returnd) {
+        key = 'fv';
+    } else {
+        key = 'vv';
+    }
+
+    // Definir o valor correspondente ao textarea
+    elementTextArea.value = conterproofReturndMaterial[key];
+}
+
+*/
+
+
+
+
+
+
 document.querySelectorAll('select[name="packaging[]"]').forEach(populateSelectPac);
 document.querySelectorAll('select[name="morphology[]"]').forEach(populateSelectMorph);
 document.querySelectorAll('select[name="examresulting[]"]').forEach(populateSelectExamResulting);
