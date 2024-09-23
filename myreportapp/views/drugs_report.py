@@ -12,21 +12,29 @@ def drugs_report(request):
     user = request.user
     user_data = UserRegistrationModel.objects.get(username=user.username)
 
-    if request.method == 'POST':        
+
+    if request.method == 'POST':  
+        
+        y1, m1, d1 = request.POST.get('data_atendimento').split('-')
+        invert_date1 = f"{d1}-{m1}-{y1}"
+
+        y2, m2, d2 = request.POST.get('data_liberacao').split('-')
+        invert_date2 = f"{d2}-{m2}-{y2}"
+
         try:            
             new_report = DrugReport(
                 report_number='000/00',
                 city=user_data.city,
                 protocol_number=request.POST.get('protocolo'),
-                designated_date=request.POST.get('data_atendimento'),
+                designated_date=invert_date1,
                 exam_objective='Constatação Provisória',
                 occurrence_nature='Entorpecente',
                 occurring_number=request.POST.get('boletim'),
                 police_station=request.POST.get('delegacia'),
                 requesting_authority=request.POST.get('autoridade_requisitante'),
-                activation_date=request.POST.get('data_atendimento'),
+                activation_date=invert_date1,
                 activation_time=request.POST.get('hora_atendimento'),
-                service_date=request.POST.get('data_liberacao'),
+                service_date=invert_date2,
                 service_time=request.POST.get('hora_liberacao'),
                 director=user_data.director,
                 nucleus=user_data.unit,
