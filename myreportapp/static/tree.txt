@@ -1,0 +1,18 @@
+Listagem de caminhos de pasta
+O número de série do volume é F204-C80A
+C:.
+¦   tree.txt
+¦   
++---css
+¦       styles.css
+¦       
++---doctemplates
+¦       report.docx
+¦       
++---images
+¦   +---reports_links
+¦           drugs.jpg
+¦           
++---js
+        scripts.js
+        

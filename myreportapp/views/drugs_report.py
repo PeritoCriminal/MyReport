@@ -5,7 +5,9 @@ from ..models.drugs_report_model import DrugReport
 from ..models.custom_user_model import UserRegistrationModel
 from datetime import datetime, timedelta
 from docx import Document
+from docx.shared import Pt, Cm
 from io import BytesIO
+import os
 
 @login_required(login_url='/login/')
 def drugs_report(request):
@@ -69,16 +71,36 @@ def drugs_report(request):
             )
             new_report.save()
 
-            doc = Document()
+            template_path = os.path.join('myreportapp', 'static', 'doctemplates', 'report.docx')
 
+            print(f'Path do template: {os.path.abspath(template_path)}')
+            
+            doc = None
+            # Carrega o documento
+            try:
+                doc = Document(template_path)
+            except Exception as e:
+                print(f'Erro ao abrir o documento: {e}')
+                doc = Document()
+
+            doc.add_heading('Laudo Técnico Pericial', 0)
             # Gera o preâmbulo usando o método do model
             preamble_text = new_report.generate_preamble()
     
             # Adiciona o preâmbulo ao documento
-            doc.add_paragraph(preamble_text)
+            #doc.add_paragraph(preamble_text) #somente para esse parágrafo quero espaçamento a equerda de 5cm e font 11
+            
+            preamble_paragraph = doc.add_paragraph(preamble_text)
+            
+            preamble_paragraph.paragraph_format.left_indent = Cm(5)
+
+            # Formatação da fonte do parágrafo
+            for run in preamble_paragraph.runs:
+                run.font.size = Pt(11)
+                run.font.name = 'Arial'
 
             # Adiciona título e conteúdo ao documento
-            doc.add_heading('Relatório de Exame de Drogas', 0)
+        
             doc.add_paragraph(f'Número do Relatório: {new_report.report_number}')
             doc.add_paragraph(f'Protocolo: {new_report.protocol_number}')
             doc.add_paragraph(f'Data de Designação: {new_report.designated_date}')
