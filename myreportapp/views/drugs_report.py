@@ -83,12 +83,16 @@ def drugs_report(request):
                 print(f'Erro ao abrir o documento: {e}')
                 doc = Document()
 
+                # Verifica se o primeiro parágrafo está vazio e o remove do XML
+            if doc.paragraphs and not doc.paragraphs[0].text.strip():
+                p = doc.paragraphs[0]._element
+                p.getparent().remove(p)
+
             doc.add_heading('Laudo Técnico Pericial', 0)
             # Gera o preâmbulo usando o método do model
             preamble_text = new_report.generate_preamble()
     
             # Adiciona o preâmbulo ao documento
-            #doc.add_paragraph(preamble_text) #somente para esse parágrafo quero espaçamento a equerda de 5cm e font 11
             
             preamble_paragraph = doc.add_paragraph(preamble_text)
             

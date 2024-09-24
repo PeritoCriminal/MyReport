@@ -80,7 +80,7 @@
     <div id="people-involved-container">
         <label>Pessoas Envolvidas</label>
         <div class="form-group d-flex align-items-center">
-            <input type="text" name="people_involved[]" class="form-control people-involved" placeholder="Nome da Pessoa" required>
+            <input type="text" id="people_involved" name="people_involved[]" class="form-control people-involved" placeholder="Nome da Pessoa" required>
             <button type="button" class="btn btn-secondary ml-2 add-person">+</button>
         </div>
     </div>
@@ -214,7 +214,19 @@
 <script>
 
 // FUNÇÕES NO ARQUIVO scripts.js  ----  DEvem ser apagadas depois 
+let testando = true;
 
+if (testando) {
+    document.querySelector('#protocolo').value='prot_teste';
+    document.querySelector('#boletim').value='boletim_teste';
+    document.querySelector('#delegacia').value='del. pol. teste';
+    document.querySelector('#autoridade_requisitante').value='Dr. teste';
+    document.querySelector('#people_involved').value = 'sicrano';
+    document.querySelector('#massa-bruta').value = 10;
+    document.querySelector('#massa-liquida').value = 5;
+    document.querySelector('#lacre-entrada').value = 'teste5555';
+    document.querySelector('#lacre-saida').value = 'sptc5555';
+}
 
 function setupImageUpload(selectorInput, selectorHiddenInput) {
     const inputElement = document.querySelector(selectorInput);
@@ -603,6 +615,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }else{  
             alert('Formulário foi verificado');
             form.submit();  // Submete o formulário manualmente após validação
+            setTimeout(function() {
+                window.location.href = "{% url 'index' %}";
+            }, 1000);
         };
     });
 });
