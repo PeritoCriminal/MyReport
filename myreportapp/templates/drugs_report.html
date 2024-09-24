@@ -384,7 +384,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <textarea class="form-control" name="resultOfExams[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
             </div>
 
-
+            
             <div class="form-group">
                 <label for="returnedOrCounterproof">Retorno e Contraperícia</label>
                 <textarea class="form-control returned-or-counterproof" name="returnedOrCounterproof[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
@@ -429,7 +429,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const hiddenInputFile = newItem.querySelector('.imageItemExaminatedBase64Input');
             handleImageResize(file, hiddenInputFile);        
         });
-        //thisLiquidMass = newItem.querySelector('.liquid-mass-value');
+        //thisLiquidMass = newItem.querySelector('.liquid-mass-value'); //conterproof_returndmaterial
         const thisreturnedOrCounterproof = newItem.querySelector('.returned-or-counterproof');
         const thisCounterproof = newItem.querySelector('.form-check-input-counterproof');
         const thisReturned = newItem.querySelector('.form-check-input-returned');
@@ -551,7 +551,7 @@ function populateSelectExamResulting(selectElement) {
     });
 }
 let conterproofReturndMaterial = {
-    {% for key, value in conterproof_returndmaterial.items %}
+    {% for key, value in conterproof.items %}
         "{{ key }}": "{{ value }}",
     {% endfor %}
 };
@@ -577,7 +577,8 @@ function updateObservations(selectElement, selectedValue) {
     // Atualiza o textarea "packagingAndMorphologiObservations[]"
     const textarea = parentContainer.querySelector('textarea[name="packagingAndMorphologiObservations[]"]');
     if (textarea) {
-        textarea.value = `${itemPackagingSelected} ${itemMorphologySelected}`;
+        let texto_formated = `${itemPackagingSelected} ${itemMorphologySelected}`
+        textarea.value = texto_formated.replace('encerrando contendo', 'encerrando');
     }
 
     // Atualiza o textarea "resultOfExams[]"
@@ -607,7 +608,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Formulário não encontrado!');
         return;
     }
-
+        // listOfCounterProof
     submitButton.addEventListener('click', function(event) {
         event.preventDefault();  // Evita o envio automático do formulário
         if(!formCheking()){
@@ -646,7 +647,7 @@ function formCheking(){
         document.querySelector('#delegacia').focus();
         return false;
     }
-
+    
     let authority = document.querySelector('#autoridade_requisitante').value;
     if (authority.trim() === ''){
         alert('Valor para Autoridade Requisitante inválido.')
