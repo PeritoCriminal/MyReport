@@ -71,7 +71,17 @@ def drugs_report(request):
             )
             new_report.save()
 
+            # Gerando laudo em .docx
+
             template_path = os.path.join('myreportapp', 'static', 'doctemplates', 'report.docx')
+
+            def adicionar_texto_formatado(doc, texto_negrito, texto_normal):
+                # Cria um parágrafo e adiciona o texto em negrito
+                paragrafo = doc.add_paragraph()
+                run_negrito = paragrafo.add_run(texto_negrito)
+                run_negrito.bold = True
+                # Adiciona o texto normal em seguida
+                paragrafo.add_run(texto_normal)
 
             print(f'Path do template: {os.path.abspath(template_path)}')
             
@@ -88,7 +98,20 @@ def drugs_report(request):
                 p = doc.paragraphs[0]._element
                 p.getparent().remove(p)
 
-            doc.add_heading('Laudo Técnico Pericial', 0)
+            doc.add_heading('LAUDO DE CONSTATAÇÃO', 0)
+            adicionar_texto_formatado(doc, 'Registro de Entrada RE: ', new_report.protocol_number)
+            adicionar_texto_formatado(doc, 'Origem: BO - ', new_report.occurring_number)
+            adicionar_texto_formatado(doc, 'Autoridade Requisitante: ', new_report.requesting_authority)            
+
+            if len (new_report.listOfEnvolvedPeople) > 1:
+                formatted_people = ', '.join(new_report.listOfEnvolvedPeople[:-1]) + ' e ' + new_report.listOfEnvolvedPeople[-1]
+            else:
+                # Se houver apenas uma pessoa, retorna diretamente
+                formatted_people = new_report.listOfEnvolvedPeople[0]
+            
+            adicionar_texto_formatado(doc, 'Nome(s) do(s) Envolvido(s): ', formatted_people)
+            adicionar_texto_formatado(doc, 'Data do Exame: ', new_report.designated_date)
+    
             # Gera o preâmbulo usando o método do model
             preamble_text = new_report.generate_preamble()
     
@@ -96,19 +119,14 @@ def drugs_report(request):
             
             preamble_paragraph = doc.add_paragraph(preamble_text)
             
-            preamble_paragraph.paragraph_format.left_indent = Cm(5)
+            # preamble_paragraph.paragraph_format.left_indent = Cm(4)
 
             # Formatação da fonte do parágrafo
             for run in preamble_paragraph.runs:
                 run.font.size = Pt(11)
                 run.font.name = 'Arial'
 
-            # Adiciona título e conteúdo ao documento
-        
-            doc.add_paragraph(f'Número do Relatório: {new_report.report_number}')
-            doc.add_paragraph(f'Protocolo: {new_report.protocol_number}')
-            doc.add_paragraph(f'Data de Designação: {new_report.designated_date}')
-            # Adicione outros campos conforme necessário
+            adicionar_texto_formatado(doc, 'Dos Materiais Recebidos e Examinados ', f'({len(new_report.listOfPackagings)} Iten(s)):')
 
             # Salva o documento em um buffer de memória
             doc_buffer = BytesIO()
@@ -206,6 +224,7 @@ def drugs_report(request):
         'lacre_saida': 'SPTC',
         'today_date': today_date,
         'current_time': formatted_current_time,
+        'material': 'Todo material recebido encontrava-se acondicionado em invólucro(s) plástico(s) lacrado(s), acompanhado da requisição de exame pericial.',
         'before_time': formatted_before_time,
         'before_date': before_date,
         'user_name': user.full_name,
