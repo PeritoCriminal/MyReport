@@ -84,6 +84,18 @@ def drugs_report(request):
                 paragrafo.add_run(texto_normal)
 
             print(f'Path do template: {os.path.abspath(template_path)}')
+
+            def adicionar_itens(doc, n):
+                for i in range(n):
+                    if n == 1:
+                        doc.add_paragraph(f'Item único (Acondicionado sob o lacre {new_report.listOfEntranceSeal[i]})')
+                    else:
+                        doc.add_paragraph(f'Item {i + 1} (Acondicionado sob o lacre {new_report.listOfEntranceSeal[i]})')                  
+                    # Adiciona o texto formatado com a descrição do item
+                    adicionar_texto_formatado(doc, 'Descrição: ', new_report.listOfpackagingAndMorphology[i])
+                    adicionar_texto_formatado(doc, 'Massa Bruta e/ou quantidade: ', str(new_report.listOfGrossMass[i]))
+                    adicionar_texto_formatado(doc, 'Massa Líquida: ', str(new_report.listOfLiquidMass[i]))
+
             
             doc = None
             # Carrega o documento
@@ -126,7 +138,23 @@ def drugs_report(request):
                 run.font.size = Pt(11)
                 run.font.name = 'Arial'
 
-            adicionar_texto_formatado(doc, 'Dos Materiais Recebidos e Examinados ', f'({len(new_report.listOfPackagings)} Iten(s)):')
+            number_of_itens = len(new_report.listOfPackagings)
+
+            if number_of_itens == 1:
+                sing_or_pl = 'Item'
+            else:
+                sing_or_pl = 'Itens'
+
+            adicionar_texto_formatado(doc, 'Dos Materiais Recebidos e Examinados ', f'({number_of_itens} {sing_or_pl}):')
+
+            doc.add_paragraph(new_report.materialReceivedObservations)
+            doc.add_paragraph('O Exame Revelou:')
+
+            adicionar_itens(doc, number_of_itens)
+    
+
+
+
 
             # Salva o documento em um buffer de memória
             doc_buffer = BytesIO()
