@@ -8,6 +8,7 @@ from docx import Document
 from docx.shared import Pt, Cm
 from io import BytesIO
 import os
+import ast
 
 @login_required(login_url='/login/')
 def drugs_report(request):
@@ -86,6 +87,10 @@ def drugs_report(request):
             print(f'Path do template: {os.path.abspath(template_path)}')
 
             def adicionar_itens(doc, n):
+
+                # Converter a string de 'listOfReturned' para uma lista de booleanos
+                list_of_returned = ast.literal_eval(new_report.listOfReturned.replace('true', 'True').replace('false', 'False'))
+
                 for i in range(n):
                     if n == 1:
                         doc.add_paragraph(f'Item único (Acondicionado sob o lacre {new_report.listOfEntranceSeal[i]})')
@@ -97,6 +102,14 @@ def drugs_report(request):
                     adicionar_texto_formatado(doc, 'Massa Líquida: ', str(new_report.listOfLiquidMass[i]))
                     adicionar_texto_formatado(doc, 'Quantidade retirada para análise e/ou contraperícia: ', new_report.listOfCounterProof[i])
                     adicionar_texto_formatado(doc, 'Resultado: ', new_report.listOfResultOfExams[i])
+
+                    # Verifica se o item foi devolvido ou não e adiciona essa informação ao final
+                    if list_of_returned[i]:
+                        doc.add_paragraph(f'O restante do item (material , invólucro(s) e lacre(s)) foi devolvido à autoridade policial requisitante nos termos das exigências legais, sob o lacre número {new_report.listOfExitseal[i]}.')
+                    else:
+                        doc.add_paragraph('As embalagens e os respectivos lacres foram aqui inutilizados conforme as Portarias SPTC No 112 de 29-6-2016 e SPTC no 63 de 30 de abril de 2015.')            
+                    
+                    
             
             doc = None
             # Carrega o documento
@@ -247,9 +260,9 @@ def drugs_report(request):
         'vv':'uma amostra de aproximadamente 2 g (dois gramas) foi aqui retirada para análises, sendo o remanescente destas análises armazenado sob a forma de contraperícia.'
     }
 
-    returned = {
+    """returned = {
         'returned': 'O restante do item (material , invólucro(s) e lacre(s)) foi devolvido à autoridade policial requisitante nos termos das exigências legais, sob o lacre número SPTC6447218.'
-    }
+    }"""
 
     context = {
         'protocol_prefix': 'TOX',
@@ -266,7 +279,7 @@ def drugs_report(request):
         'morphology': morphology,
         'exam_resulting': exam_resulting,
         'conterproof': conterproof,
-        'returned': returned,
+        #'returned': returned,
         'alert': '(Este Laudo é de caráter provisório e não confirma necessariamente o resultado da identificação que será enviado no Laudo Definitivo)',
     } 
 

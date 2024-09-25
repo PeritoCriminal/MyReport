@@ -554,7 +554,7 @@ let conterproofReturndMaterial = {
     {% for key, value in conterproof.items %}
         "{{ key }}": "{{ value }}",
     {% endfor %}
-};
+};  //toNiceName
 
 document.querySelectorAll('select[name="packaging[]"]').forEach(populateSelectPac);
 document.querySelectorAll('select[name="morphology[]"]').forEach(populateSelectMorph);
@@ -782,12 +782,16 @@ function formCheking(){
             alert('Lacre de Entrada não pode ser nulo.');
             lacreEntrada[i - 1].focus();
             return false;
+        }else{
+            lacreEntrada[i - 1].value = lacreEntrada[i - 1].value.toUpperCase();
         };
 
         if (lacreSaida[i - 1].value =='' || lacreSaida[i - 1].value =='SPTC' ){
             alert('Valor inválido para Lacre de Saída.');
             lacreSaida[i - 1].focus();
             return false;
+        }else{
+            lacreSaida[i - 1].value = lacreSaida[i - 1].value.toUpperCase();
         };
         
     }
