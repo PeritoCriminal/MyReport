@@ -6,9 +6,11 @@ from ..models.custom_user_model import UserRegistrationModel
 from datetime import datetime, timedelta
 from docx import Document
 from docx.shared import Pt, Cm
+from docx.enum.text import WD_ALIGN_PARAGRAPH
 from io import BytesIO
 import os
 import ast
+import base64
 
 @login_required(login_url='/login/')
 def drugs_report(request):
@@ -76,6 +78,45 @@ def drugs_report(request):
 
             template_path = os.path.join('myreportapp', 'static', 'doctemplates', 'report.docx')
 
+
+            def insert_image_from_base64_to_docx(doc, base64_string, label, width_cm=12):
+                if not base64_string:
+                    return "No image found."
+
+                try:
+                    # Remove o prefixo 'data:image/png;base64,' ou similar, se existir
+                    if ';base64,' in base64_string:
+                        base64_string = base64_string.split(';base64,')[1]
+
+                    label_num = 1
+                    # Decodifica a string Base64 em bytes
+                    image_data = base64.b64decode(base64_string)
+
+                    # Salva a imagem temporariamente em um objeto BytesIO
+                    image_stream = BytesIO(image_data)
+
+                    # Insere a imagem no documento docx com o tamanho especificado
+                    run = doc.add_paragraph().add_run()
+                    run.add_picture(image_stream, width=Cm(width_cm))
+                    run.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+                    legenda = f'Imagem - {label}'
+
+                    caption_paragraph = doc.add_paragraph(legenda)
+                    caption_paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                    caption_paragraph.italic = True  # Define o texto como itálico
+                    caption_paragraph.font.size = Pt(11) 
+
+                    return "Image added successfully."
+
+                except Exception as e:
+                    return f"An error occurred: {e}"
+
+
+
+
+
+
             def adicionar_texto_formatado(doc, texto_negrito, texto_normal):
                 # Cria um parágrafo e adiciona o texto em negrito
                 paragrafo = doc.add_paragraph()
@@ -109,7 +150,7 @@ def drugs_report(request):
                     else:
                         doc.add_paragraph('As embalagens e os respectivos lacres foram aqui inutilizados conforme as Portarias SPTC No 112 de 29-6-2016 e SPTC no 63 de 30 de abril de 2015.')            
                     
-                    
+                    #insert_image_from_base64_to_docx(doc, new_report.materialImage, new_report.materialImageCaption)
             
             doc = None
             # Carrega o documento
@@ -165,6 +206,8 @@ def drugs_report(request):
             doc.add_paragraph('O Exame Revelou:')
 
             adicionar_itens(doc, number_of_itens)
+
+            insert_image_from_base64_to_docx(doc, new_report.materialImage, new_report.materialImageCaption)
     
 
 
