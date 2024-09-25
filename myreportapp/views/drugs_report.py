@@ -79,6 +79,62 @@ def drugs_report(request):
             template_path = os.path.join('myreportapp', 'static', 'doctemplates', 'report.docx')
 
 
+
+
+
+            def check_images(materialImage, examImages, returnedItemsImage, counterProofImage):
+                """
+                Verifica se há imagens entre os atributos fornecidos.
+
+                :param materialImage: A string Base64 da imagem principal.
+                :param examImages: A string que representa a lista de strings Base64 de imagens examinadas.
+                :param returnedItemsImage: A string Base64 da imagem de itens devolvidos.
+                :param counterProofImage: A string Base64 da imagem de contraprova.
+                :return: Uma string informando se há ou não imagens.
+                """
+                # Verifica se a imagem principal não é vazia
+                hasImg = 'Ilustrando as peças do exame:'
+
+                if materialImage:
+                    return hasImg
+
+                # Tenta avaliar a lista de imagens examinadas
+                try:
+                    exam_images_list = ast.literal_eval(examImages)  # Converte a string para lista
+                except (ValueError, SyntaxError):
+                    exam_images_list = []  # Se não for possível converter, assume lista vazia
+
+                # Verifica se há imagens na lista de imagens examinadas
+                if any(image.strip() for image in exam_images_list):  # Verifica se há algum item não vazio
+                    return hasImg
+
+                # Verifica se a imagem de itens devolvidos não é vazia
+                if returnedItemsImage:
+                    return hasImg
+
+                # Verifica se a imagem de contraprova não é vazia
+                if counterProofImage:
+                    return hasImg
+
+                return "Não há imagens disponíveis."
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             def insert_image_from_base64_to_docx(doc, base64_string, label, width_cm=12):
                 if not base64_string:
                     return "No image found."
@@ -117,11 +173,25 @@ def drugs_report(request):
 
 
 
-            def adicionar_texto_formatado(doc, texto_negrito, texto_normal):
+            def adicionar_texto_formatado(doc, texto_negrito, texto_normal, recuo=1):
+                """
+                Adiciona um texto formatado ao documento.
+
+                :param doc: O documento ao qual o texto será adicionado.
+                :param texto_negrito: O texto que deve ser adicionado em negrito.
+                :param texto_normal: O texto que deve ser adicionado normalmente.
+                :param recuo: O recuo à esquerda do parágrafo em centímetros. Padrão é 1 cm.
+                """
                 # Cria um parágrafo e adiciona o texto em negrito
                 paragrafo = doc.add_paragraph()
+                
+                # Define o recuo à esquerda
+                paragrafo.paragraph_format.left_indent = Cm(recuo)
+
+                # Adiciona o texto em negrito
                 run_negrito = paragrafo.add_run(texto_negrito)
                 run_negrito.bold = True
+                
                 # Adiciona o texto normal em seguida
                 paragrafo.add_run(texto_normal)
 
@@ -134,22 +204,24 @@ def drugs_report(request):
 
                 for i in range(n):
                     if n == 1:
-                        doc.add_paragraph(f'Item único (Acondicionado sob o lacre {new_report.listOfEntranceSeal[i]})')
+                        item_q = f'Item único'
                     else:
-                        doc.add_paragraph(f'Item {i + 1} (Acondicionado sob o lacre {new_report.listOfEntranceSeal[i]})')                  
-                    # Adiciona o texto formatado com a descrição do item
-                    adicionar_texto_formatado(doc, 'Descrição: ', new_report.listOfpackagingAndMorphology[i])
-                    adicionar_texto_formatado(doc, 'Massa Bruta e/ou quantidade: ', str(new_report.listOfGrossMass[i]))
-                    adicionar_texto_formatado(doc, 'Massa Líquida: ', str(new_report.listOfLiquidMass[i]))
-                    adicionar_texto_formatado(doc, 'Quantidade retirada para análise e/ou contraperícia: ', new_report.listOfCounterProof[i])
-                    adicionar_texto_formatado(doc, 'Resultado: ', new_report.listOfResultOfExams[i])
+                        item_q = f'Item {i + 1}'                 
+                    adicionar_texto_formatado(doc, item_q, f'(Acondicionado sob o lacre {new_report.listOfEntranceSeal[i]})')
+                    adicionar_texto_formatado(doc, 'Descrição: ', new_report.listOfpackagingAndMorphology[i], 2)
+                    adicionar_texto_formatado(doc, 'Massa Bruta e/ou quantidade: ', str(new_report.listOfGrossMass[i]), 2)
+                    adicionar_texto_formatado(doc, 'Massa Líquida: ', str(new_report.listOfLiquidMass[i]), 2)
+                    adicionar_texto_formatado(doc, 'Quantidade retirada para análise e/ou contraperícia: ', new_report.listOfCounterProof[i], 2)
+                    adicionar_texto_formatado(doc, 'Resultado: ', new_report.listOfResultOfExams[i], 2)
 
                     # Verifica se o item foi devolvido ou não e adiciona essa informação ao final
                     if list_of_returned[i]:
-                        doc.add_paragraph(f'O restante do item (material , invólucro(s) e lacre(s)) foi devolvido à autoridade policial requisitante nos termos das exigências legais, sob o lacre número {new_report.listOfExitseal[i]}.')
+                        returned_if = f'O restante do item (material , invólucro(s) e lacre(s)) foi devolvido à autoridade policial requisitante nos termos das exigências legais, sob o lacre número {new_report.listOfExitseal[i]}.'
                     else:
-                        doc.add_paragraph('As embalagens e os respectivos lacres foram aqui inutilizados conforme as Portarias SPTC No 112 de 29-6-2016 e SPTC no 63 de 30 de abril de 2015.')            
+                        returned_if = 'As embalagens e os respectivos lacres foram aqui inutilizados conforme as Portarias SPTC No 112 de 29-6-2016 e SPTC no 63 de 30 de abril de 2015.'          
                     
+                    adicionar_texto_formatado(doc, '', returned_if, 2)
+
                     #insert_image_from_base64_to_docx(doc, new_report.materialImage, new_report.materialImageCaption)
             
             doc = None
@@ -206,7 +278,24 @@ def drugs_report(request):
             doc.add_paragraph('O Exame Revelou:')
 
             adicionar_itens(doc, number_of_itens)
+           
+            adicionar_texto_formatado(doc, '', new_report.considerations)
 
+            adicionar_texto_formatado(doc, '', 'Este laudo segue assinado digitalmente e estará arquivado no sistema GDL da Superintendência da Polícia Técnico Científica do Estado de São Paulo.')
+
+            assinado_paragraph = doc.add_paragraph('ASSINADO DIGITALMENTE')
+            assinado_paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+
+            expert_paragraph = doc.add_paragraph(new_report.reporting_expert)
+            expert_paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+
+            perito_paragraph = doc.add_paragraph('Perito(a) Criminal')
+            perito_paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+
+            hasImg = check_images(new_report.materialImage, new_report.examImages, new_report.returnedItemsImage, new_report.counterProofImage)
+            
+            adicionar_texto_formatado(doc, hasImg, '')
+            
             insert_image_from_base64_to_docx(doc, new_report.materialImage, new_report.materialImageCaption)
     
 
