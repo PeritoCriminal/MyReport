@@ -54,7 +54,7 @@ class BaseReport(models.Model):
         elif self.reporting_expert.startswith('Dr.'):
             expertIs = 'designado o perito criminal'
         else:
-            expertIs = 'o(a) perito(a) criminal'
+            expertIs = 'designado(a) o(a) perito(a) criminal'
 
         if self.requesting_authority.startswith('Dra.'):
             authorityIs = 'a Delegada de Polícia'

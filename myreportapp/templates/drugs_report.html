@@ -213,7 +213,7 @@
 
 <script>
 
-// FUNÇÕES NO ARQUIVO scripts.js  ----  DEvem ser apagadas depois 
+// FUNÇÕES NO ARQUIVO scripts.js  ----  Devem ser apagadas depois
 let testando = true;
 
 if (testando) {
@@ -574,7 +574,7 @@ function updateObservations(selectElement, selectedValue) {
 
     const parentContainer = selectElement.closest('div.form-row').parentElement;
 
-    // Atualiza o textarea "packagingAndMorphologiObservations[]"
+    // Atualiza o textarea "packagingAndMorphologiObservations[]"  submit
     const textarea = parentContainer.querySelector('textarea[name="packagingAndMorphologiObservations[]"]');
     if (textarea) {
         let texto_formated = `${itemPackagingSelected} ${itemMorphologySelected}`
@@ -614,11 +614,11 @@ document.addEventListener('DOMContentLoaded', function() {
         if(!formCheking()){
             return;
         }else{  
-            alert('Formulário foi verificado');
+            //alert('Formulário foi verificado');
             form.submit();  // Submete o formulário manualmente após validação
             setTimeout(function() {
                 window.location.href = "{% url 'index' %}";
-            }, 1000);
+            }, 5000);
         };
     });
 });
@@ -892,7 +892,7 @@ function formCheking(){
     console.log(listOfpackagingAndMorphology);
     console.log(listOfResultOfExams);
            
-    teste('Tudo ok até aqui');
+    //teste('Tudo ok até aqui');
     return true;
 }
 

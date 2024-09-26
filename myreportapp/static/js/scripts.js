@@ -1,6 +1,6 @@
 /*  Formata a numeração do Laudo, Protocolo e Boletim, incluindo o ano do registro.
     Aplica o formato "X.XXX/AAAA".*/
-function formatStringWithYear(str, date) {    
+function formatStringWithYear(str, date) {
     if (str.includes('/')) {
         return str.toUpperCase();
     }
@@ -105,13 +105,50 @@ function beforeThan(priorDate, priorHour, lastDate, lastHour) {
     return beforeDateTime < lastDateTime;
 }
 
+
+function resizeImage(file, width, height, callback) {
+    const reader = new FileReader();
+
+    reader.onload = function (event) {
+        const img = new Image();
+        img.src = event.target.result;
+
+        img.onload = function () {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Define o tamanho do canvas, considerando a borda de 1px
+            canvas.width = width; // +2 para incluir 1px de borda em cada lado
+            canvas.height = height; // +2 para a borda de 1px em cada lado
+
+            // Preenche o fundo com a cor da borda (preta)
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, canvas.width, canvas.height); // Pinta todo o canvas com preto
+
+            // Desenha a imagem redimensionada dentro da borda (1px de distância das bordas)
+            ctx.drawImage(img, 1, 1, width-2, height-2);
+
+            // Converte o canvas para Base64
+            const resizedBase64 = canvas.toDataURL('image/jpeg'); // ou 'image/png'
+
+            // Retorna o Base64 para o callback
+            callback(resizedBase64);
+            //alert('imagem baixada');
+        };
+    };
+
+    reader.readAsDataURL(file);
+}
+
+
 function handleImageResize(file, hiddenInputElement) {
     resizeImage(file, 1200, 800, function (resizedBase64) {
-        // Armazena a string Base64 no input hidden
         hiddenInputElement.value = resizedBase64;
     });
 }
 
+
+/*
 function resizeImage(file, maxWidth, maxHeight, callback) {
     const reader = new FileReader();
     reader.onload = function (event) {
@@ -138,8 +175,7 @@ function resizeImage(file, maxWidth, maxHeight, callback) {
     };
     reader.readAsDataURL(file);
 }
-
-
+*/
 
 
 function teste(texto) {

@@ -403,15 +403,17 @@ def drugs_report(request):
             hasImg = check_images(new_report.materialImage, new_report.examImages, new_report.returnedItemsImage, new_report.counterProofImage)
             
             adicionar_texto_formatado(doc, hasImg, '')
+
+            num_img_caption = 0
             
-            insert_image_from_base64_to_docx(doc, new_report.materialImage, new_report.materialImageCaption)
+            num_img_caption = insert_image_from_base64_to_docx(doc, new_report.materialImage, new_report.materialImageCaption, num_img_caption)
 
             for i in range(len(new_report.examImages)):
-                insert_image_from_base64_to_docx(doc, new_report.examImages[i], new_report.examImageCaptions[i])
+                num_img_caption = insert_image_from_base64_to_docx(doc, new_report.examImages[i], new_report.examImageCaptions[i], num_img_caption)
     
-            insert_image_from_base64_to_docx(doc, new_report.returnedItemsImage, new_report.returnedItemsCaption)
+            num_img_caption = insert_image_from_base64_to_docx(doc, new_report.returnedItemsImage, new_report.returnedItemsCaption, num_img_caption)
 
-            insert_image_from_base64_to_docx(doc, new_report.counterProofImage, new_report.counterProofCaption)
+            num_img_caption = insert_image_from_base64_to_docx(doc, new_report.counterProofImage, new_report.counterProofCaption, num_img_caption)
 
             adicionar_rodape(doc, f'RE: {new_report.protocol_number} | Boletim {new_report.occurring_number} - {new_report.police_station}')
 
