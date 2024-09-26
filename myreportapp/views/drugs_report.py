@@ -350,13 +350,13 @@ def drugs_report(request):
             adicionar_texto_formatado(doc, 'Origem: BO - ', new_report.occurring_number)
             adicionar_texto_formatado(doc, 'Autoridade Requisitante: ', new_report.requesting_authority)            
 
-            if len (new_report.listOfEnvolvedPeople) > 1:
-                formatted_people = ', '.join(new_report.listOfEnvolvedPeople[:-1]) + ' e ' + new_report.listOfEnvolvedPeople[-1]
+            if len(new_report.listOfEnvolvedPeople) > 1:
+                formatted_people = ', '.join(new_report.listOfEnvolvedPeople)
             else:
                 # Se houver apenas uma pessoa, retorna diretamente
                 formatted_people = new_report.listOfEnvolvedPeople[0]
             
-            adicionar_texto_formatado(doc, 'Nome(s) do(s) Envolvido(s): ', formatted_people)
+            adicionar_texto_formatado(doc, 'Nome(s) do(s) Envolvido(s): ', f'{formatted_people}.')
             adicionar_texto_formatado(doc, 'Data do Exame: ', new_report.designated_date)
     
             # Gera o preâmbulo usando o método do model

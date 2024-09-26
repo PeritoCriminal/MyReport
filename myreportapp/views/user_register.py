@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib import messages
-from ..forms.user_registration_modelforms import UserRegistrationModelForm
+from ..forms.user_registration_model import UserRegistrationModelForm
 
 def register(request):
     if request.method == 'POST':
