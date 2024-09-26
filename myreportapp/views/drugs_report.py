@@ -7,6 +7,8 @@ from datetime import datetime, timedelta
 from docx import Document
 from docx.shared import Pt, Cm
 from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.oxml import OxmlElement
+from docx.oxml.ns import qn
 from io import BytesIO
 import os
 import ast
@@ -77,6 +79,87 @@ def drugs_report(request):
             # Gerando laudo em .docx
 
             template_path = os.path.join('myreportapp', 'static', 'doctemplates', 'report.docx')
+
+
+
+
+
+
+            def adicionar_rodape(doc, texto_rodape):
+                # Adicionar o rodapé ao documento
+                section = doc.sections[-1]
+                footer = section.footer
+
+                # Criar um parágrafo para o rodapé
+                paragrafo_rodape1 = footer.paragraphs[0]
+                paragrafo_rodape1.text = texto_rodape
+                paragrafo_rodape1.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+
+                # Definir a fonte e o tamanho do rodapé
+                run_rodape1 = paragrafo_rodape1.runs[0]
+                run_rodape1.font.name = 'Times New Roman'
+                run_rodape1.font.size = Pt(10)
+
+                # Adicionar a segunda linha: Página X de Y
+                paragrafo_rodape2 = footer.add_paragraph()
+                paragrafo_rodape2.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+
+                # Texto padrão antes da numeração da página
+                run_rodape2 = paragrafo_rodape2.add_run("Página ")
+                run_rodape2.font.name = 'Times New Roman'
+                run_rodape2.font.size = Pt(10)
+
+                # Definir espaçamento de 6 pontos antes e depois, e espaçamento de linha simples
+                paragrafo_rodape1.paragraph_format.space_before = Pt(12)
+                paragrafo_rodape1.paragraph_format.space_after = Pt(0)
+                paragrafo_rodape1.paragraph_format.line_spacing = 1  # Espaçamento simples
+
+                # Adicionando a numeração de página
+                field_code = 'PAGE'
+                page_field = OxmlElement('w:fldSimple')
+                page_field.set(qn('w:instr'), field_code)
+                run_num_page = OxmlElement('w:r')
+                run_text = OxmlElement('w:t')
+                run_text.text = "1"  # Placeholder que será substituído por Word
+                run_num_page.append(run_text)
+                page_field.append(run_num_page)
+                paragrafo_rodape2._element.append(page_field)
+
+                # Adicionar o texto " de "
+                run_de = paragrafo_rodape2.add_run(" de ")
+                run_de.font.name = 'Times New Roman'
+                run_de.font.size = Pt(10)
+
+                paragrafo_rodape2.paragraph_format.space_before = Pt(0)
+                paragrafo_rodape2.paragraph_format.space_after = Pt(6)
+                paragrafo_rodape2.paragraph_format.line_spacing = 1  # Espaçamento simples
+
+                # Adicionando a contagem total de páginas
+                total_page_field_code = 'NUMPAGES'
+                total_page_field = OxmlElement('w:fldSimple')
+                total_page_field.set(qn('w:instr'), total_page_field_code)
+                run_total_pages = OxmlElement('w:r')
+                run_total_text = OxmlElement('w:t')
+                run_total_text.text = "1"  # Placeholder que será substituído por Word
+                run_total_pages.append(run_total_text)
+                total_page_field.append(run_total_pages)
+                paragrafo_rodape2._element.append(total_page_field)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -207,7 +290,16 @@ def drugs_report(request):
                         item_q = f'Item único'
                     else:
                         item_q = f'Item {i + 1}'                 
-                    adicionar_texto_formatado(doc, item_q, f'(Acondicionado sob o lacre {new_report.listOfEntranceSeal[i]})')
+                    adicionar_texto_formatado(doc, item_q, f' (Acondicionado sob o lacre {new_report.listOfEntranceSeal[i]})')
+                    paragrafo = doc.paragraphs[-1]
+
+                    # Aumentar o espaçamento antes para 24 pontos
+                    paragrafo.paragraph_format.space_before = Pt(24)
+
+                    # Aplicar sublinhado ao texto em negrito
+                    run_negrito = paragrafo.runs[0]
+                    run_negrito.underline = True                   
+                    
                     adicionar_texto_formatado(doc, 'Descrição: ', new_report.listOfpackagingAndMorphology[i], 2)
                     adicionar_texto_formatado(doc, 'Massa Bruta e/ou quantidade: ', str(new_report.listOfGrossMass[i]), 2)
                     adicionar_texto_formatado(doc, 'Massa Líquida: ', str(new_report.listOfLiquidMass[i]), 2)
@@ -297,10 +389,15 @@ def drugs_report(request):
             adicionar_texto_formatado(doc, hasImg, '')
             
             insert_image_from_base64_to_docx(doc, new_report.materialImage, new_report.materialImageCaption)
+
+            for i in range(len(new_report.examImages)):
+                insert_image_from_base64_to_docx(doc, new_report.examImages[i], new_report.examImageCaptions[i])
     
+            insert_image_from_base64_to_docx(doc, new_report.returnedItemsImage, new_report.returnedItemsCaption)
 
+            insert_image_from_base64_to_docx(doc, new_report.counterProofImage, new_report.counterProofCaption)
 
-
+            adicionar_rodape(doc, f'RE: {new_report.protocol_number} | Boletim {new_report.occurring_number} - {new_report.police_station}')
 
             # Salva o documento em um buffer de memória
             doc_buffer = BytesIO()

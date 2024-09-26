@@ -41,14 +41,34 @@ class BaseReport(models.Model):
         occurrence_nature_text = f"Natureza da ocorrência, de acordo com a requisição: {self.occurrence_nature}."
         return occurrence_nature_text
     
-    def generate_preamble(self): 
+    def generate_preamble(self):
+        if self.director.startswith('Dra'):
+            directorIs = 'pela Diretora deste Instituto de Criminalística, a Perita Criminal'
+        elif self.director.startswith('Dr.'):
+            directorIs = 'pelo Diretor deste Instituto de Criminalística, o Perito Criminal'
+        else:
+            directorIs = 'pelo(a) Diretor(a) deste Instituto de Criminalística, o(a) Perito(a) Criminal'
+
+        if self.reporting_expert.startswith('Dra.'):
+            expertIs = 'designada a perita criminal'
+        elif self.reporting_expert.startswith('Dr.'):
+            expertIs = 'designado o perito criminal'
+        else:
+            expertIs = 'o(a) perito(a) criminal'
+
+        if self.requesting_authority.startswith('Dra.'):
+            authorityIs = 'a Delegada de Polícia'
+        elif self.requesting_authority.startswith('Dr.'):
+            authorityIs = 'o Delegado de Polícia'
+        else:
+            authorityIs = 'o(a) Delegado(a) de Polícia'
         preamble = (
             f"Em {self.designated_date}, na cidade de {self.city} e no Instituto de Criminalística, "
             f"da Superintendência da Polícia Técnico-Científica, da Secretaria de Segurança Pública do Estado de São Paulo, "
             f"em conformidade com o disposto no art. 178 do Decreto-Lei 3689 de 3-10-1941 e Decreto-Lei 42847 de 9-2-1998, "
-            f"pelo Diretor deste Instituto de Criminalística, o Perito Criminal {self.director}, foi designado o perito criminal "
+            f"{directorIs} {self.director}, foi {expertIs} "
             f"{self.reporting_expert} para proceder ao Exame Pericial especificado em requisição de exame assinada pela Autoridade Policial, "
-            f"o Delegado de Polícia {self.requesting_authority}."
+            f"{authorityIs} {self.requesting_authority}."
         )
         return preamble
     
