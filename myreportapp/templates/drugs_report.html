@@ -214,7 +214,7 @@
 <script>
 
 // FUNÇÕES NO ARQUIVO scripts.js  ----  Devem ser apagadas depois
-let testando = false;
+let testando = true;
 
 if (testando) {
     document.querySelector('#protocolo').value='prot_teste';
@@ -250,6 +250,40 @@ function setupImageUpload(selectorInput, selectorHiddenInput) {
 //  FIM DAS FUNÇÕES EM scripts.js
 
 //TESTES DE FUNÇÕES NOVAS
+
+
+function generateLitleTags() {
+    const itemsHeader = document.querySelectorAll('h5[name="item_header[]"]');
+    const selectedItems = document.querySelectorAll('select[name="examresulting[]"]'); // Seleciona todos os selects
+    const thisNumberOfItems = itemsHeader.length;
+    const protocolNumber = `Registro de Entrada: ${document.querySelector('#protocolo').value}`;
+    const boNumber = `Boletim: ${document.querySelector('#boletim').value}`;
+    const policeDistrict = document.querySelector('#delegacia').value;
+
+    let text = '';
+
+    for (let i = 0; i < thisNumberOfItems; i++) { 
+        const selectedItem = selectedItems[i] ? selectedItems[i].value : ''; // Obtém o valor do select correspondente
+        text += `\n_____________________________\n${itemsHeader[i].textContent}\n${selectedItem}\n${protocolNumber}\n${boNumber}\n${policeDistrict}\n`; // Inclui o valor selecionado
+    }
+
+    return text; // Retorna o texto gerado
+}
+
+/*
+for (let i = 1; i <= numberOfItems; i++) {
+    // TRATAR OS IMPUTS AQUI
+    if (grossMass[i - 1].value === '' || grossMass[i - 1].value < 0 ){
+        alert('Campo Massa Bruta não pode estar vazio nem pode ser menor que 0.');
+        grossMass[i - 1].focus();
+        return false;
+    }
+
+
+*/
+
+
+
 
 function optionsAboutTwoLogicals(bool_returnd = true, bol_conterproof = true, elementTextArea) {
     let key;
@@ -616,6 +650,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }else{  
             //alert('Formulário foi verificado');
             form.submit();  // Submete o formulário manualmente após validação
+//            createMinitagsPDF(generateLitleTags());   //   CRIAR UM BOTÃO SÓ PRA ISSO
             setTimeout(function() {
                 window.location.href = "{% url 'index' %}";
             }, 5000);

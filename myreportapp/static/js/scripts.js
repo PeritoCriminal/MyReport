@@ -126,7 +126,7 @@ function resizeImage(file, width, height, callback) {
             ctx.fillRect(0, 0, canvas.width, canvas.height); // Pinta todo o canvas com preto
 
             // Desenha a imagem redimensionada dentro da borda (1px de distância das bordas)
-            ctx.drawImage(img, 1, 1, width-2, height-2);
+            ctx.drawImage(img, 1, 1, width - 2, height - 2);
 
             // Converte o canvas para Base64
             const resizedBase64 = canvas.toDataURL('image/jpeg'); // ou 'image/png'
@@ -148,34 +148,29 @@ function handleImageResize(file, hiddenInputElement) {
 }
 
 
-/*
-function resizeImage(file, maxWidth, maxHeight, callback) {
-    const reader = new FileReader();
-    reader.onload = function (event) {
-        const img = new Image();
-        img.onload = function () {
-            // Calcula o novo tamanho da imagem
-            const ratio = Math.min(maxWidth / img.width, maxHeight / img.height);
-            const width = img.width * ratio;
-            const height = img.height * ratio;
+function createMinitagsPDF(text) {
+    const { jsPDF } = window.jspdf;
+    let pdf = new jsPDF();
 
-            // Cria um canvas para redimensionar a imagem
-            const canvas = document.createElement('canvas');
-            canvas.width = width;
-            canvas.height = height;
+    // Definir tamanho e estilo da fonte
+    pdf.setFont("Helvetica");  // Fonte negrito
+    pdf.setFontSize(12);               // Tamanho da fonte
 
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, width, height);
+    // Coordenadas iniciais de X e Y
+    let x = 20;
+    let y = 20;
+    let lineHeight = 10;  // Controla o espaçamento entre as linhas
 
-            // Converte o canvas para Base64
-            const resizedBase64 = canvas.toDataURL('image/jpeg', 0.95);  // Ajusta a qualidade para 95%
-            callback(resizedBase64);  // Retorna a imagem redimensionada como Base64
-        };
-        img.src = event.target.result;
-    };
-    reader.readAsDataURL(file);
+    // Dividir o texto em linhas e definir espaçamento entre elas
+    let lines = text.split("\n");  // Divide o texto por quebras de linha
+    lines.forEach(function(line) {
+        pdf.text(line, x, y);
+        y += lineHeight;  // Incrementa Y para espaçamento entre linhas
+    });
+
+    // Salvar o PDF
+    pdf.save('minitags.pdf');
 }
-*/
 
 
 function teste(texto) {
