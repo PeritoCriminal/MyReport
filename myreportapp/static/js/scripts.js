@@ -1,5 +1,22 @@
-/*  Formata a numeração do Laudo, Protocolo e Boletim, incluindo o ano do registro.
-    Aplica o formato "X.XXX/AAAA".*/
+/*  
+
+MYREPORT é um projeto independente.
+Oferece um ambiente para edição de laudos periciais,
+voltado especialmente para Peritos Criminais Oficiais do Estado de São Paulo.
+Idealizado e inicialmente desenvolvido pelo Perito Criminal Marcos de Oliveira Capristo.
+Contato: marcos.moc@policiacientifica.sp.gov.br | (19) 9 8231-2774
+    
+*/
+
+/*  
+
+    ESSE MÓUDULO CONTEM FUNÇÕES js COMUNS A TODOS OS MÓDULOS DESSA APLICAÇÃO 
+    OUTRAS FUNÇÕES ESPECIFICAS DE CADA APLICAÇÃO ESTÃO NO PRÓPRIO TEMPLATE DA APLICAÇÃO.
+    
+*/
+
+
+/*  FORMATA O NUMERO DO LAUDO, DO RE, DO BOLETIM COM UMA BARRA OBLIQUA E O ANO. */
 function formatStringWithYear(str, date) {
     if (str.includes('/')) {
         return str.toUpperCase();
@@ -26,9 +43,9 @@ function formatStringWithYear(str, date) {
 }
 
 
-// Função para gerar o preâmbulo
+/*  O PREÂMBULO É GERADO DO LADO DO SERVIDOR, COMO MÉTODO DE CLASSE, 
+    MAS ESSA FUÇÃO ESTARÁ AQUI DE QAP POR ENQUANTO. */
 function generatePreamble(designatedDate, city, director, reportingExpert, requestingAuthority) {
-    // Extrai dia, mês e ano da data
     const dateObj = new Date(designatedDate);
     const day = String(dateObj.getDate()).padStart(2, '0');  // Adiciona o '0' à esquerda se necessário
     const month = String(dateObj.getMonth() + 1).padStart(2, '0');  // Meses são base 0, então soma-se 1
@@ -70,7 +87,9 @@ function generatePreamble(designatedDate, city, director, reportingExpert, reque
     return preamble;
 }
 
-// Dá uma aparencia melhor aos nomes digitados pelo usuário, no padrão da língua formal.
+
+/*  DA UMA MELHORADA NO NOME DIGIADO PELO USUÁRIO, 
+    ACOMAPNHANDO O FORMATO OFICIAL DA LÍNGUA PORTUGUESA COM RELAÇÃO ÀS PREPOSIÇÕES */
 function toNiceName(nomeDeAlguem) {
     const preposicoes = new Set(['de', 'da', 'do', 'dos', 'das', 'e', 'ou', 'para', 'com', 'em', 'a', 'o', 'do', 'dos']);
     const palavras = nomeDeAlguem.split(/\s+/);
@@ -86,6 +105,8 @@ function toNiceName(nomeDeAlguem) {
 }
 
 
+/*  COMPARA DUAS DATAS ACOMPANHADAS DE SUAS RESPECTIVAS HORAS E VERIFICA SE UMA É MENOR OU NÃO
+    RETORNA UM BOOLEANO */
 function beforeThan(priorDate, priorHour, lastDate, lastHour) {
     let beforeDateTime = new Date(
         priorDate.getFullYear(),
@@ -106,6 +127,8 @@ function beforeThan(priorDate, priorHour, lastDate, lastHour) {
 }
 
 
+/*  REDIMENSIONA UMA IMAGEM, CRIA BORDA E SALVA COMO TXT BASE 64
+    O TXT SERÁ É NO BD E, QUANDO NECESSÁRIO A IMAGEM SERÁ RECUPERADA */
 function resizeImage(file, width, height, callback) {
     const reader = new FileReader();
 
@@ -117,30 +140,23 @@ function resizeImage(file, width, height, callback) {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
 
-            // Define o tamanho do canvas, considerando a borda de 1px
-            canvas.width = width; // +2 para incluir 1px de borda em cada lado
-            canvas.height = height; // +2 para a borda de 1px em cada lado
+            canvas.width = width;
+            canvas.height = height;
 
-            // Preenche o fundo com a cor da borda (preta)
             ctx.fillStyle = "black";
-            ctx.fillRect(0, 0, canvas.width, canvas.height); // Pinta todo o canvas com preto
-
-            // Desenha a imagem redimensionada dentro da borda (1px de distância das bordas)
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(img, 1, 1, width - 2, height - 2);
 
-            // Converte o canvas para Base64
-            const resizedBase64 = canvas.toDataURL('image/jpeg'); // ou 'image/png'
-
-            // Retorna o Base64 para o callback
+            const resizedBase64 = canvas.toDataURL('image/jpeg');
             callback(resizedBase64);
-            //alert('imagem baixada');
         };
     };
-
     reader.readAsDataURL(file);
 }
 
 
+/*  CHAMA A FUNÇÃO ACIMA, SETANDO OS VALORES DE LARGURA E ALTURA.
+    O ELEMENTO INPUT HTML OCULTO RECEBE O TXT BASE 64 QUE É ENVIADO AO BD */
 function handleImageResize(file, hiddenInputElement) {
     resizeImage(file, 1200, 800, function (resizedBase64) {
         hiddenInputElement.value = resizedBase64;
@@ -148,35 +164,29 @@ function handleImageResize(file, hiddenInputElement) {
 }
 
 
+/*  CRIA ETIQUETAS QUE PODEM SER IMPRESSAS E FIXADAS NAS EMBALAGENS DE AMOSTRAS PARA CONTRRAPERÍCIA */
 function createMinitagsPDF(text) {
     const { jsPDF } = window.jspdf;
     let pdf = new jsPDF();
 
-    // Definir tamanho e estilo da fonte
     pdf.setFont("Helvetica");
     pdf.setFontSize(10);
 
-    // Coordenadas iniciais de X e Y
     let x = 20;
     let y = 20;
-    const lineHeight = 6;  // Controla o espaçamento entre as linhas
-    const pageHeight = pdf.internal.pageSize.height;  // Altura da página
 
-    // Dividir o texto em linhas
+    const lineHeight = 6;
+    const pageHeight = pdf.internal.pageSize.height;
+
     let lines = text.split("\n");
 
-    lines.forEach(function(line) {
-        // Verificar se a próxima linha excede a altura da página
-        if (y + lineHeight > pageHeight) {
-            pdf.addPage();  // Adiciona nova página
-            y = 20;  // Reseta Y para a nova página
+    lines.forEach(function (line) {
+        if (y + lineHeight > pageHeight - 26) {
+            pdf.addPage();
+            y = 20;
         }
         pdf.text(line, x, y);
-        y += lineHeight;  // Incrementa Y para espaçamento entre linhas
+        y += lineHeight;
     });
-
-    // Salvar o PDF
     pdf.save('minitags.pdf');
 }
-
-
