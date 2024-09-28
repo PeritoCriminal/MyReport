@@ -284,6 +284,7 @@ def drugs_report(request):
         'Negativo': 'NÃO FOI POSSÍVEL IDENTIFICAR presença de substâncias elencadas nas listas A, B e F da Portaria SVS/MS 344/98 e atualizações posteriores, ou na Portaria MJSP 204/2022, em sua lista III, conforme a(s) técnica(s) utilizada(s) (Portaria SPTC 42/2024).',
         'Inconclusivo': 'Os exames/análises preliminares mostraram-se INCONCLUSIVOS, sendo necessárias análises mais complexas e morosas, incompatíveis com a rapidez demandada pelos exames de constatação. O resultado deste presente item seguirá em laudo definitivo.',
         'Cocaina': 'foi DETECTADA presença da substância COCAÍNA, constante na lista F1 da Portaria SVS/MS 344/98 e atualizações posteriores',
+        'Crack': 'foi DETECTADA presença da substância COCAÍNA, constante na lista F1 da Portaria SVS/MS 344/98 e atualizações posteriores',
         'Maconha': 'foi DETECTADA presença da substância TETRAHIDROCANNABINOL (THC), constante na lista F2 da Portaria SVS/MS 344/98 e atualizações posteriores',
         }
     
@@ -312,7 +313,7 @@ def drugs_report(request):
         'morphology': morphology,
         'exam_resulting': exam_resulting,
         'conterproof': conterproof,
-        #'returned': returned,
+        'drUser': user_data.full_name,
         'alert': '(Este Laudo é de caráter provisório e não confirma necessariamente o resultado da identificação que será enviado no Laudo Definitivo)',
     } 
 

@@ -1,21 +1,21 @@
 from django.db import models
 from datetime import datetime
-
+import locale
 
 class BaseReport(models.Model):
     date_register = models.DateField('Data do Registro', auto_now_add=True)
     report_number = models.CharField('Número do Laudo', max_length=20, default='indefinido')
-    city = models.CharField('Número do Laudo', max_length=50, default='Limeira')
+    city = models.CharField('Cidade', max_length=50, default='Limeira')
     protocol_number = models.CharField('Número do Protocolo', max_length=20, default='indefinido')
     occurring_number = models.CharField('Número do Boletim', max_length=20, default='indefinido')
-    designated_date = models.CharField('Data de Designação',  max_length=20, default='data indefinida!')
+    designated_date = models.CharField('Data de Designação', max_length=20, default='data indefinida!')
     exam_objective = models.CharField('Objetivo do Exame', max_length=300, default='indefinido')
     occurrence_nature = models.CharField('Natureza da Ocorrência', max_length=300, default='indefinido')
     police_station = models.CharField('Distrito Policial', max_length=200, default='indefinido')
     requesting_authority = models.CharField('Autoridade Requisitante', max_length=200, default='indefinido')
-    activation_date = models.CharField('Data do Acionamento',  max_length=20, default='data indefinida!')
+    activation_date = models.CharField('Data do Acionamento', max_length=20, default='data indefinida!')
     activation_time = models.TimeField('Hora do Acionamento', auto_now=False, blank=True, null=True)
-    service_date = models.CharField('Data do Atendimento',  max_length=20, default='data indefinida!')
+    service_date = models.CharField('Data do Atendimento', max_length=20, default='data indefinida!')
     service_time = models.TimeField('Hora do Atendimento', auto_now=False)
     director = models.CharField('Diretor', max_length=200, default='indefinido')
     nucleus = models.CharField('Núcleo', max_length=200, default='indefinido')
@@ -30,7 +30,7 @@ class BaseReport(models.Model):
     class Meta:
         abstract = True
 
-    def setDateDefault():
+    def setDateDefault(self):
         pass
     
     def generate_objective(self):
@@ -40,8 +40,16 @@ class BaseReport(models.Model):
     def generate_occurrence_nature(self):
         occurrence_nature_text = f"Natureza da ocorrência, de acordo com a requisição: {self.occurrence_nature}."
         return occurrence_nature_text
-    
+
+    def format_date(self, date_str):
+        # Converte a string 'dd-mm-aaaa' para 'dd de mês de aaaa'
+        locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')  # Define a localidade para português do Brasil
+        date_object = datetime.strptime(date_str, '%d-%m-%Y')  # Converte a string para um objeto datetime
+        formatted_date = date_object.strftime('%d de %B de %Y')  # Formata a data
+        return formatted_date
+
     def generate_preamble(self):
+        formatted_date = self.format_date(self.designated_date)  # Formata a data
         if self.director.startswith('Dra'):
             directorIs = 'pela Diretora deste Instituto de Criminalística, a Perita Criminal'
         elif self.director.startswith('Dr.'):
@@ -62,13 +70,14 @@ class BaseReport(models.Model):
             authorityIs = 'o Delegado de Polícia'
         else:
             authorityIs = 'o(a) Delegado(a) de Polícia'
+        
         preamble = (
-            f"Em {self.designated_date}, na cidade de {self.city} e no Instituto de Criminalística, "
-            f"da Superintendência da Polícia Técnico-Científica, da Secretaria de Segurança Pública do Estado de São Paulo, "
-            f"em conformidade com o disposto no art. 178 do Decreto-Lei 3689 de 3-10-1941 e Decreto-Lei 42847 de 9-2-1998, "
-            f"{directorIs} {self.director}, foi {expertIs} "
-            f"{self.reporting_expert} para proceder ao Exame Pericial especificado em requisição de exame assinada pela Autoridade Policial, "
-            f"{authorityIs} {self.requesting_authority}."
+            f"Em {formatted_date}, na cidade de {self.city} "
+            f"e no Instituto de Criminalística da Superintendência da Polícia Técnico-Científica, " 
+            f"da Secretaria de Segurança Pública do Estado de São Paulo, em conformidade com o disposto no art. "
+            f"178 do Decreto-Lei 3689, de 3 de outubro de 1941, e no Decreto-Lei 42847, "
+            f"de 9 de fevereiro de 1998, {directorIs} {self.director}, "
+            f"foi {expertIs} {self.reporting_expert} para proceder ao exame pericial especificado em requisição "
+            f"assinada pela Autoridade Policial, {authorityIs} {self.requesting_authority}."
         )
         return preamble
-    

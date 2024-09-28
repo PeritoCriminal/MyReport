@@ -206,9 +206,11 @@
         <label for="conclusao">Conclusão</label>
         <textarea class="form-control" id="conclusao" name="conclusao" rows="4" placeholder="Digite a conclusão aqui..."></textarea>
     </div>
+    <button type="button" class="btn btn-secondary" id="generate-tags" onclick="if (formCheking()) createMinitagsPDF(generateLitleTags())">Gerar Etiquetas</button>
     <button type="submit" class="btn btn-primary" id='enviar'>Enviar</button>
     <input type="hidden" id="listOfReturndCheckBoxes" name="listOfReturndCheckBoxes">
     <input type="hidden" id="listOfCounterproofCheckBoxes" name="listOfCounterproofCheckBoxes">
+    <input type="hidden" id="drUser" name="drUser" value="{{drUser}}">
 </form>
 
 <script>
@@ -253,21 +255,21 @@ function setupImageUpload(selectorInput, selectorHiddenInput) {
 
 
 function generateLitleTags() {
+    let text = '';
+    const drUser = document.querySelector('#drUser').value;
     const itemsHeader = document.querySelectorAll('h5[name="item_header[]"]');
     const selectedItems = document.querySelectorAll('select[name="examresulting[]"]'); // Seleciona todos os selects
     const thisNumberOfItems = itemsHeader.length;
     const protocolNumber = `Registro de Entrada: ${document.querySelector('#protocolo').value}`;
     const boNumber = `Boletim: ${document.querySelector('#boletim').value}`;
     const policeDistrict = document.querySelector('#delegacia').value;
-
-    let text = '';
-
+    const today = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
     for (let i = 0; i < thisNumberOfItems; i++) { 
         const selectedItem = selectedItems[i] ? selectedItems[i].value : ''; // Obtém o valor do select correspondente
-        text += `\n_____________________________\n${itemsHeader[i].textContent}\n${selectedItem}\n${protocolNumber}\n${boNumber}\n${policeDistrict}\n`; // Inclui o valor selecionado
+        text += `\n_____________________________\n\n${protocolNumber}\n${drUser}\n${boNumber}\n${policeDistrict}\nData: ${today}\nAmostra: ${itemsHeader[i].textContent} - ${selectedItem}`; // Inclui o valor selecionado
     }
 
-    return text; // Retorna o texto gerado
+    return text;  // Retorna o texto gerado
 }
 
 /*

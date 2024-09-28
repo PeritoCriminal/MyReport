@@ -153,17 +153,24 @@ function createMinitagsPDF(text) {
     let pdf = new jsPDF();
 
     // Definir tamanho e estilo da fonte
-    pdf.setFont("Helvetica");  // Fonte negrito
-    pdf.setFontSize(12);               // Tamanho da fonte
+    pdf.setFont("Helvetica");
+    pdf.setFontSize(10);
 
     // Coordenadas iniciais de X e Y
     let x = 20;
     let y = 20;
-    let lineHeight = 10;  // Controla o espaçamento entre as linhas
+    const lineHeight = 6;  // Controla o espaçamento entre as linhas
+    const pageHeight = pdf.internal.pageSize.height;  // Altura da página
 
-    // Dividir o texto em linhas e definir espaçamento entre elas
-    let lines = text.split("\n");  // Divide o texto por quebras de linha
+    // Dividir o texto em linhas
+    let lines = text.split("\n");
+
     lines.forEach(function(line) {
+        // Verificar se a próxima linha excede a altura da página
+        if (y + lineHeight > pageHeight) {
+            pdf.addPage();  // Adiciona nova página
+            y = 20;  // Reseta Y para a nova página
+        }
         pdf.text(line, x, y);
         y += lineHeight;  // Incrementa Y para espaçamento entre linhas
     });
@@ -172,8 +179,4 @@ function createMinitagsPDF(text) {
     pdf.save('minitags.pdf');
 }
 
-
-function teste(texto) {
-    alert(texto)
-}
 
