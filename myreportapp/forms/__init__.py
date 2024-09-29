@@ -14,4 +14,5 @@ Contato: marcos.moc@policiacientifica.sp.gov.br | (19) 9 8231-2774
 
 from .user_login_form import UserLoginForm
 from .user_registration_model import UserRegistrationModelForm
+from .user_edit_profile_form import EditProfileForm
 # from .drug_report_modelforms import DrugReport

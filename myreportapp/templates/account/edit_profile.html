@@ -1,0 +1,46 @@
+<!--
+
+Copyright (c) 2024 Marcos de Oliveira Capristo
+Todos os direitos reservados.
+
+MYREPORT é um projeto independente.
+Oferece um ambiente para edição de laudos periciais,
+voltado especialmente para Peritos Criminais Oficiais do Estado de São Paulo.
+Idealizado e inicialmente desenvolvido pelo Perito Criminal Marcos de Oliveira Capristo.
+Contato: marcos.moc@policiacientifica.sp.gov.br | (19) 9 8231-2774
+
+-->
+
+<!--
+
+DADOS DO USUÁRIO
+
+-->
+
+
+
+{% extends "base.html" %}
+
+{% block title %}Dados do Usuário{% endblock title %}
+
+{% block content %}
+<h1>Dados do Usuário</h1>
+
+{% if messages %}
+    <ul>
+        {% for message in messages %}
+            <li{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<p>{{ aviso }}</p>
+<p>{{ recado }}</p>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Atualizar</button>
+</form>
+
+{% endblock content %}

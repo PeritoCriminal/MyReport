@@ -21,3 +21,5 @@ from .user_register import register
 from .user_login_views import CustomLoginView
 from .reports import reports
 from .drugs_report import drugs_report
+from .edit_profile import editProfile
+from .user_reports import userReports
