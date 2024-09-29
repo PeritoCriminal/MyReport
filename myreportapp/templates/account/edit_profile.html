@@ -40,6 +40,7 @@ DADOS DO USUÁRIO
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
+    {{ password_form.as_p }}  <!-- Renderiza o formulário de alteração de senha -->
     <button type="submit" class="btn btn-primary">Atualizar</button>
 </form>
 
