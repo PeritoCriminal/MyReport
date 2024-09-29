@@ -183,15 +183,10 @@ PODE MELHORAR:
                 <label for="resultOfExams">Resultado do Exame</label>
                 <textarea class="form-control" id="resultOfExams" name="resultOfExams[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
             </div>    
-
-
             <div class="form-group">
                 <label for="returnedOrCounterproof">Retorno e Contraperícia</label>
                 <textarea class="form-control" id="returnedOrCounterproof" name="returnedOrCounterproof[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
             </div>
-
-
-
             <div class="d-flex align-items-center">
                 <input type="hidden" id="imageItemExaminatedBase64" class="imageItemExaminatedBase64" name="imageItemExaminatedBase64[]">  <!-- Input invisível para armazenar a imagem em Base64 -->
                 <input type="file" id = "uploadItemExaminatedImage" class="uploadItemExaminatedImage" name="uploadItemExaminatedImage[]">
@@ -203,14 +198,11 @@ PODE MELHORAR:
             </div>
         </div>
     </div>
-
     <div class="item-group form-group border p-3 mb-3">
         <div class="form-group d-flex justify-content-between">
             <div class="form-check form-group">
-                <label for="material-devolvido">Material Devolvido</label>
-            
+                <label for="material-devolvido">Material Devolvido</label>            
                 <input type="hidden" id="material-devolvidoBase64" name="material-devolvidoBase64" class='material_devolvidoBase64'>  <!-- Input invisível para armazenar a imagem em Base64 -->
-
                 <input type="file" class="form-control-file" id="material-devolvido" name="material_devolvido" class='material_devolvido' accept="image/*">
             </div>
             <div class="form-check form-group w-100">
@@ -220,10 +212,8 @@ PODE MELHORAR:
         </div>
         <div class="form-group d-flex justify-content-between">
             <div class="form-check form-group">
-                <label for="contrapericia-imagem">Contraperícia</label>
-            
-                <input type="hidden" id="contrapericia-imagemBase64" name="contrapericia-imagemoBase64" class='contrapericia-imagemoBase64'>  <!-- Input invisível para armazenar a imagem em Base64 -->
-            
+                <label for="contrapericia-imagem">Contraperícia</label>            
+                <input type="hidden" id="contrapericia-imagemBase64" name="contrapericia-imagemoBase64" class='contrapericia-imagemoBase64'>  <!-- Input invisível para armazenar a imagem em Base64 -->           
                 <input type="file" class="form-control-file" id="contrapericia-imagem" name="contrapericia_imagem" class='contrapericia_imagem' accept="image/*">
             </div>
             <div class="form-check form-group w-100">
@@ -247,12 +237,15 @@ PODE MELHORAR:
     <input type="hidden" id="drUser" name="drUser" value="{{drUser}}">
 </form>
 
+ 
+
+
 <script>
 
-// FUNÇÕES NO ARQUIVO scripts.js  ----  Devem ser apagadas depois
-let testando = true;
+// FUNÇÕES COMPARTILHADAS NO ARQUIVO scripts.js --
+let setar_como_true_para_realizar_testes = false;
 
-if (testando) {
+if (setar_como_true_para_realizar_testes) {
     document.querySelector('#protocolo').value='prot_teste';
     document.querySelector('#boletim').value='boletim_teste';
     document.querySelector('#delegacia').value='del. pol. teste';
@@ -283,10 +276,6 @@ function setupImageUpload(selectorInput, selectorHiddenInput) {
 }
 
 
-//  FIM DAS FUNÇÕES EM scripts.js
-
-//TESTES DE FUNÇÕES NOVAS
-
 
 function generateLitleTags() {
     let text = '';
@@ -303,22 +292,8 @@ function generateLitleTags() {
         text += `\n_____________________________\n\n${protocolNumber}\n${drUser}\n${boNumber}\n${policeDistrict}\nData: ${today}\nAmostra: ${itemsHeader[i].textContent} - ${selectedItem}`; // Inclui o valor selecionado
     }
 
-    return text;  // Retorna o texto gerado
+    return text; 
 }
-
-/*
-for (let i = 1; i <= numberOfItems; i++) {
-    // TRATAR OS IMPUTS AQUI
-    if (grossMass[i - 1].value === '' || grossMass[i - 1].value < 0 ){
-        alert('Campo Massa Bruta não pode estar vazio nem pode ser menor que 0.');
-        grossMass[i - 1].focus();
-        return false;
-    }
-
-
-*/
-
-
 
 
 function optionsAboutTwoLogicals(bool_returnd = true, bol_conterproof = true, elementTextArea) {
@@ -330,8 +305,6 @@ function optionsAboutTwoLogicals(bool_returnd = true, bol_conterproof = true, el
     } else {
         key = 'vv';
     }
-
-    // Definir o valor correspondente ao textarea
     elementTextArea.value = conterproofReturndMaterial[key];
 }
 
@@ -351,7 +324,6 @@ function handleLiquidMassChange(numericInput, counterproofCheckbox, returnedChec
     }
 }
 
-//FIM DE TESTES PARA NOVAS FUNÇÕES
 
 // NOVOS CAMPOS PARA PESSOAS ENVOLVIDAS
 document.getElementById('people-involved-container').addEventListener('click', function (event) {
@@ -371,6 +343,7 @@ document.getElementById('people-involved-container').addEventListener('click', f
         event.target.parentElement.remove();
     }
 });
+
 
 document.addEventListener('DOMContentLoaded', function() {
     updateItemHeaders();
@@ -459,9 +432,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 <label for="returnedOrCounterproof">Retorno e Contraperícia</label>
                 <textarea class="form-control returned-or-counterproof" name="returnedOrCounterproof[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
             </div>
-
-
-
             <div class="d-flex justify-content-between align-items-center mt-3">
                 <input type="hidden" name="imageItemExaminatedBase64[]" class="imageItemExaminatedBase64Input">  <!-- Input invisível para armazenar a imagem em Base64 -->
                 <input type="file" name="uploadItemExaminatedImage[]" class="uploadItemExaminatedImageInput">
@@ -499,7 +469,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const hiddenInputFile = newItem.querySelector('.imageItemExaminatedBase64Input');
             handleImageResize(file, hiddenInputFile);        
         });
-        //thisLiquidMass = newItem.querySelector('.liquid-mass-value'); //conterproof_returndmaterial
+
         const thisreturnedOrCounterproof = newItem.querySelector('.returned-or-counterproof');
         const thisCounterproof = newItem.querySelector('.form-check-input-counterproof');
         const thisReturned = newItem.querySelector('.form-check-input-returned');
@@ -518,15 +488,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         newItem.querySelector('.lacre_saida').addEventListener('focus', function(event){
             const sealInputs = document.querySelectorAll('input[name="lacre_saida[]"]');
-            const currentInput = event.target;  // O input que recebeu o foco
+            const currentInput = event.target;
         
-            // Verifica se há inputs anteriores ao atual
             const currentIndex = Array.from(sealInputs).indexOf(currentInput);
             if (currentIndex > 0) {
-                const firstValue = sealInputs[0].value;  // Valor do primeiro input
+                const firstValue = sealInputs[0].value;
                 let allEqual = true;
         
-                // Verifica se todos os inputs anteriores têm o mesmo valor que o primeiro
                 for (let i = 1; i < currentIndex; i++) {
                     if (sealInputs[i].value !== firstValue) {
                         allEqual = false;
@@ -534,31 +502,30 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
         
-                // Se todos forem iguais ao primeiro, atribui o valor ao input atual
                 if (allEqual) {
                     currentInput.value = firstValue;
                 }
             }
         });
         
-
         updateItemHeaders();
     }
+
 
     document.querySelector('#massa-liquida').addEventListener('change', function(){
         handleLiquidMassChange(this, document.querySelector('#contrapericia') , document.querySelector('#devolvido'));
         optionsAboutTwoLogicals(document.querySelector('#devolvido').checked, document.querySelector('#contrapericia').checked, document.querySelector('#returnedOrCounterproof'));
     });
 
+
     document.querySelector('#devolvido').addEventListener('change', function(){
         optionsAboutTwoLogicals(document.querySelector('#devolvido').checked, document.querySelector('#contrapericia').checked, document.querySelector('#returnedOrCounterproof'));
     });
 
+
     document.querySelector('#contrapericia').addEventListener('change', function(){
         optionsAboutTwoLogicals(document.querySelector('#devolvido').checked, document.querySelector('#contrapericia').checked, document.querySelector('#returnedOrCounterproof'));
     });
-    //document.querySelector('#contrapericia')
-
 
 
     document.querySelector('.add-item').addEventListener('click', addItem);
@@ -571,10 +538,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });    
 });
 
+
 // VARIÁVEIS QUE IRÃO PREENCHER O TEXTAREA DE ACORDO COM A ESCOLHA DO USUÁRIO
 let itemPackagingSelected = '';
 let itemMorphologySelected = '';
 let itemExamResult = '';
+
 
 // COMBOBOXES COM A DESCRIÇÃO DAS EMBALAGENS
 const packaging = {{ packaging|safe }};
@@ -591,6 +560,7 @@ function populateSelectPac(selectElement) {
     });
 }
 
+
 // COMBOBOXES COM AS MORFOLOGIAS
 const morphology = {{ morphology|safe }};
 function populateSelectMorph(selectElement) {
@@ -605,6 +575,7 @@ function populateSelectMorph(selectElement) {
         updateObservations(selectElement, morphology[selectElement.value]);
     });
 }
+
 
 // COMBOBOXES COM AS OPÇÕES DE RESULTADOS.
 const examresulting = {{ exam_resulting|safe }};
@@ -624,11 +595,13 @@ let conterproofReturndMaterial = {
     {% for key, value in conterproof.items %}
         "{{ key }}": "{{ value }}",
     {% endfor %}
-};  //toNiceName
+}; 
+
 
 document.querySelectorAll('select[name="packaging[]"]').forEach(populateSelectPac);
 document.querySelectorAll('select[name="morphology[]"]').forEach(populateSelectMorph);
 document.querySelectorAll('select[name="examresulting[]"]').forEach(populateSelectExamResulting);
+
 
 function updateObservations(selectElement, selectedValue) {
     const selectName = selectElement.name;
@@ -644,14 +617,12 @@ function updateObservations(selectElement, selectedValue) {
 
     const parentContainer = selectElement.closest('div.form-row').parentElement;
 
-    // Atualiza o textarea "packagingAndMorphologiObservations[]"  submit
     const textarea = parentContainer.querySelector('textarea[name="packagingAndMorphologiObservations[]"]');
     if (textarea) {
         let texto_formated = `${itemPackagingSelected} ${itemMorphologySelected}`
         textarea.value = texto_formated.replace('encerrando contendo', 'encerrando');
     }
 
-    // Atualiza o textarea "resultOfExams[]"
     const returnTextarea = parentContainer.querySelector('textarea[name="resultOfExams[]"]');
     if (returnTextarea) {
         returnTextarea.value = itemExamResult;
@@ -678,15 +649,13 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Formulário não encontrado!');
         return;
     }
-        // listOfCounterProof
+
     submitButton.addEventListener('click', function(event) {
-        event.preventDefault();  // Evita o envio automático do formulário
+        event.preventDefault();  
         if(!formCheking()){
             return;
         }else{  
-            //alert('Formulário foi verificado');
-            form.submit();  // Submete o formulário manualmente após validação
-//            createMinitagsPDF(generateLitleTags());   //   CRIAR UM BOTÃO SÓ PRA ISSO
+            form.submit();  
             setTimeout(function() {
                 window.location.href = "{% url 'index' %}";
             }, 5000);
@@ -772,7 +741,6 @@ function formCheking(){
         return false;
     }
     
-    // Verifica se a data de acionamento é inferior à de liberação
     if (!beforeThan(serviceDate, serviceHour, releaseDate, releaseHour)) {
         alert('A data e hora do acionamento devem ser anteriores à data e hora da liberação.');
         document.querySelector('#data_atendimento').focus();
@@ -795,9 +763,7 @@ function formCheking(){
         return false;
     }
 
-    let materialReceivedObservations = document.querySelector('#allMaterialObservations').value.trim();
-    
-    //let labelAllMaterialImg = document.querySelector('#labelOfImgOfAllMaterialReceived').value;  
+    let materialReceivedObservations = document.querySelector('#allMaterialObservations').value.trim(); 
 
     let people_involved = document.querySelectorAll('input[name="people_involved[]"]');
     let listOfEnvolvedPeople = [];
@@ -811,6 +777,7 @@ function formCheking(){
             firstEmptyInput = person;
         }
     });
+
     if (listOfEnvolvedPeople.length === 0) {
         alert('Preencha pelo menos um campo para o nome de pessoa envolvida.');        
         if (firstEmptyInput) {
@@ -818,25 +785,26 @@ function formCheking(){
             return false;
         }
     }
+
     let packaging = document.querySelectorAll('select[name="packaging[]"]');    
     let numberOfItems = packaging.length;
     let grossMass = document.querySelectorAll('input[name="massa_bruta[]"]');
     let liquidMass = document.querySelectorAll('input[name="massa_liquida[]"]');
 
-//  IMPLEMENTAR AS VERIIFCAÇÕES NECESSÁRIAS DOS INPUTS
-
     for (let i = 1; i <= numberOfItems; i++) {
-        // TRATAR OS IMPUTS AQUI
+
         if (grossMass[i - 1].value === '' || grossMass[i - 1].value < 0 ){
             alert('Campo Massa Bruta não pode estar vazio nem pode ser menor que 0.');
             grossMass[i - 1].focus();
             return false;
         }
+
         if (liquidMass[i - 1].value === '' || liquidMass[i - 1].value < 0){
             alert('Campo Massa Líquida não pode estar vazio nem pode ser menor que 0.');
             liquidMass[i - 1].focus();
             return false;
         }
+
         grossMass[i - 1].value = grossMass[i - 1].value.replace(',', '.');
         liquidMass[i - 1].value = liquidMass[i - 1].value.replace(',', '.');
 
@@ -867,14 +835,13 @@ function formCheking(){
         
     }
 
-    // ATRIBUIR ÀS VARIÁVEIS / CRIAR E POPULAR AS LISTAS AQUI
-
     document.querySelector('#protocolo').value = formatStringWithYear(protocol, serviceDate);
     document.querySelector('#boletim').value = formatStringWithYear(policereport, serviceDate);
     document.querySelector('#autoridade_requisitante').value = toNiceName(authority);
     document.querySelector('#delegacia').value = toNiceName(policestation);
 
     let listItensLabels = [];
+
     let itemLabel = document.querySelectorAll('h5[name="item_header[]"]');    
     itemLabel.forEach(item => {
         listItensLabels.push(item.textContent);        
@@ -939,7 +906,7 @@ function formCheking(){
         listOfResultOfExams.push(`("Resultado das análises:":${reusltOfExams.value.trim()})`);
     });
 
-    // VERIFICAÇÃO PELO CONSOLE
+/*  //  COMENTARIOS PARA CONSOLE:
     console.log(protocol);
     console.log(policereport);
     console.log(policestation);
@@ -961,12 +928,10 @@ function formCheking(){
     console.log(listOfEntranceSeal);
     console.log(listOfExitseal);
     console.log(listOfpackagingAndMorphology);
-    console.log(listOfResultOfExams);
-           
-    //teste('Tudo ok até aqui');
+    console.log(listOfResultOfExams);           
+*/
     return true;
 }
-
 
 </script>
 

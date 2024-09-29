@@ -20,7 +20,6 @@ VIEW DROGS_REPORT, A MELHORAR
 """
 
 
-
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
@@ -127,8 +126,8 @@ def drugs_report(request):
                     run_negrito.underline = True                   
                     
                     adicionar_texto_formatado(doc, 'Descrição: ', new_report.listOfpackagingAndMorphology[i], 2)
-                    adicionar_texto_formatado(doc, 'Massa Bruta e/ou quantidade: ', str(new_report.listOfGrossMass[i]), 2)
-                    adicionar_texto_formatado(doc, 'Massa Líquida: ', str(new_report.listOfLiquidMass[i]), 2)
+                    adicionar_texto_formatado(doc, 'Massa Bruta: ', f'{new_report.listOfGrossMass[i]} gramas', 2)
+                    adicionar_texto_formatado(doc, 'Massa Líquida: ', f'{new_report.listOfLiquidMass[i]} gramas', 2)
                     adicionar_texto_formatado(doc, 'Quantidade retirada para análise e/ou contraperícia: ', new_report.listOfCounterProof[i], 2)
                     adicionar_texto_formatado(doc, 'Resultado: ', new_report.listOfResultOfExams[i], 2)
 
