@@ -14,17 +14,20 @@ Contato: marcos.moc@policiacientifica.sp.gov.br | (19) 9 8231-2774
 
 """
 
-VIEW FURTO, A DESENVOLVER
-
+MODEL PARA LAUDO DE LOCAL DE FURTO
 
 """
 
 
-from django.shortcuts import render
+from django.db import models
+from .base_report_model import BaseReport
 
-context = {
-    'msg_about_this_form_to_user': 'Tudo vai dar certo!'
-}
+class TheftReportModel(BaseReport):
+    burglary_scene = models.TextField(blank=True, verbose_name='Descrição do Local', default='')
 
-def theft(request):
-    return render(request, 'furto.html', context)
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = 'Local de Furto'
+        verbose_name_plural = 'Locais de Furto'

@@ -25,5 +25,49 @@ LAUDO DE FURTO, A DESENVOLVER
 {% block title %}Furto{% endblock title %}
 
 {% block content %}
-    <h2 class="titulo-2">Furto</h2>
+    <h2 class="titulo-2">Local de Furto</h2>
+    <form id="theft-report" method="post" action="{% url 'furto' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% include "baseform.html" %}
+        <p>Aqui so campos especificos desse formulário</p>
+        {% include "bottomform.html" %}
+    </form>
+
+
+
+<script>
+
+    //Atributos
+    const reportNumber = document.querySelector('#laudo');
+    const protocolNumber = document.querySelector('#protocolo');
+    const policeReportNumber = document.querySelector('#boletim');
+    const policeStation = document.querySelector('#delegacia');
+    const requestingAuthority = document.querySelector('#autoridade_requisitante');
+    const serviceDate = document.querySelector('#data_atendimento');
+    const serviceTime = document.querySelector('#hora_atendimento');
+    const releaseDate = document.querySelector('#data_liberacao');
+    const releaseTime = document.querySelector('#hora_liberacao');
+
+    function checkForm(){
+        if (reportNumber.value.trim() == 0){
+            alert('Valor do número do Laudo não pode estar vazio.');
+            reportNumber.focus();
+            return false;
+        }
+
+        return true;
+    }
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+        if (checkForm){
+            alert('Tudo certo por enquanto!');
+        }
+
+        teste('Testando. Essa deve ser a última função desse script.\nServe para verificar se scripts.js está sendo chamado.');
+    });
+    
+</script>
+
 {% endblock content %}

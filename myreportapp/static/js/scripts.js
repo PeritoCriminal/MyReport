@@ -190,3 +190,7 @@ function createMinitagsPDF(text) {
     });
     pdf.save('minitags.pdf');
 }
+
+function teste(texto) {
+    alert(texto);
+}
