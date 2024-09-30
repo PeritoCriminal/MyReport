@@ -35,6 +35,12 @@ def reports(request):
             'alt': 'Relatório de Drogas',
             'title': 'Entorpecentes - Constatação Provisória',
         },
+        {
+            'url': 'furto',
+            'image': 'images/reports_links/furto.png',
+            'alt': 'Relatório de Furto',
+            'title': 'Furto',
+        },
         # Adicionar outras imagens e links
     ]
     return render(request, 'reports.html', {'report_links': report_links})

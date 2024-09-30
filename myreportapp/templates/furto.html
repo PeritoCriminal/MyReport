@@ -1,4 +1,4 @@
-"""
+<!--
 
 Copyright (c) 2024 Marcos de Oliveira Capristo
 Todos os direitos reservados.
@@ -9,18 +9,21 @@ voltado especialmente para Peritos Criminais Oficiais do Estado de São Paulo.
 Idealizado e inicialmente desenvolvido pelo Perito Criminal Marcos de Oliveira Capristo.
 Contato: marcos.moc@policiacientifica.sp.gov.br | (19) 9 8231-2774
 
+-->
 
-"""
+<!--
+
+LAUDO DE FURTO, A DESENVOLVER
+
+-->
 
 
-from .index import index
-from .contact import contact
-from .about import about
-from .login import login
-from .user_register import register
-from .user_login_views import CustomLoginView
-from .reports import reports
-from .drugs_report import drugs_report
-from .edit_profile import editProfile
-from .user_reports import userReports
-from .theft import theft
+
+
+{% extends "base.html" %}
+
+{% block title %}Furto{% endblock title %}
+
+{% block content %}
+    <h2 class="titulo-2">Furto</h2>
+{% endblock content %}

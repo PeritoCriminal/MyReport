@@ -12,15 +12,15 @@ Contato: marcos.moc@policiacientifica.sp.gov.br | (19) 9 8231-2774
 
 """
 
+"""
 
-from .index import index
-from .contact import contact
-from .about import about
-from .login import login
-from .user_register import register
-from .user_login_views import CustomLoginView
-from .reports import reports
-from .drugs_report import drugs_report
-from .edit_profile import editProfile
-from .user_reports import userReports
-from .theft import theft
+VIEW FURTO, A DESENVOLVER
+
+
+"""
+
+
+from django.shortcuts import render
+
+def theft(request):
+    return render(request, 'furto.html')

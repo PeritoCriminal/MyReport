@@ -22,7 +22,7 @@ ESSA PÁGINA CONTEM LINKS PARA OS MODELOS DE LAUDOS
 {% load static %}
 
 {% block content %}
-<h1>Selecione um Relatório</h1>
+<h2 class="titulo-2">Selecione um Relatório</h2>
 <div class="reports-links">
     {% for link in report_links %}
     <a href="{% url link.url %}">

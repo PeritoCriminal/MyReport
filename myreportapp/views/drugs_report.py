@@ -99,15 +99,27 @@ def drugs_report(request):
                 considerations = request.POST.get('considerations'),
                 conclusion = request.POST.get('conclusao'),
             )
-            new_report.save()
 
-            # Gerando laudo em .docx
+            """
+            
+            ALINHA ABAIXO ESTÁ COMENTADA PARA NÃO SALVAR O OBJETO NO BANCO DE DADOS.
+            A TABELA EXISTE E O MÓDULO ESTÁ PRONTO PARA ESSA FUNCIONALIDADE, 
+            MAS NÃO FOI IMPLEMENTADO A RECUPERAÇÃO DOS DADOS PARA SUA ALTERAÇÃO OU EXCLUSÃO.
+                    
+            """
 
+            # new_report.save() 
+
+
+            """     
+            
+            GERAR ARQUIVO DOCX E ENVIAR AO USUÁRIO
+            
+            """
             template_path = os.path.join('myreportapp', 'static', 'doctemplates', 'report.docx')
 
             def adicionar_itens(doc, n):
 
-                # Converter a string de 'listOfReturned' para uma lista de booleanos
                 list_of_returned = ast.literal_eval(new_report.listOfReturned.replace('true', 'True').replace('false', 'False'))
 
                 for i in range(n):
@@ -117,11 +129,7 @@ def drugs_report(request):
                         item_q = f'Item {i + 1}'                 
                     adicionar_texto_formatado(doc, item_q, f' (Acondicionado sob o lacre {new_report.listOfEntranceSeal[i]})')
                     paragrafo = doc.paragraphs[-1]
-
-                    # Aumentar o espaçamento antes para 24 pontos
                     paragrafo.paragraph_format.space_before = Pt(24)
-
-                    # Aplicar sublinhado ao texto em negrito
                     run_negrito = paragrafo.runs[0]
                     run_negrito.underline = True                   
                     
@@ -131,25 +139,20 @@ def drugs_report(request):
                     adicionar_texto_formatado(doc, 'Quantidade retirada para análise e/ou contraperícia: ', new_report.listOfCounterProof[i], 2)
                     adicionar_texto_formatado(doc, 'Resultado: ', new_report.listOfResultOfExams[i], 2)
 
-                    # Verifica se o item foi devolvido ou não e adiciona essa informação ao final
                     if list_of_returned[i]:
                         returned_if = f'O restante do item (material , invólucro(s) e lacre(s)) foi devolvido à autoridade policial requisitante nos termos das exigências legais, sob o lacre número {new_report.listOfExitseal[i]}.'
                     else:
                         returned_if = 'As embalagens e os respectivos lacres foram aqui inutilizados conforme as Portarias SPTC No 112 de 29-6-2016 e SPTC no 63 de 30 de abril de 2015.'          
                     
                     adicionar_texto_formatado(doc, '', returned_if, 2)
-
-                    #insert_image_from_base64_to_docx(doc, new_report.materialImage, new_report.materialImageCaption)
             
             doc = None
-            # Carrega o documento
             try:
                 doc = Document(template_path)
             except Exception as e:
                 print(f'Erro ao abrir o documento: {e}')
                 doc = Document()
 
-                # Verifica se o primeiro parágrafo está vazio e o remove do XML
             if doc.paragraphs and not doc.paragraphs[0].text.strip():
                 p = doc.paragraphs[0]._element
                 p.getparent().remove(p)
@@ -162,19 +165,15 @@ def drugs_report(request):
             if len(new_report.listOfEnvolvedPeople) > 1:
                 formatted_people = ', '.join(new_report.listOfEnvolvedPeople)
             else:
-                # Se houver apenas uma pessoa, retorna diretamente
                 formatted_people = new_report.listOfEnvolvedPeople[0]
             
             adicionar_texto_formatado(doc, 'Nome(s) do(s) Envolvido(s): ', f'{formatted_people}.')
             adicionar_texto_formatado(doc, 'Data do Exame: ', new_report.designated_date)
     
-            # Gera o preâmbulo usando o método do model
             preamble_text = new_report.generate_preamble()
     
-            # Adiciona o preâmbulo ao documento            
             preamble_paragraph = doc.add_paragraph(preamble_text)
             
-            # Formatação da fonte do parágrafo
             for run in preamble_paragraph.runs:
                 run.font.size = Pt(11)
                 run.font.name = 'Arial'
@@ -223,7 +222,6 @@ def drugs_report(request):
 
             adicionar_rodape(doc, f'RE: {new_report.protocol_number} | Boletim {new_report.occurring_number} - {new_report.police_station}')
 
-            # Salva o documento em um buffer de memória
             doc_buffer = BytesIO()
             doc.save(doc_buffer)
             doc_buffer.seek(0)
@@ -234,7 +232,6 @@ def drugs_report(request):
             response['Content-Disposition'] = f'attachment; filename={file_name}'
             
             return response
-            #return HttpResponse(f'Relatório criado com sucesso!')
         except Exception as e:
             return HttpResponse(f'Erro ao criar relatório: {str(e)}')
     now = datetime.now()
@@ -301,7 +298,7 @@ def drugs_report(request):
         'embalagem plástica com resquícios': 'contendo embalagens plásticas com massa total de [X] gramas e resquícios do material [descrição do material].',
         'embalagem plástica': 'contendo embalagem plástica com massa total de [X] gramas e [descrição do material].'
     }
-    exam_resulting = {  #FALTA IMPLENTAR OS TEXTOS DOS VALORES
+    exam_resulting = {
         'Selecione uma opção': '',
         'Negativo': 'NÃO FOI POSSÍVEL IDENTIFICAR presença de substâncias elencadas nas listas A, B e F da Portaria SVS/MS 344/98 e atualizações posteriores, ou na Portaria MJSP 204/2022, em sua lista III, conforme a(s) técnica(s) utilizada(s) (Portaria SPTC 42/2024).',
         'Inconclusivo': 'Os exames/análises preliminares mostraram-se INCONCLUSIVOS, sendo necessárias análises mais complexas e morosas, incompatíveis com a rapidez demandada pelos exames de constatação. O resultado deste presente item seguirá em laudo definitivo.',
@@ -315,10 +312,6 @@ def drugs_report(request):
         'fv':'todo o material foi aqui retirado para análises, sendo o remanescente destas análises armazenado sob a forma de contraperícia.',
         'vv':'uma amostra de aproximadamente 2 g (dois gramas) foi aqui retirada para análises, sendo o remanescente destas análises armazenado sob a forma de contraperícia.'
     }
-
-    """returned = {
-        'returned': 'O restante do item (material , invólucro(s) e lacre(s)) foi devolvido à autoridade policial requisitante nos termos das exigências legais, sob o lacre número SPTC6447218.'
-    }"""
 
     context = {
         'protocol_prefix': 'TOX',
