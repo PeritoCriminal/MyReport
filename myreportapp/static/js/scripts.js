@@ -105,6 +105,35 @@ function toNiceName(nomeDeAlguem) {
 }
 
 
+/*  VERIFICA SE UMA DATA É VÁLIDA */
+function isValidDate(dateString) {
+    try {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) {
+            throw new Error('Data inválida');
+        }
+        return true;
+    } catch (error) {
+        console.error(error.message);
+        return false;
+    }
+}
+
+/*  VERIFICA SE UMA HORA É VÁLIDA */
+function isValidTime(timeString) {
+    try {
+        const timePattern = /^([0-1]\d|2[0-3]):([0-5]\d)$/;        
+        if (!timeString.match(timePattern)) {
+            throw new Error('Hora inválida');
+        }
+        return true;
+    } catch (error) {
+        console.error(error.message);
+        return false;
+    }
+}
+
+
 /*  COMPARA DUAS DATAS ACOMPANHADAS DE SUAS RESPECTIVAS HORAS E VERIFICA SE UMA É MENOR OU NÃO
     RETORNA UM BOOLEANO */
 function beforeThan(priorDate, priorHour, lastDate, lastHour) {

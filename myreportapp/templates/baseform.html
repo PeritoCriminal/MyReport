@@ -1,24 +1,44 @@
+<!--
+
+Copyright (c) 2024 Marcos de Oliveira Capristo
+Todos os direitos reservados.
+
+MYREPORT é um projeto independente.
+Oferece um ambiente para edição de laudos periciais,
+voltado especialmente para Peritos Criminais Oficiais do Estado de São Paulo.
+Idealizado e inicialmente desenvolvido pelo Perito Criminal Marcos de Oliveira Capristo.
+Contato: marcos.moc@policiacientifica.sp.gov.br | (19) 9 8231-2774
+
+-->
+
+<!--
+
+FRAGMENTO DE FORMULÁRIO - TOP
+
+-->
+
+
+
 <div class="alert alert-warning">                   
     {{ msg_about_this_form_to_user | safe }}
 </div>
 
 <!-- DADOS GERAIS DO FORMULÁRIO / ANÁLOGOS A CLASS ABSTRACT DO MODELS, MENOS PARA OS CHECKS DAS SUBSTÂNCIAS EXAMINADAS -->
-<!-- DADOS GERAIS DO FORMULÁRIO -->
 <div class="item-group form-group border p-3 mb-3">
 
     <!-- Primeira Linha -->
     <div class="form-group d-flex justify-content-between">
         <div class="form-group">
             <label for="laudo">Laudo</label>
-            <input type="text" id="laudo" name="laudo" class="form-control text-uppercase" required value="{{ protocol_prefix }}">
+            <input type="text" id="laudo" name="laudo" class="form-control" required value="{{ protocol_prefix }}">
         </div>
         <div class="form-group">
             <label for="protocolo">Protocolo</label>
-            <input type="text" id="protocolo" name="protocolo" class="form-control text-uppercase" required value="{{ protocol_prefix }}">
+            <input type="text" id="protocolo" name="protocolo" class="form-control" required value="{{ protocol_prefix }}">
         </div>
         <div class="form-group">
             <label for="boletim">Boletim</label>
-            <input type="text" id="boletim" name="boletim" class="form-control text-uppercase" required>
+            <input type="text" id="boletim" name="boletim" class="form-control" required>
         </div>
     </div>
 
