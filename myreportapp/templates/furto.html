@@ -26,7 +26,9 @@ LAUDO DE FURTO, DESENVOLVENDO
     <form id="theft-report" method="post" action="{% url 'furto' %}" enctype="multipart/form-data">
         {% csrf_token %}
         {% include "baseform.html" %}
-        <p>Aqui so campos especificos desse formulário</p>
+        
+        {% include 'local.html' %}
+
         {% include "bottomform.html" %}
     </form>
     <input type="button" onclick="checkForm()" value="teste"></imput>
@@ -62,6 +64,7 @@ LAUDO DE FURTO, DESENVOLVENDO
     const serviceTime = document.querySelector('#hora_atendimento');
     const releaseDate = document.querySelector('#data_liberacao');
     const releaseTime = document.querySelector('#hora_liberacao');
+    const submitButton = document.querySelector('#enviar');
 
     function checkForm(){
         if (reportNumber.value.trim() == ''){
@@ -107,7 +110,7 @@ LAUDO DE FURTO, DESENVOLVENDO
 
         if (!isValidTime(serviceTime.value)){
             alert('Hora inválida.');
-            serviceTime.fcus();
+            serviceTime.focus();
             return false;
         }
 
@@ -119,7 +122,7 @@ LAUDO DE FURTO, DESENVOLVENDO
 
         if (!isValidTime(releaseTime.value)){
             alert('Hora inválida.');
-            releaseTime.fcus();
+            releaseTime.focus();
             return false;
         }
 
@@ -148,6 +151,11 @@ LAUDO DE FURTO, DESENVOLVENDO
 
         requestingAuthority.addEventListener('change', function(){
             requestingAuthority.value = toNiceName(requestingAuthority.value);
+        });
+
+        submitButton.addEventListener('click', function(){
+            event.preventDefault();
+            checkForm();
         });
 
         testandoInputs();

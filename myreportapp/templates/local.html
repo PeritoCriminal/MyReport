@@ -1,0 +1,42 @@
+<div id="item-container">
+    <label>Local</label>    
+    <div class="item-group form-group border p-3 mb-3">
+        <div class="item-header-dark mb-2">
+            <h5 name="item_header[]">Local</h5>
+        </div>
+        <div class="form-group">
+            <label for="packagingAndMorphologiObservations">Invólucros e Morfologia</label>
+            <textarea class="form-control" id="packagingAndMorphologiObservations" name="packagingAndMorphologiObservations[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
+        </div>
+        <div class="form-group">
+            <label for="resultOfExams">Resultado do Exame</label>
+            <textarea class="form-control" id="resultOfExams" name="resultOfExams[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
+        </div>    
+        <div class="form-group">
+            <label for="returnedOrCounterproof">Retorno e Contraperícia</label>
+            <textarea class="form-control" id="returnedOrCounterproof" name="returnedOrCounterproof[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
+        </div>
+        <div class="d-flex align-items-center">
+            <input type="hidden" id="imageItemExaminatedBase64" class="imageItemExaminatedBase64" name="imageItemExaminatedBase64[]">  <!-- Input invisível para armazenar a imagem em Base64 -->
+            <input type="file" id = "uploadItemExaminatedImage" class="uploadItemExaminatedImage" name="uploadItemExaminatedImage[]">
+            <div class="form-check form-group flex-grow-1 mx-3 w-100">
+                <label for="imagem-legenda_item">Legenda da Imagem</label>
+                <input type="text" class="form-control" id="labelOfImgItemExaminatedReceived" name="labelOfImgItemExaminatedReceived[]" value="Item examinado.">
+            </div>
+            <button type="button" class="btn btn-secondary ml-auto add-item">+</button>
+        </div>
+    </div>
+</div>
+<div class="item-group form-group border p-3 mb-3">
+    <div class="form-group d-flex justify-content-between">
+        <div class="form-check form-group">
+            <label for="material-devolvido">Material Devolvido</label>            
+            <input type="hidden" id="material-devolvidoBase64" name="material-devolvidoBase64" class='material_devolvidoBase64'>  <!-- Input invisível para armazenar a imagem em Base64 -->
+            <input type="file" class="form-control-file" id="material-devolvido" name="material_devolvido" class='material_devolvido' accept="image/*">
+        </div>
+        <div class="form-check form-group w-100">
+            <label for="material-devolvido-legenda">Legenda da imagem</label>
+            <input type="text" class="form-control" id="material-devolvido-legenda" name="material_devolvido_legenda" value="Material devolvido após exame.">
+        </div>
+    </div>
+</div>
