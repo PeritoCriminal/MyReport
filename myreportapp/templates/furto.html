@@ -25,7 +25,7 @@ LAUDO DE FURTO, DESENVOLVENDO
     <h2 class="titulo-2">Local de Furto</h2>
     <form id="theft-report" method="post" action="{% url 'furto' %}" enctype="multipart/form-data">
         {% csrf_token %}
-        {% include "baseform.html" %}
+        {% include "formfragments/baseform.html" %}
         
         {% include 'local.html' %}
 
@@ -37,7 +37,8 @@ LAUDO DE FURTO, DESENVOLVENDO
 <script>
 
     //Setar com true durante exeção de alguns testes
-    const testando = false
+    const testando = true;
+
     function testandoInputs(){
         if (testando){
             reportNumber.value = 'L001';
@@ -126,8 +127,13 @@ LAUDO DE FURTO, DESENVOLVENDO
             return false;
         }
 
+        testeLocal();
+
+        alert(itemImgLabel.value);
+
         alert('Todos os testes executados.')
         return true;
+
     }
 
 
