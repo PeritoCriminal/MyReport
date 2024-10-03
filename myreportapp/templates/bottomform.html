@@ -33,3 +33,20 @@ FRAGMENTO DE FORMULÁRIO - BOTTOM
 <button type="submit" class="btn btn-primary" id='enviar'>Enviar</button>
 
 </form>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const submitButton = document.querySelector('#enviar');
+        
+        submitButton.addEventListener('click', function(){
+            event.preventDefault();
+            checkForm();
+        });
+
+        testandoInputs();
+
+});    
+
+</script>

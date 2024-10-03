@@ -1,8 +1,9 @@
 <div id="item-container">
-    <label>Local</label>    
+    <label><h4>Descrição e Exame do Local</h4></label>    
     <div class="item-group form-group border p-3 mb-3">
-        <div class="item-header-dark mb-2">
-            <h5 name="item_header[]">Descrição e Exame do Local</h5>
+        <div class="item-header-dark mb-2 d-flex align-items-center">
+            <h5 name="item_header[]" class="mb-0">Subtítulo</h5>
+            <input type="text" class="local-subtitle form-control ml-2" placeholder="Sub Título desse bloco" style="flex-grow: 1;"> <!-- Alinhamento e tamanho do input -->
         </div>
         <div class="form-group">
             <label for="local-description">Descrição e Exame do Local</label>
@@ -10,70 +11,77 @@
         </div>    
         <div class="d-flex align-items-center">
             <input type="hidden" id="local-img-to-text-base64" class="local-img-to-text-base64" name="local-img-to-text-base64[]">  <!-- Input invisível para armazenar a imagem em Base64 -->
-            <input type="file" id = "upload-local-image" class="upload-local-image" name="upload-local-image[]">
+            <input type="file" id="upload-local-image" class="upload-local-image" name="upload-local-image[]">
             <div class="form-check form-group flex-grow-1 mx-3 w-100">
                 <label for="label-local-img">Legenda da Imagem</label>
-                <input type="text" class="form-control" id="label-local-img" name="label-local-img[]" value="Item examinado.">
+                <input type="text" class="form-control" id="label-local-img" name="label-local-img[]" value="" placeholder="Legenda da imagem selecionada.">
             </div>
             <button type="button" class="btn btn-secondary ml-auto add-item">+</button>
-            
-            <script>
-
-                const itemImgLabel = document.querySelector('#label-local-img');
-
-                function testeLocal(){
-                    alert('função testeLocal funcionando.');
-                }
-                // Função para adicionar um novo container
-                function addNewContainer(button) {
-                    // Seleciona o container original, que é o "item-group" mais próximo do botão clicado
-                    const container = button.closest('.item-group');
-            
-                    // Clona o container original
-                    const newContainer = container.cloneNode(true);
-            
-                    // Limpa os campos do container clonado
-                    newContainer.querySelector('textarea').value = '';
-                    newContainer.querySelector('.local-img-to-text-base64').value = '';
-                    newContainer.querySelector('.upload-local-image').value = '';
-                    newContainer.querySelector('input[type="text"]').value = 'Item examinado.';
-            
-                    // Substitui o evento do botão "+" do novo container
-                    const newAddButton = newContainer.querySelector('.add-item');
-                    newAddButton.addEventListener('click', function() {
-                        addNewContainer(this);  // O novo botão + também funcionará corretamente
-                    });
-            
-                    // Verifica se o botão "-" já existe no novo container para evitar duplicação
-                    if (!newContainer.querySelector('.remove-item')) {
-                        // Cria o botão "-" para remover o novo container
-                        const removeButton = document.createElement('button');
-                        removeButton.type = 'button';
-                        removeButton.classList.add('btn', 'btn-danger', 'ml-2', 'remove-item');
-                        removeButton.innerText = '-';
-            
-                        // Insere o botão "-" no container clonado
-                        const buttonContainer = newContainer.querySelector('.add-item').parentNode;
-                        buttonContainer.appendChild(removeButton);
-            
-                        // Adiciona o evento para remover o container ao clicar no botão "-"
-                        removeButton.addEventListener('click', function() {
-                            newContainer.remove();
-                        });
-                    }
-            
-                    // Insere o novo container logo após o container original
-                    container.insertAdjacentElement('afterend', newContainer);
-                }
-            
-                // Adiciona o evento de clique no botão "+" inicial
-                document.querySelectorAll('.add-item').forEach(button => {
-                    button.addEventListener('click', function() {
-                        addNewContainer(this);
-                    });
-                });
-            </script>        
-
         </div>
     </div>
 </div>
+
+
+<script>
+    function testeLocal() {
+        alert('função testeLocal funcionando.');
+    }
+
+    // Função para adicionar um novo container
+    function addNewContainer(button) {
+        // Seleciona o container original, que é o "item-group" mais próximo do botão clicado
+        const container = button.closest('.item-group');
+
+        // Clona o container original
+        const newContainer = container.cloneNode(true);
+
+        // Limpa os campos do container clonado
+        newContainer.querySelector('textarea').value = '';
+        newContainer.querySelector('.local-img-to-text-base64').value = '';
+        newContainer.querySelector('.upload-local-image').value = '';
+        newContainer.querySelector('input[type="text"]').value = 'Item examinado.';
+        newContainer.querySelector('.local-subtitle').value = '';  // Limpa o campo de Subtítulo
+
+        // Remove o botão "-" antigo, caso exista, para evitar duplicação
+        const existingRemoveButton = newContainer.querySelector('.remove-item');
+        if (existingRemoveButton) {
+            existingRemoveButton.remove();
+        }
+
+        // Substitui o evento do botão "+" do novo container
+        const newAddButton = newContainer.querySelector('.add-item');
+        newAddButton.addEventListener('click', function () {
+            addNewContainer(this);  // O novo botão + também funcionará corretamente
+        });
+
+        // Cria o botão "-" para remover o novo container
+        const removeButton = document.createElement('button');
+        removeButton.type = 'button';
+        removeButton.classList.add('btn', 'btn-danger', 'ml-2', 'remove-item');
+        removeButton.innerText = '-';
+
+        // Insere o botão "-" no container clonado
+        const buttonContainer = newContainer.querySelector('.add-item').parentNode;
+        buttonContainer.appendChild(removeButton);
+
+        // Adiciona o evento para remover o container ao clicar no botão "-"
+        removeButton.addEventListener('click', function () {
+            newContainer.remove();
+        });
+
+        // Insere o novo container logo após o container original
+        container.insertAdjacentElement('afterend', newContainer);
+    }
+
+    // Função para adicionar o evento de clique no botão "+"
+    function initializeAddButtons() {
+        document.querySelectorAll('.add-item').forEach(button => {
+            button.addEventListener('click', function () {
+                addNewContainer(this);
+            });
+        });
+    }
+
+    // Inicializa os eventos para os botões "+" na carga da página
+    initializeAddButtons();
+</script>

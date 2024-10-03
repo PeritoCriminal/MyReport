@@ -4,9 +4,9 @@
 }
 
 div.item-header-dark {
-    background-color: #dedede !important;
+    /*background-color: #585353 !important;*/
     /* Cor de fundo escura, ajuste conforme necessário */
-    color: gray !important;
+    /*color: #fefefe !important;*/
     /* Cor do texto para garantir que seja visível sobre o fundo escuro */
     padding: 10px;
     /* Ajuste o preenchimento conforme necessário */
@@ -38,5 +38,9 @@ div.item-header-dark {
 }
 
 input::placeholder {
-    color: blueviolet;
+    color: rgb(43, 153, 226) !important;
+}
+
+textarea::placeholder {
+    color: rgb(43, 153, 226) !important;
 }
