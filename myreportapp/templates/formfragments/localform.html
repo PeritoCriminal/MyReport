@@ -3,11 +3,29 @@
     <div class="item-group form-group border p-3 mb-3">
         <div class="item-header-dark mb-2 d-flex align-items-center">
             <h5 name="item_header[]" class="mb-0">Subtítulo</h5>
-            <input type="text" class="local-subtitle form-control ml-2" placeholder="Subtítulo desse bloco - deixe em branco para manter o subtítulo anterior" style="flex-grow: 1;" value="Preservação."> <!-- Alinhamento e tamanho do input -->
+            <input type="text" class="local-subtitle form-control ml-2" placeholder="Subtítulo desse bloco - deixe em branco para manter o subtítulo anterior" style="flex-grow: 1;" value="Preservação do Local e Contexto do Atendimento"> <!-- Alinhamento e tamanho do input -->
         </div>
         <div class="form-group">
-            <label for="local-description">Preservação do Local e Contexto do Atendimento</label>
-            <textarea class="form-control" id="local-description" name="local-description[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
+            <!--<label for="local-description">Preservação do Local e Contexto do Atendimento</label>-->
+            <div class="form-group row">
+                <div class="form-group col-2">
+                    <label for="preservation-team">Equipe</label>
+                    <select name="preservation-team" id="preservation-team" class="form-control"></select>
+                </div>
+                <div class="form-group col-4">
+                    <label for="supervisor">Encarregado</label>
+                    <input type="text" id="supervisor" name="supervisor" class="form-control" required placeholder="Exemplo: Cabo PM Marcos de Oliveira">
+                </div>
+                <div class="form-group col-2">
+                    <label for="vtr-veicle">Viatura</label>
+                    <input type="text" id="vtr-veicle" name="vtr-veicle" class="form-control" required placeholder="Exemplo: i-36,123">
+                </div> 
+                <div class="form-group col-4">
+                    <label for="preservation-conditions">Condições do Local</label>
+                    <select name="preservation-conditions" id="preservation-conditions" class="form-control"></select>                </div>
+                       
+            </div>        
+            <textarea class="form-control" id="preservationContext" name="preservationContext" rows="4" placeholder="Texto exibido no laudo."></textarea>
         </div>
     </div>
     <div class="item-group form-group border p-3 mb-3">
@@ -33,6 +51,78 @@
 
 
 <script>
+
+    const preservationTeam = {
+        'Selecione': '',
+        'Sem equipe': 'No local não havia equipe de preservação.',
+        'PM': 'Local preservado por equipe da Polícia Militar',
+        'PMR': 'Local preservado por equipe da Polícia Militar Rodoviária',
+        'GCM': 'Local preservado por equipe da Guarda Civil Municipal',
+        'PC': 'Local preservado por equipe da Polícia Civil',
+        'PRF': 'Local preservado por equipe da Polícia Rodoviária Federal',
+        'CBM': 'Local preservado por equipe do Corpo de Bombeiros Militar',
+        'PF': 'Local preservado por equipe da Polícia Federal',
+        'Forças Armadas': 'Local preservado por equipe das Forças Armadas',
+        'Agentes de Trânsito': 'Local preservado por agentes de trânsito'
+    };
+
+    const preservationConditions = {
+        'Selecione': '',
+        'Local Inidôneo': 'Vestígios comprometidos devido a condições inadequadas, como contaminação ou degradação.',
+        'Local Idôneo': 'Vestígios preservados com sucesso através de técnicas adequadas e controle de acesso.',
+        'Local Contaminado': 'A presença de substâncias estranhas comprometeu a integridade dos vestígios, tornando-os inadequados para análise.',
+        'Local Com Acesso Restrito': 'Medidas de segurança implementadas garantiram a preservação dos vestígios, minimizando o risco de contaminação.',
+        'Local Exposto a Intempéries': 'As condições climáticas adversas, como chuva e vento, causaram danos aos vestígios, dificultando sua preservação.',
+        'Local Preservado Adequadamente': 'Foram tomadas todas as precauções necessárias para garantir que os vestígios permanecessem intactos e disponíveis para análise.',
+        'Local com Vestígios Degradados': 'Os vestígios apresentavam sinais de degradação devido à exposição prolongada a fatores ambientais desfavoráveis.',
+        'Local com Vestígios Intactos': 'Os vestígios foram encontrados em condições perfeitas, permitindo uma análise detalhada e precisa.',
+        'Local Acessado por Terceiros': 'O acesso não autorizado ao local resultou em comprometimento dos vestígios, impossibilitando sua análise confiável.',
+        'Local Inspecionado Antes da Preservação': 'Uma inspeção minuciosa foi realizada para identificar e documentar todos os vestígios relevantes antes da preservação.'
+    };
+
+    const selectElementTeam = document.querySelector('#preservation-team');
+    const teamSupervisor = document.querySelector('#supervisor');
+    const vtrVeicle = document.querySelector('#vtr-veicle');
+    const selectElementConditions = document.querySelector('#preservation-conditions');
+    const preservationGeneralContext = document.querySelector('#preservationContext');
+
+    for (const [key, value] of Object.entries(preservationTeam)) {
+        const option = document.createElement('option');
+        option.value = value;  
+        option.textContent = key;
+        selectElementTeam.appendChild(option);
+    }
+
+    for (const [key, value] of Object.entries(preservationConditions)) {
+        const option = document.createElement('option');
+        option.value = value;  
+        option.textContent = key;
+        selectElementConditions.appendChild(option);
+    }
+
+
+    function describePreservationContext(){
+        preservationGeneralContext.value = `${selectElementTeam.value}\nEncarregado: ${teamSupervisor.value}\nViatura: ${vtrVeicle.value.trim()}\n${selectElementConditions.value}`;
+    }
+
+    selectElementTeam.addEventListener('change', function(){
+        describePreservationContext();
+    });
+
+    teamSupervisor.addEventListener('change', function(){
+        teamSupervisor.value = toNiceName(teamSupervisor.value).replace('Pm', 'PM').replace('Gcm', 'GCM');
+        describePreservationContext();
+    });
+
+    vtrVeicle.addEventListener('change', function(){
+        describePreservationContext();
+    });
+
+    selectElementConditions.addEventListener('change', function(){
+        describePreservationContext();
+    });
+
+    
 
     function addNewContainer(button) {
         // Seleciona o container original, que é o "item-group" mais próximo do botão clicado
