@@ -1,5 +1,15 @@
 <div id="item-container">
-    <label><h4>Descrição e Exame do Local</h4></label>    
+    <label><h4>Descrição e Exame do Local</h4></label>  
+    <div class="item-group form-group border p-3 mb-3">
+        <div class="item-header-dark mb-2 d-flex align-items-center">
+            <h5 name="item_header[]" class="mb-0">Subtítulo</h5>
+            <input type="text" class="local-subtitle form-control ml-2" placeholder="Subtítulo desse bloco - deixe em branco para manter o subtítulo anterior" style="flex-grow: 1;" value="Preservação."> <!-- Alinhamento e tamanho do input -->
+        </div>
+        <div class="form-group">
+            <label for="local-description">Preservação do Local e Contexto do Atendimento</label>
+            <textarea class="form-control" id="local-description" name="local-description[]" rows="3" placeholder="Texto exibido no laudo."></textarea>
+        </div>
+    </div>
     <div class="item-group form-group border p-3 mb-3">
         <div class="item-header-dark mb-2 d-flex align-items-center">
             <h5 name="item_header[]" class="mb-0">Subtítulo</h5>
@@ -14,7 +24,7 @@
             <input type="file" id="upload-local-image" class="upload-local-image" name="upload-local-image[]">
             <div class="form-check form-group flex-grow-1 mx-3 w-100">
                 <label for="label-local-img">Legenda da Imagem</label>
-                <input type="text" class="form-control label-local-img" id="label-local-img" name="label-local-img[]" value="" placeholder="Legenda da imagem selecionada.">
+                <input type="text" class="form-control label-local-img" id="label-local-img" name="label-local-img[]" value="" placeholder="" disabled>
             </div>
             <button type="button" class="btn btn-secondary ml-auto add-item">+</button>
         </div>
@@ -38,6 +48,9 @@
         newContainer.querySelector('input[type="text"]').value = 'Item examinado.';
         newContainer.querySelector('.local-subtitle').value = '';
         newContainer.querySelector('.label-local-img').value = '';
+        newContainer.querySelector('.label-local-img').placeholder = '';
+        newContainer.querySelector('.label-local-img').disabled = true;
+
     
         // Remove o botão "-" antigo, caso exista, para evitar duplicação
         const existingRemoveButton = newContainer.querySelector('.remove-item');
@@ -74,10 +87,15 @@
             const file = event.target.files[0];
             if (!file) {
                 alert('Nenhum arquivo selecionado');
+                newContainer.querySelector('.label-local-img').placeholder = '';
+                newContainer.querySelector('.label-local-img').disabled = true;
                 return;
             }
             const hiddenInputFile = newContainer.querySelector('.local-img-to-text-base64');
             handleImageResize(file, hiddenInputFile);
+            newContainer.querySelector('.label-local-img').placeholder = 'Digite aqui uma legenda para a imagem selecionada.';
+            newContainer.querySelector('.label-local-img').disabled = false;
+            newContainer.querySelector('.label-local-img').focus();
             alert('A imagem foi carregada, editada, e convertida para txt base64.');
         });
     }
@@ -85,11 +103,16 @@
     document.querySelector('#upload-local-image').addEventListener('change', function(event){
         const file = event.target.files[0];
             if (!file) {
+                document.querySelector('#label-local-img').placeholder = '';
+                document.querySelector('#label-local-img').disabled = true;
                 alert('Nenhum arquivo selecionado');
                 return;
             }
             const hiddenInputFile = document.querySelector('.local-img-to-text-base64');
             handleImageResize(file, hiddenInputFile);
+            document.querySelector('#label-local-img').placeholder = 'Digite aqui uma legenda para a imagem selecionada.';
+            document.querySelector('#label-local-img').disabled = false;
+            document.querySelector('#label-local-img').focus();
             alert('A imagem foi carregada, editada, e convertida para txt base64.');
     });
 

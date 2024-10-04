@@ -27,32 +27,37 @@ FRAGMENTO DE FORMULÁRIO - TOP
 <div class="item-group form-group border p-3 mb-3">
 
     <!-- Primeira Linha -->
-    <div class="form-group d-flex justify-content-between">
-        <div class="form-group">
+    <div class="form-group row">
+        <div class="form-group col-3">
             <label for="laudo">Laudo</label>
             <input type="text" id="laudo" name="laudo" class="form-control" title="teste ...." required value="{{ laudo_prefix }}">
         </div>
-        <div class="form-group">
+        <div class="form-group col-3">
             <label for="protocolo">Protocolo</label>
             <input type="text" id="protocolo" name="protocolo" class="form-control" required value="{{ protocol_prefix }}">
         </div>
-        <div class="form-group">
-            <label for="boletim">Boletim</label>
-            <input type="text" id="boletim" name="boletim" class="form-control" required>
-        </div>
+        <div class="form-group col-6">
+            <label for="fotografo">Fotógrafo</label>
+            <input type="text" id="fotografo" name="fotografo" class="form-control" required value="{{ fotografo_prefix }}">
+        </div>        
     </div>
 
     <!-- Segunda Linha -->
-    <div class="form-group d-flex justify-content-between">
-        <div class="form-group flex-fill mr-2">
+    <div class="form-group row">
+        <div class="form-group col-4">
+            <label for="boletim">Boletim</label>
+            <input type="text" id="boletim" name="boletim" class="form-control" required>
+        </div>
+        <div class="form-group col-4">
             <label for="delegacia">Delegacia</label>
             <input type="text" id="delegacia" name="delegacia" class="form-control" required value="{{ delegacia }}">
         </div>
-        <div class="form-group flex-fill ml-2">
+        <div class="form-group col-4">
             <label for="autoridade_requisitante">Autoridade Requisitante</label>
             <input type="text" id="autoridade_requisitante" name="autoridade_requisitante" class="form-control" required>
         </div>
     </div>
+
 
     <!-- Terceira Linha -->
     <div class="form-group d-flex justify-content-between">
@@ -81,6 +86,7 @@ FRAGMENTO DE FORMULÁRIO - TOP
     //Atributos
     const reportNumber = document.querySelector('#laudo');
     const protocolNumber = document.querySelector('#protocolo');
+    const photographer = document.querySelector('#fotografo');
     const policeReportNumber = document.querySelector('#boletim');
     const policeStation = document.querySelector('#delegacia');
     const requestingAuthority = document.querySelector('#autoridade_requisitante');
@@ -119,6 +125,13 @@ FRAGMENTO DE FORMULÁRIO - TOP
             alert('O valor do Registro de Entrada não pode ser vazio.');
             protocolNumber.value = '';
             protocolNumber.focus();
+            return false;
+        }
+
+        if (photographer.value.trim() == ''){
+            alert('Digite o nome do fotógrafo.');
+            photographer.value = '';
+            photographer.focus();
             return false;
         }
 
@@ -180,6 +193,10 @@ FRAGMENTO DE FORMULÁRIO - TOP
 
         protocolNumber.addEventListener('change', function(){
             protocolNumber.value = protocolNumber.value.toUpperCase();
+        });
+
+        photographer.addEventListener('change', function(){
+            photographer.value = toNiceName(photographer.value);
         });
 
         policeReportNumber.addEventListener('change', function(){
