@@ -22,9 +22,19 @@
                 </div> 
                 <div class="form-group col-4">
                     <label for="preservation-conditions">Condições do Local</label>
-                    <select name="preservation-conditions" id="preservation-conditions" class="form-control"></select>                </div>
-                       
-            </div>        
+                    <select name="preservation-conditions" id="preservation-conditions" class="form-control"></select>
+                </div>                       
+            </div>    
+            <div class="form-group row">
+                <div class="form-group col-4">
+                    <input type="checkbox" name="checkAuthority" id="checkAuthority">
+                    <label for="checkAuthority" class="form-check-label">Autoridade Requisitante no Local</label>
+                </div>
+                <div class="form-group col-4">
+                    <input type="checkbox" name="checkTeamInvestigation" id="checkTeamInvestigation">
+                    <label for="checkTeamInvestigation" class="form-check-label">Equipe de Investigação no Local</label>
+                </div>
+            </div>
             <textarea class="form-control" id="preservationContext" name="preservationContext" rows="4" placeholder="Texto exibido no laudo."></textarea>
         </div>
     </div>
@@ -80,11 +90,20 @@
         'Local Inspecionado Antes da Preservação': 'Uma inspeção minuciosa foi realizada para identificar e documentar todos os vestígios relevantes antes da preservação.'
     };
 
+    const deltaAndTeam = [
+        '',
+        'Autoridade Requisitante esteve no local e acompanhou ou trabalho da perícia.',
+        'Autoridade Requisitante juntamente com equipe de investigação da Polícia Civil esteve no local e acompanhou o trabalho da perícia.',
+        'Equipe de investigação da Polícia Cíviel esteve no local e acompanhou o trabalho da perícia.'
+    ];
+
     const selectElementTeam = document.querySelector('#preservation-team');
     const teamSupervisor = document.querySelector('#supervisor');
     const vtrVeicle = document.querySelector('#vtr-veicle');
     const selectElementConditions = document.querySelector('#preservation-conditions');
     const preservationGeneralContext = document.querySelector('#preservationContext');
+    const deltaInPlace = document.querySelector('#checkAuthority');
+    const pcTeamInPlace = document.querySelector('#checkTeamInvestigation');
 
     for (const [key, value] of Object.entries(preservationTeam)) {
         const option = document.createElement('option');
@@ -102,7 +121,8 @@
 
 
     function describePreservationContext(){
-        preservationGeneralContext.value = `${selectElementTeam.value}\nEncarregado: ${teamSupervisor.value}\nViatura: ${vtrVeicle.value.trim()}\n${selectElementConditions.value}`;
+        const val_about_delta_in_place = deltaAndTeam[twoBolleans(deltaInPlace.checked, pcTeamInPlace.checked)];
+        preservationGeneralContext.value = `${selectElementTeam.value}\nEncarregado: ${teamSupervisor.value}\nViatura: ${vtrVeicle.value.trim()}\n${selectElementConditions.value}\n${val_about_delta_in_place}`;
     }
 
     selectElementTeam.addEventListener('change', function(){
@@ -122,6 +142,13 @@
         describePreservationContext();
     });
 
+    deltaInPlace.addEventListener('change', function(){
+        describePreservationContext();
+    });
+
+    pcTeamInPlace.addEventListener('change', function(){
+        describePreservationContext();
+    });
     
 
     function addNewContainer(button) {

@@ -220,6 +220,20 @@ function createMinitagsPDF(text) {
     pdf.save('minitags.pdf');
 }
 
+function twoBolleans(bol1, bol2){
+    let val = 0;
+    if(bol1 && !bol2){
+        val = 1;
+    }else if(bol1 && bol2){
+        val = 2;
+    }else if(!bol1 && bol2){
+        val = 3;
+    }else{
+        val = 0;
+    }
+    return val;
+}
+
 function teste(texto) {
     alert(texto);
 }

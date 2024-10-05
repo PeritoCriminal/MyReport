@@ -33,7 +33,7 @@ FRAGMENTO DE FORMULÁRIO - TOP
             <input type="text" id="laudo" name="laudo" class="form-control" title="teste ...." required value="{{ laudo_prefix }}">
         </div>
         <div class="form-group col-3">
-            <label for="protocolo">Protocolo</label>
+            <label for="protocolo">Registro de Entrada.</label>
             <input type="text" id="protocolo" name="protocolo" class="form-control" required value="{{ protocol_prefix }}">
         </div>
         <div class="form-group col-6">
@@ -62,20 +62,24 @@ FRAGMENTO DE FORMULÁRIO - TOP
     <!-- Terceira Linha -->
     <div class="form-group d-flex justify-content-between">
         <div class="form-group">
-            <label for="data_atendimento">Data do Atendimento</label>
-            <input type="date" id="data_atendimento" name="data_atendimento" class="form-control" value="{{ before_date|date:'Y-m-d' }}" required>
+            <label for="data_designacao">Designação</label>
+            <input type="date" id="data_designacao" name="data_designacao" class="form-control" value="{{ before_date|date:'Y-m-d' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="data_acionamento">acionamento</label>
+            <input type="date" id="data_acionamento" name="data_acionamento" class="form-control" value="{{ before_date|date:'Y-m-d' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="hora_acionamento">Hora do acionamento</label>
+            <input type="time" id="hora_acionamento" name="hora_acionamento" class="form-control" value="{{ before_time }}" required>
+        </div>
+        <div class="form-group">
+            <label for="data_atendimento">Atendimento</label>
+            <input type="date" id="data_atendimento" name="data_atendimento" class="form-control" value="{{ today_date|date:'Y-m-d' }}" required>
         </div>
         <div class="form-group">
             <label for="hora_atendimento">Hora do Atendimento</label>
-            <input type="time" id="hora_atendimento" name="hora_atendimento" class="form-control" value="{{ before_time }}" required>
-        </div>
-        <div class="form-group">
-            <label for="data_liberacao">Data da Liberação</label>
-            <input type="date" id="data_liberacao" name="data_liberacao" class="form-control" value="{{ today_date|date:'Y-m-d' }}" required>
-        </div>
-        <div class="form-group">
-            <label for="hora_liberacao">Hora da Liberação</label>
-            <input type="time" id="hora_liberacao" name="hora_liberacao" class="form-control" value="{{ current_time }}" required>
+            <input type="time" id="hora_atendimento" name="hora_atendimento" class="form-control" value="{{ current_time }}" required>
         </div>
     </div>
 </div>
@@ -90,11 +94,19 @@ FRAGMENTO DE FORMULÁRIO - TOP
     const policeReportNumber = document.querySelector('#boletim');
     const policeStation = document.querySelector('#delegacia');
     const requestingAuthority = document.querySelector('#autoridade_requisitante');
-    const serviceDate = document.querySelector('#data_atendimento');
-    const serviceTime = document.querySelector('#hora_atendimento');
-    const releaseDate = document.querySelector('#data_liberacao');
-    const releaseTime = document.querySelector('#hora_liberacao');
+    const desigatedDate = document.querySelector('#data_designacao');
+    const activationDate = document.querySelector('#data_acionamento');
+    const serviceTime = document.querySelector('#hora_acionamento');
+    const releaseDate = document.querySelector('#data_atendimento');
+    const releaseTime = document.querySelector('#hora_atendimento');
     const submitButton = document.querySelector('#enviar');
+
+    //  Metodos
+    desigatedDate.addEventListener('change', function(){
+        activationDate.value = desigatedDate.value;
+        releaseDate.value = desigatedDate.value;
+        serviceTime.focus();
+    });
 
     const testando = false;
 
@@ -106,7 +118,7 @@ FRAGMENTO DE FORMULÁRIO - TOP
             policeStation.value = 'Del. Sec. Limeira Plantão';
             requestingAuthority.value = 'Dra. Mariana Ferreira';
             const today = new Date().toISOString().split('T')[0];
-            serviceDate.value = today;
+            activationDate.value = today;
             releaseDate.value = today;
             serviceTime.value = '12:30';
             releaseTime.value = '12:30';
@@ -156,9 +168,15 @@ FRAGMENTO DE FORMULÁRIO - TOP
             return false;
         }
 
-        if (!isValidDate(serviceDate.value)){
+        if (!isValidDate(desigatedDate.value)){
             alert('Data inválida.');
-            serviceDate.focus();
+            desigatedDate.focus();
+            return false;
+        }
+
+        if (!isValidDate(activationDate.value)){
+            alert('Data inválida.');
+            activationDate.focus();
             return false;
         }
 
