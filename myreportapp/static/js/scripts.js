@@ -137,6 +137,18 @@ function isValidTime(timeString) {
 /*  COMPARA DUAS DATAS ACOMPANHADAS DE SUAS RESPECTIVAS HORAS E VERIFICA SE UMA É MENOR OU NÃO
     RETORNA UM BOOLEANO */
 function beforeThan(priorDate, priorHour, lastDate, lastHour) {
+    if (!(priorDate instanceof Date)){
+        priorDate = new Date(priorDate);
+    }
+    if (!(priorHour instanceof Date)) {
+        priorHour = new Date(`1970-01-01T${priorHour}:00`);
+    }
+    if (!(lastDate instanceof Date)) {
+        lastDate = new Date(lastDate);
+    }
+    if (!(lastHour instanceof Date)) {
+        lastHour = new Date(`1970-01-01T${lastHour}:00`);
+    }
     let beforeDateTime = new Date(
         priorDate.getFullYear(),
         priorDate.getMonth(),

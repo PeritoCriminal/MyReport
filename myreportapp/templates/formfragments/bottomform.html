@@ -42,12 +42,10 @@ FRAGMENTO DE FORMULÁRIO - BOTTOM
         
         submitButton.addEventListener('click', function(){
             event.preventDefault();
-            checkForm();
-            //if (form.checkValidity()) {
-                form.submit();   
-            //} else {
-            //    console.log('O formulário contém erros. Por favor, corrija-os antes de enviar.');
-           // }
+            if(checkForm()){
+                form.submit();
+                alert('formulário enviado!');
+            };
         });
 
         testandoInputs();

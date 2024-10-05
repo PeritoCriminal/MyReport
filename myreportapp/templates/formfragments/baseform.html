@@ -120,7 +120,7 @@ FRAGMENTO DE FORMULÁRIO - TOP
         serviceTime.focus();
     });
 
-    const testando = true;
+    const testando = false;
 
     function testandoInputs(){
         if (testando){
@@ -225,6 +225,13 @@ FRAGMENTO DE FORMULÁRIO - TOP
         if (!isValidTime(releaseTime.value)){
             alert('Hora inválida.');
             releaseTime.focus();
+            return false;
+        }
+
+
+        if (!beforeThan(activationDate.value, serviceTime.value, releaseDate.value, releaseTime.value)){
+            alert('Data e hora do acionamento não pode ser superior a data e a hora do atendimento.');
+            activationDate.focus();
             return false;
         }
 
