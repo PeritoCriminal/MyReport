@@ -57,6 +57,16 @@ FRAGMENTO DE FORMULÁRIO - TOP
             <input type="text" id="autoridade_requisitante" name="autoridade_requisitante" class="form-control" required>
         </div>
     </div>
+    <div class="form-group row">
+        <div class="form-group col-6">
+            <label for="objetivo">Objetivo (conforme Requsição)</label>
+            <input type="text" id="objetivo" name="objetivo" class="form-control" required>
+        </div>
+        <div class="form-group col-6">
+            <label for="naturesa">Naturesa (conforme Requsição)</label>
+            <input type="text" id="naturesa" name="naturesa" class="form-control" required>
+        </div>
+    </div>
 
 
     <!-- Terceira Linha -->
@@ -66,7 +76,7 @@ FRAGMENTO DE FORMULÁRIO - TOP
             <input type="date" id="data_designacao" name="data_designacao" class="form-control" value="{{ before_date|date:'Y-m-d' }}" required>
         </div>
         <div class="form-group">
-            <label for="data_acionamento">acionamento</label>
+            <label for="data_acionamento">Acionamento</label>
             <input type="date" id="data_acionamento" name="data_acionamento" class="form-control" value="{{ before_date|date:'Y-m-d' }}" required>
         </div>
         <div class="form-group">
@@ -94,6 +104,8 @@ FRAGMENTO DE FORMULÁRIO - TOP
     const policeReportNumber = document.querySelector('#boletim');
     const policeStation = document.querySelector('#delegacia');
     const requestingAuthority = document.querySelector('#autoridade_requisitante');
+    const objectivit = document.querySelector('#objetivo');
+    const crimeNature = document.querySelector('#naturesa');
     const desigatedDate = document.querySelector('#data_designacao');
     const activationDate = document.querySelector('#data_acionamento');
     const serviceTime = document.querySelector('#hora_acionamento');
@@ -108,16 +120,20 @@ FRAGMENTO DE FORMULÁRIO - TOP
         serviceTime.focus();
     });
 
-    const testando = false;
+    const testando = true;
 
     function testandoInputs(){
         if (testando){
             reportNumber.value = 'L001';
             protocolNumber.value = 'P001';
+            photographer.value = 'Fotógrafo Técnico Pericial';
             policeReportNumber.value = 'LP001';
             policeStation.value = 'Del. Sec. Limeira Plantão';
             requestingAuthority.value = 'Dra. Mariana Ferreira';
+            objectivit.value = 'Objetivo';
+            crimeNature.value = 'Naturesa';
             const today = new Date().toISOString().split('T')[0];
+            desigatedDate.value = today;
             activationDate.value = today;
             releaseDate.value = today;
             serviceTime.value = '12:30';
@@ -165,6 +181,20 @@ FRAGMENTO DE FORMULÁRIO - TOP
             alert('Valor para Autoridade Requisitante não pode ser vazio.');
             requestingAuthority.value = '';
             requestingAuthority.focus();
+            return false;
+        }
+
+        if (objectivit.value.trim() == ''){
+            alert('Valor para Objetivo não pode ser vazio.');
+            objectivit.value='';
+            objectivit.focus();
+            return false;
+        }
+
+        if (crimeNature.value.trim() == ''){
+            alert('Valor para Naturesa não pode ser vazio.');
+            crimeNature.value='';
+            crimeNature.focus();
             return false;
         }
 

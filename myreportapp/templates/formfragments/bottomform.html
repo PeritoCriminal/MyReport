@@ -20,14 +20,14 @@ FRAGMENTO DE FORMULÁRIO - BOTTOM
 
 <div class="form-group d-flex justify-content-between">
     <div class="form-group flex-fill mr-2">
-        <label for="observations"><h4>Observações</h4></label>
-        <textarea class="form-control" id="observations" name="observations" rows="3" placeholder="Texto exibido no laudo."></textarea>
+        <label for="observations"><h4>Considerações</h4></label>
+        <textarea class="form-control" id="observations" name="observations" rows="3" placeholder="Elementos de interesse investigativo, como por exemplo, presença de câmeras de vigilância."></textarea>
     </div>
 </div>
 <div class="form-group d-flex justify-content-between">
     <div class="form-group flex-fill mr-2">
         <label for="conclusions"><h4>Conclusão</h4></label>
-        <textarea class="form-control" id="conclusions" name="conclusions" rows="3" placeholder="Texto exibido no laudo."></textarea>
+        <textarea class="form-control" id="conclusions" name="conclusions" rows="3" placeholder="Conclusão da análise, como por exemplo: Constatado furto mediante escalada."></textarea>
     </div>
 </div>
 <button type="submit" class="btn btn-primary" id='enviar'>Enviar</button>
@@ -43,6 +43,11 @@ FRAGMENTO DE FORMULÁRIO - BOTTOM
         submitButton.addEventListener('click', function(){
             event.preventDefault();
             checkForm();
+            //if (form.checkValidity()) {
+                form.submit();   
+            //} else {
+            //    console.log('O formulário contém erros. Por favor, corrija-os antes de enviar.');
+           // }
         });
 
         testandoInputs();
