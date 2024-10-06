@@ -24,3 +24,5 @@ from .drugs_report import drugs_report
 from .edit_profile import editProfile
 from .user_reports import userReports
 from .theft import theft
+from .edit_report import editReport
+from .delete_reports import deleteReport

@@ -40,6 +40,7 @@ LAUDOS DO USUÁRIO
                     <th scope="col">Número do Protocolo</th>
                     <th scope="col">Data de Designação</th>
                     <th scope="col">Natureza</th>
+                    <th scope="col" class="text-center">Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -50,6 +51,24 @@ LAUDOS DO USUÁRIO
                         <td>{{ report.protocol_number }}</td>
                         <td>{{ report.designated_date }}</td>
                         <td>{{ report.occurrence_nature }}</td>
+                        <td class="text-center">
+                            <!-- Ícone de Alterar -->
+                            <a href="{% url 'edit_report' report.id %}" class="btn btn-outline-primary btn-sm" title="Alterar">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <!-- Ícone de Deletar -->
+                            <a href="{% url 'delete_report' report.id %}" class="btn btn-outline-danger btn-sm" title="Deletar">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                            
+                            <!-- Ícone de Gerar Relatório DOCX -->
+                        
+                            <a href="" class="btn btn-outline-success btn-sm" title="Gerar DOCX">
+                            <i class="fas fa-file-word"></i>
+                            </a>
+                        
+
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
