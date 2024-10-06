@@ -20,7 +20,7 @@ VIEW FURTO, A DESENVOLVER
 """
 
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from ..models.custom_user_model import UserRegistrationModel
 from ..models.theft_report_model import TheftReportModel
@@ -37,8 +37,8 @@ def theft(request):
                 city=user_data.city,
                 protocol_number=request.POST.get('protocolo'),
                 designated_date=request.POST.get('data_designacao'),
-                exam_objective='constatação de furto',
-                occurrence_nature='exame inicial',
+                exam_objective=request.POST.get('objetivo'),
+                occurrence_nature=request.POST.get('naturesa'),
                 occurring_number=request.POST.get('boletim'),
                 police_station=request.POST.get('delegacia'),
                 requesting_authority=request.POST.get('autoridade_requisitante'),
@@ -61,11 +61,14 @@ def theft(request):
                 considerations = request.POST.get('considerations'),
                 conclusion = request.POST.get('conclusions'),
             )
-            newReport.save()  # Salva o relatório no banco de dados
-            message = "Relatório salvo com sucesso!"  # Mensagem de sucesso
+            newReport.save()
+            return redirect('user_reports')  # Redireciona para a página de relatórios
+            message = "Relatório salvo com sucesso!"
+            # como rediriceionar o usuário para a página user_reports.html ?
+            # como a página user_reports.html pode exibir um lista com os relatórios salvos?
         except Exception as e:
             print(f'Erro: {e}')
-            message = f"Erro ao salvar o relatório: {e}"  # Mensagem de erro
+            message = f"Erro ao salvar o relatório: {e}"
 
     else:
         message = None

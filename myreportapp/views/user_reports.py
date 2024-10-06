@@ -22,5 +22,14 @@ VIEW CONCTACT, A DESENVOLVER
 
 from django.shortcuts import render
 
+from ..models.theft_report_model import TheftReportModel
+
 def userReports(request):
-    return render(request, 'user_reports.html')
+    user = request.user
+    local_reports = TheftReportModel.objects.filter(reporting_expert=user.full_name)
+
+    context = {
+        'local_reports': local_reports,
+    }
+
+    return render(request, 'user_reports.html', context)

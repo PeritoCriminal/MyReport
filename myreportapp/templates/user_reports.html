@@ -31,4 +31,31 @@ LAUDOS DO USUÁRIO
     
     <p>{{ recado }}</p>
 
+    {% if local_reports %}
+        <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Número do Laudo</th>
+                    <th scope="col">Número do Protocolo</th>
+                    <th scope="col">Data de Designação</th>
+                    <th scope="col">Natureza</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in local_reports %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ report.report_number }}</td>
+                        <td>{{ report.protocol_number }}</td>
+                        <td>{{ report.designated_date }}</td>
+                        <td>{{ report.occurrence_nature }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Você ainda não possui relatórios salvos.</p>
+    {% endif %}
+
 {% endblock content %}
