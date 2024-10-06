@@ -3,7 +3,7 @@
     <div class="item-group form-group border p-3 mb-3">
         <div class="item-header-dark mb-2 d-flex align-items-center">
             <h5 name="item_header[]" class="mb-0">Subtítulo</h5>
-            <input type="text" class="local-subtitle form-control ml-2" placeholder="Subtítulo desse bloco - deixe em branco para manter o subtítulo anterior" style="flex-grow: 1;" value="Preservação do Local e Contexto do Atendimento"> <!-- Alinhamento e tamanho do input -->
+            <input type="text" class="form-control ml-2" placeholder="Subtítulo desse bloco - deixe em branco para manter o subtítulo anterior" style="flex-grow: 1;" value="Preservação do Local e Contexto do Atendimento"> <!-- Alinhamento e tamanho do input -->
         </div>
         <div class="form-group">
             <!--<label for="local-description">Preservação do Local e Contexto do Atendimento</label>-->
@@ -41,11 +41,11 @@
     <div class="item-group form-group border p-3 mb-3">
         <div class="item-header-dark mb-2 d-flex align-items-center">
             <h5 name="item_header[]" class="mb-0">Subtítulo</h5>
-            <input type="text" class="local-subtitle form-control ml-2" placeholder="Subtítulo desse bloco - deixe em branco para manter o subtítulo anterior" style="flex-grow: 1;"> <!-- Alinhamento e tamanho do input -->
+            <input type="text" name="local-subtitle[]" class="local-subtitle form-control ml-2" placeholder="Subtítulo desse bloco - deixe em branco para manter o subtítulo anterior" style="flex-grow: 1;"> <!-- Alinhamento e tamanho do input -->
         </div>
         <div class="form-group">
             <label for="local-description">Descrição e Exame do Local</label>
-            <textarea class="form-control" id="local-description" name="local-description[]" rows="5" placeholder="Texto exibido no laudo."></textarea>
+            <textarea class="local-description form-control" id="local-description" name="local-description[]" rows="5" placeholder="Texto exibido no laudo."></textarea>
         </div>    
         <div class="d-flex align-items-center">
             <input type="hidden" id="local-img-to-text-base64" class="local-img-to-text-base64" name="local-img-to-text-base64[]">  <!-- Input invisível para armazenar a imagem em Base64 -->

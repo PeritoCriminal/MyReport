@@ -20,8 +20,8 @@ FRAGMENTO DE FORMULÁRIO - BOTTOM
 
 <div class="form-group d-flex justify-content-between">
     <div class="form-group flex-fill mr-2">
-        <label for="observations"><h4>Considerações</h4></label>
-        <textarea class="form-control" id="observations" name="observations" rows="3" placeholder="Elementos de interesse investigativo, como por exemplo, presença de câmeras de vigilância."></textarea>
+        <label for="considerations"><h4>Considerações</h4></label>
+        <textarea class="form-control" id="considerations" name="considerations" rows="3" placeholder="Elementos de interesse investigativo, como por exemplo, presença de câmeras de vigilância."></textarea>
     </div>
 </div>
 <div class="form-group d-flex justify-content-between">
@@ -34,6 +34,9 @@ FRAGMENTO DE FORMULÁRIO - BOTTOM
 
 </form>
 
+{% if message %}
+    <div class="alert alert-info">{{ message }}</div>
+{% endif %}
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -43,7 +46,9 @@ FRAGMENTO DE FORMULÁRIO - BOTTOM
         submitButton.addEventListener('click', function(){
             event.preventDefault();
             if(checkForm()){
+                alert('tudo checado!');
                 form.submit();
+                //alert(listForLocalContext());
                 alert('formulário enviado!');
             };
         });

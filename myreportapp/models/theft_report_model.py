@@ -23,7 +23,12 @@ from django.db import models
 from .base_report_model import BaseReport
 
 class TheftReportModel(BaseReport):
-    burglary_scene = models.TextField(blank=True, verbose_name='Descrição do Local', default='')
+    preservation_context = models.TextField(blank=True, verbose_name='Preservação', default='')
+    localsubtitle = models.JSONField(blank=True, verbose_name='Subtítulo', default=list)
+    localdescription = models.JSONField(blank=True, verbose_name='Descrição', default=list)
+    localimgbase64 = models.JSONField(blank=True, verbose_name='Imagem Base 64', default=list)
+    locallegend = models.JSONField(blank=True, verbose_name='Legenda da Imagem', default=list)
+
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

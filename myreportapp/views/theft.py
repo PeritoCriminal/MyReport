@@ -31,7 +31,6 @@ def theft(request):
     user_data = UserRegistrationModel.objects.get(username=user.username)
 
     if request.method == 'POST':
-
         try:
             newReport = TheftReportModel(
                 report_number=request.POST.get('laudo'),
@@ -46,7 +45,7 @@ def theft(request):
                 activation_date=request.POST.get('data_acionamento'),
                 activation_time=request.POST.get('hora_atendimento'),
                 service_date=request.POST.get('data_atendimento'),
-                service_time=request.POST.get('hora_liberacao'),
+                service_time=request.POST.get('hora_atendimento'),
                 director=user_data.director,
                 nucleus=user_data.unit,
                 team=user_data.team,
@@ -54,22 +53,27 @@ def theft(request):
                 assistant_expert='Não se aplica',
                 photographer=request.POST.get('fotografo'),
                 draftsman='Não se aplica',
+                preservation_context=request.POST.get('preservationContext'),
+                localsubtitle=request.POST.getlist('local-subtitle[]'),
+                localdescription=request.POST.getlist('local-description[]'),
+                localimgbase64=request.POST.getlist('local-img-to-text-base64[]'),
+                locallegend=request.POST.getlist('label-local-img[]'),
+                considerations = request.POST.get('considerations'),
+                conclusion = request.POST.get('conclusions'),
             )
+            newReport.save()  # Salva o relatório no banco de dados
+            message = "Relatório salvo com sucesso!"  # Mensagem de sucesso
         except Exception as e:
             print(f'Erro: {e}')
+            message = f"Erro ao salvar o relatório: {e}"  # Mensagem de erro
 
-        reportNumber = request.POST.get('laudo')
-
-        if reportNumber:
-            print("Relatório criado com sucesso:")
-            for field, value in newReport.__dict__.items():
-                print(f'{field}: {value}')
-        else:
-            print("POST request falhou. Nenhum número de laudo foi recebido.")
+    else:
+        message = None
 
     context = {
         'user_data': user_data,
         'msg_about_this_form_to_user': 'Editor Laudo',
+        'message': message,  # Exibe a mensagem na página
     }
 
     return render(request, 'furto.html', context)
