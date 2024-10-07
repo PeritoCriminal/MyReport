@@ -1,0 +1,56 @@
+<!--
+
+Copyright (c) 2024 Marcos de Oliveira Capristo
+Todos os direitos reservados.
+
+MYREPORT é um projeto independente.
+Oferece um ambiente para edição de laudos periciais,
+voltado especialmente para Peritos Criminais Oficiais do Estado de São Paulo.
+Idealizado e inicialmente desenvolvido pelo Perito Criminal Marcos de Oliveira Capristo.
+Contato: marcos.moc@policiacientifica.sp.gov.br | (19) 9 8231-2774
+
+-->
+
+<!--
+
+PÁGINA SOBRE, A DESENVOLVER
+
+-->
+
+{% extends "base.html" %}
+
+{% block title %}Editar{% endblock title %}
+
+{% block content %}
+    <h2>Alterar Formulário</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="laudo">Número do Laudo</label>
+            <input type="text" class="form-control" id="laudo" name="laudo" value="{{ report.report_number }}">
+        </div>
+    
+        <div class="form-group">
+            <label for="protocolo">Número do Protocolo</label>
+            <input type="text" class="form-control" id="protocolo" name="protocolo" value="{{ report.protocol_number }}">
+        </div>
+    
+        <div class="form-group">
+            <label for="data_designacao">Data de Designação</label>
+            <input type="date" class="form-control" id="data_designacao" name="data_designacao" value="{{ report.designated_date }}">
+        </div>
+    
+        <!-- Continue com os outros campos, preenchendo os valores existentes -->
+        
+        <button type="submit" class="btn btn-primary">Salvar</button>
+    </form>
+    
+    {% if message %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endif %}
+
+<script>
+    const number_of_items = {{ number_of_items }};
+    alert(number_of_items);
+</script>
+{% endblock content %}
