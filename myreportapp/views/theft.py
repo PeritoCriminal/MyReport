@@ -30,21 +30,25 @@ def theft(request, report_id=None):
     message = None
     numberOfLocals = 0
     list_local_subtitle = []
-    new_report = True
-    
+    new_report = False   # Define como falso inicialmente
+
     # Verificar se o relatório já existe (edição) ou se será um novo
     if report_id:
         report = get_object_or_404(TheftReportModel, id=report_id)  # Busca o relatório existente para edição
         numberOfLocals = len(report.localsubtitle)  # Calcula o número de locais
         list_local_subtitle = report.localsubtitle  # Passa a lista de subtítulos locais
-        new_report = False
+        message = f'obtido id {report_id}'  # Agora usando corretamente report_id
     else:
-        report = None  # Criação de novo relatório
+        report = TheftReportModel()  # Cria um novo relatório
+        message = 'novo laudo.'
+        new_report = True  # Define como True para um novo relatório
 
     if request.method == 'POST':
+        rep_id = request.POST.get('report_id')
         try:
             # Se for uma edição de relatório existente
-            if not new_report:
+            if rep_id:  # Edita o relatório existente
+                report = get_object_or_404(TheftReportModel, id=rep_id)
                 report.report_number = request.POST.get('laudo')
                 report.protocol_number = request.POST.get('protocolo')
                 report.designated_date = request.POST.get('data_designacao')
@@ -66,7 +70,7 @@ def theft(request, report_id=None):
                 report.considerations = request.POST.get('considerations')
                 report.conclusion = request.POST.get('conclusions')
                 report.save()  # Salva o relatório editado
-                message = "Relatório atualizado com sucesso!"
+                message += " - Relatório atualizado com sucesso!"
             
             # Se não for uma edição, cria um novo relatório
             else:
@@ -100,9 +104,7 @@ def theft(request, report_id=None):
                     conclusion=request.POST.get('conclusions'),
                 )
                 newReport.save()  # Salva o novo relatório
-                message = "Relatório salvo com sucesso!"
-
-            # return redirect('user_reports')
+                message += " - Novo relatório salvo com sucesso!"
 
         except Exception as e:
             print(f'Erro: {e}')

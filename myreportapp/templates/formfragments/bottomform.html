@@ -30,6 +30,11 @@ FRAGMENTO DE FORMULÁRIO - BOTTOM
         <textarea class="form-control" id="conclusions" name="conclusions" rows="3" placeholder="Conclusão da análise, como por exemplo: Constatado furto mediante escalada."></textarea>
     </div>
 </div>
+
+{% if report.id %}
+    <input type="hidden" name="report_id" value="{{ report.id }}">
+{% endif %}
+
 <button type="submit" class="btn btn-primary" id='enviar'>Enviar</button>
 
 </form>
