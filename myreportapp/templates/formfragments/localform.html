@@ -54,14 +54,14 @@
                 <label for="label-local-img">Legenda da Imagem</label>
                 <input type="text" class="form-control label-local-img" id="label-local-img" name="label-local-img[]" value="" placeholder="" disabled>
             </div>
-            <button type="button" class="btn btn-secondary ml-auto add-item">+</button>
+            <button type="button" id="btn-add-item" class="btn btn-secondary ml-auto add-item">+</button>
         </div>
     </div>
 </div>
 
 
 <script>
-
+// edit_report
     const preservationTeam = {
         'Selecione': '',
         'Sem equipe': 'No local não havia equipe de preservação.',
@@ -96,7 +96,7 @@
         'Autoridade Requisitante juntamente com equipe de investigação da Polícia Civil esteve no local e acompanhou o trabalho da perícia.',
         'Equipe de investigação da Polícia Cíviel esteve no local e acompanhou o trabalho da perícia.'
     ];
-
+    
     const selectElementTeam = document.querySelector('#preservation-team');
     const teamSupervisor = document.querySelector('#supervisor');
     const vtrVeicle = document.querySelector('#vtr-veicle');
@@ -243,5 +243,22 @@
     
     // Inicializa os eventos para os botões "+" na carga da página
     initializeAddButtons();
+
+
+    const numberOfLocals = {{ number_of_locals }};
+    if (numberOfLocals > 0){
+        for (let i = 1; i < numberOfLocals; i++){
+            alert(`Numero de Itens = ${i}`);
+            const btn = document.querySelector('#btn-add-item');
+            btn.click();
+        }
+        const list_local_subtitle = {{ list_local_subtitle|safe }};  // Converte corretamente para JSON
+        const local_subtitles = document.querySelectorAll('.local-subtitle');  // Seleciona todos os campos com a classe .local-subtitle
+
+        // Itera sobre os campos e define o valor com base na lista local_subtitle
+        local_subtitles.forEach((subtitle, index) => {
+        subtitle.value = list_local_subtitle[index] || "";  // Evita erro se a lista for menor que o número de elementos
+    });
+    }
 
 </script>

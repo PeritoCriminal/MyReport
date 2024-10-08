@@ -30,7 +30,7 @@ FRAGMENTO DE FORMULÁRIO - TOP
     <div class="form-group row">
         <div class="form-group col-3">
             <label for="laudo">Laudo</label>
-            <input type="text" id="laudo" name="laudo" class="form-control" title="teste ...." required value="{{ laudo_prefix }}">
+            <input type="text" id="laudo" name="laudo" class="form-control" title="teste ...." required value="{{ report.report_number }}">
         </div>
         <div class="form-group col-3">
             <label for="protocolo">Registro de Entrada.</label>
@@ -120,7 +120,7 @@ FRAGMENTO DE FORMULÁRIO - TOP
         serviceTime.focus();
     });
 
-    const testando = true;
+    const testando = false;
 
     function testandoInputs(){
         if (testando){
@@ -266,9 +266,10 @@ FRAGMENTO DE FORMULÁRIO - TOP
             requestingAuthority.value = toNiceName(requestingAuthority.value);
         });
 
+        
         reportNumber.focus();
 
-        //testandoInputs();
+        //testandoInputs(); edit_report
 
     });    
 
