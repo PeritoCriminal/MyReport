@@ -27,7 +27,7 @@ from docx import Document
 from docx.shared import Pt
 import os
 
-from .viewbase import adicionar_rodape
+from .viewbase import adicionar_rodape, insert_image_from_base64_to_docx
 
 def theft_report_view(request, report_id=None):
     user = request.user
@@ -170,7 +170,28 @@ def generate_theft_docx(request, report_id):
     doc.add_paragraph(f'Data e hora do atendimento: {theft_report.service_date} | {theft_report.service_time}')
     doc.add_paragraph(f'Perito: {theft_report.reporting_expert}')
     doc.add_paragraph(f'Fotografia e apoio técnico: {theft_report.photographer}')
+    doc.add_heading(f'Descrição e Exame do Local')
+    
+    counter = len(theft_report.localsubtitle)
+    num_img = 0
+
+    for i in range(counter):
+        subtitle = theft_report.localsubtitle[i]
+        if subtitle:
+            doc.add_heading(subtitle, 2)
+        description = theft_report.localdescription[i]
+        if description:
+            description = description.replace('\r', '').strip()  # Remove caracteres de controle
+            paragraphs = description.split('\n')
+            for paragraph in paragraphs:
+                doc.add_paragraph(paragraph)
+        img = theft_report.localimgbase64[i]
+        label = theft_report.locallegend[i]
+        if img:
+            num_img = insert_image_from_base64_to_docx(doc, img, label, num_img)
+    
     adicionar_rodape(doc, f'Laudo: {theft_report.report_number} | Boletim: {theft_report. occurring_number} - {theft_report.police_station}')
+
     # doc.add_paragraph(f'Detalhes do Furto: {theft_report.details}')
 
     # Ajusta o estilo do documento (opcional)

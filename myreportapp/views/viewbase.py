@@ -55,6 +55,7 @@ def insert_image_from_base64_to_docx(doc, base64_string, label, num_img, width_c
         paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER  # Centraliza o parágrafo que contém a imagem
 
         paragraph_format = paragraph.paragraph_format
+        paragraph_format.space_before = Pt(24)
         paragraph_format.space_after = Pt(0)
         paragraph_format.keep_with_next = True
 
