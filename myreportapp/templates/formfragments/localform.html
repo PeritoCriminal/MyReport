@@ -52,7 +52,7 @@
             <input type="file" id="upload-local-image" class="upload-local-image" name="upload-local-image[]">
             <div class="form-check form-group flex-grow-1 mx-3 w-100">
                 <label for="label-local-img">Legenda da Imagem</label>
-                <input type="text" class="form-control label-local-img" id="label-local-img" name="label-local-img[]" value="" placeholder="" disabled>
+                <input type="text" class="form-control label-local-img" id="label-local-img" name="label-local-img[]" value="" placeholder="">
             </div>
             <button type="button" id="btn-add-item" class="btn btn-secondary ml-auto add-item">+</button>
         </div>
@@ -166,7 +166,7 @@
         newContainer.querySelector('.local-subtitle').value = '';
         newContainer.querySelector('.label-local-img').value = '';
         newContainer.querySelector('.label-local-img').placeholder = '';
-        newContainer.querySelector('.label-local-img').disabled = true;
+        //newContainer.querySelector('.label-local-img').disabled = true;
 
     
         // Remove o botão "-" antigo, caso exista, para evitar duplicação
@@ -221,14 +221,14 @@
         const file = event.target.files[0];
             if (!file) {
                 document.querySelector('#label-local-img').placeholder = '';
-                document.querySelector('#label-local-img').disabled = true;
+                //document.querySelector('#label-local-img').disabled = true;
                 alert('Nenhum arquivo selecionado');
                 return;
             }
             const hiddenInputFile = document.querySelector('.local-img-to-text-base64');
             handleImageResize(file, hiddenInputFile);
             document.querySelector('#label-local-img').placeholder = 'Digite aqui uma legenda para a imagem selecionada.';
-            document.querySelector('#label-local-img').disabled = false;
+            //document.querySelector('#label-local-img').disabled = false;
             document.querySelector('#label-local-img').focus();
             alert('A imagem foi carregada, editada, e convertida para txt base64.');
     });
@@ -260,5 +260,29 @@
         subtitle.value = list_local_subtitle[index] || "";  // Evita erro se a lista for menor que o número de elementos
     });
     }
+/*
+    function setDefaultIfEmpty(elements) {
+        elements.forEach((item) => {
+            if (item.value.trim()) { // Verifica se o texto está vazio
+                item.value = 'VAZIO'; // Atribui 'VAZIO' se o item estiver vazio
+                console.log(`Classe: ${item.className} - conteúdo: ${item.textContent}`);
+            }
+        });
+    }
+    
+    function testLocal() {
+        const check_subtitle = document.querySelectorAll('.local-subtitle');
+        setDefaultIfEmpty(check_subtitle);
+    
+        const check_description = document.querySelectorAll('.local-description');
+        setDefaultIfEmpty(check_description);
+    
+        const check_local_img_to_text_base64 = document.querySelectorAll('.local-img-to-text-base64'); // Correção de classe
+        setDefaultIfEmpty(check_local_img_to_text_base64);
+    
+        const check_label_local_img = document.querySelectorAll('.label-local-img');
+        setDefaultIfEmpty(check_label_local_img);
+    }
+    */
 
 </script>

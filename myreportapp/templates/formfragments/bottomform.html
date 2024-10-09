@@ -51,6 +51,7 @@ FRAGMENTO DE FORMULÁRIO - BOTTOM
         submitButton.addEventListener('click', function(){
             event.preventDefault();
             if(checkForm()){
+                //testLocal();
                 //alert('tudo checado!');
                 reportNumber.value = formatStringWithYear(reportNumber.value, desigatedDate.value);
                 protocolNumber.value = formatStringWithYear(protocolNumber.value, desigatedDate.value);
