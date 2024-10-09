@@ -16,7 +16,12 @@ urlpatterns = [
     path('drugs/', drugs_report, name='drugs_report'),
     path('user_reports', userReports, name='user_reports'),
     path('edit_profile', editProfile, name='edit_profile'),
-    path('furto/', theft, name='furto'),
-    path('furto/<int:report_id>/', theft, name='edit_report'),
+    path('furto/', theft.theft_report_view, name='furto'),
+    path('furto/<int:report_id>/', theft.theft_report_view, name='edit_report'),
+    
+    path('furto/<int:report_id>/', theft.theft_report_view, name='theft_report_view'),
+    path('furto/generate-docx/<int:report_id>/', theft.generate_theft_docx, name='generate_theft_docx'),
+
+
     path('delete_report/<int:report_id>/', deleteReport, name='delete_report'),
 ]

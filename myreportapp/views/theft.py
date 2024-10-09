@@ -20,11 +20,13 @@ VIEW FURTO, A DESENVOLVER
 """
 
 
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from ..models.custom_user_model import UserRegistrationModel
 from ..models.theft_report_model import TheftReportModel
+import docx
+from docx.shared import Pt
 
-def theft(request, report_id=None):
+def theft_report_view(request, report_id=None):
     user = request.user
     user_data = UserRegistrationModel.objects.get(username=user.username)
     message = None
@@ -120,3 +122,35 @@ def theft(request, report_id=None):
     }
 
     return render(request, 'furto.html', context)
+
+
+def generate_theft_docx(request, report_id):
+    # Obtém o relatório com base no ID
+    theft_report = get_object_or_404(TheftReportModel, pk=report_id)
+
+    # Cria o documento DOCX
+    doc = docx.Document()
+    
+    # Adiciona o título
+    doc.add_heading('Relatório de Furto', 0)
+    
+    # Adiciona os campos do relatório
+    doc.add_paragraph(f'Número do Laudo: {theft_report.report_number}')
+    doc.add_paragraph(f'Número do Protocolo: {theft_report.protocol_number}')
+    # doc.add_paragraph(f'Data de Designação: {theft_report.designated_date.strftime("%d/%m/%Y")}')
+    doc.add_paragraph(f'Natureza da Ocorrência: {theft_report.occurrence_nature}')
+    # doc.add_paragraph(f'Detalhes do Furto: {theft_report.details}')
+
+    # Ajusta o estilo do documento (opcional)
+    style = doc.styles['Normal']
+    font = style.font
+    font.name = 'Arial'
+    font.size = Pt(12)
+
+    # Salva o arquivo em um objeto de resposta HTTP
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+    response['Content-Disposition'] = f'attachment; filename=relatorio_furto_{theft_report.report_number}.docx'
+    
+    doc.save(response)
+
+    return response
