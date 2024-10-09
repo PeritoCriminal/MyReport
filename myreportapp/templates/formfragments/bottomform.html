@@ -51,10 +51,13 @@ FRAGMENTO DE FORMULÁRIO - BOTTOM
         submitButton.addEventListener('click', function(){
             event.preventDefault();
             if(checkForm()){
-                alert('tudo checado!');
+                //alert('tudo checado!');
+                reportNumber.value = formatStringWithYear(reportNumber.value, desigatedDate.value);
+                protocolNumber.value = formatStringWithYear(protocolNumber.value, desigatedDate.value);
+                policeReportNumber.value = formatStringWithYear(policeReportNumber.value, desigatedDate.value);
                 form.submit();
                 //alert(listForLocalContext());
-                alert('formulário enviado!');
+                //alert('formulário enviado!');
             };
         });
 

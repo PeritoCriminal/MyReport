@@ -23,8 +23,11 @@ VIEW FURTO, A DESENVOLVER
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from ..models.custom_user_model import UserRegistrationModel
 from ..models.theft_report_model import TheftReportModel
-import docx
+from docx import Document
 from docx.shared import Pt
+import os
+
+from .viewbase import adicionar_rodape
 
 def theft_report_view(request, report_id=None):
     user = request.user
@@ -129,16 +132,45 @@ def generate_theft_docx(request, report_id):
     theft_report = get_object_or_404(TheftReportModel, pk=report_id)
 
     # Cria o documento DOCX
-    doc = docx.Document()
+    template_path = os.path.join('myreportapp', 'static', 'doctemplates', 'report.docx')
+
+    doc = None
+    try:
+        doc = Document(template_path)
+    except Exception as e:
+        print(f'Erro ao abrir o documento: {e}')
+        doc = Document()
+
+    if doc.paragraphs and not doc.paragraphs[0].text.strip():
+        p = doc.paragraphs[0]._element
+        p.getparent().remove(p)
     
     # Adiciona o título
-    doc.add_heading('Relatório de Furto', 0)
+    doc.add_heading(f'Laudo {theft_report.report_number}', 0)
     
     # Adiciona os campos do relatório
-    doc.add_paragraph(f'Número do Laudo: {theft_report.report_number}')
-    doc.add_paragraph(f'Número do Protocolo: {theft_report.protocol_number}')
-    # doc.add_paragraph(f'Data de Designação: {theft_report.designated_date.strftime("%d/%m/%Y")}')
+    
+    preamble_text = theft_report.generate_preamble()
+    
+    preamble_paragraph = doc.add_paragraph(preamble_text)
+    
+    for run in preamble_paragraph.runs:
+        run.font.size = Pt(11)
+        run.font.name = 'Arial'
+
+    doc.add_heading('Dados da Requisição de Exame', 1)
+    doc.add_paragraph(f'Autoridade Requisitante: {theft_report.requesting_authority}')
+    doc.add_paragraph(f'Boletim: {theft_report.occurring_number} - {theft_report.police_station}')
+    doc.add_paragraph(f'Objetivo: {theft_report.exam_objective}')
     doc.add_paragraph(f'Natureza da Ocorrência: {theft_report.occurrence_nature}')
+    doc.add_heading('Histórico do Atendimento', 1)
+    # doc.add_paragraph(f'Número do Laudo: {theft_report.report_number}')
+    doc.add_paragraph(f'Registro de Entrada: {theft_report.protocol_number}')
+    doc.add_paragraph(f'Data e hora do acionamento: {theft_report.service_date} | {theft_report.service_time}')
+    doc.add_paragraph(f'Data e hora do atendimento: {theft_report.service_date} | {theft_report.service_time}')
+    doc.add_paragraph(f'Perito: {theft_report.reporting_expert}')
+    doc.add_paragraph(f'Fotografia e apoio técnico: {theft_report.photographer}')
+    adicionar_rodape(doc, f'Laudo: {theft_report.report_number} | Boletim: {theft_report. occurring_number} - {theft_report.police_station}')
     # doc.add_paragraph(f'Detalhes do Furto: {theft_report.details}')
 
     # Ajusta o estilo do documento (opcional)

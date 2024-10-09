@@ -61,13 +61,34 @@ class BaseReport(models.Model):
     def generate_occurrence_nature(self):
         occurrence_nature_text = f"Natureza da ocorrência, de acordo com a requisição: {self.occurrence_nature}."
         return occurrence_nature_text
+    
+
+
 
     def format_date(self, date_str):
-        # Converte a string 'dd-mm-aaaa' para 'dd de mês de aaaa'
-        locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')  # Define a localidade para português do Brasil
-        date_object = datetime.strptime(date_str, '%d-%m-%Y')  # Converte a string para um objeto datetime
-        formatted_date = date_object.strftime('%d de %B de %Y')  # Formata a data
-        return formatted_date
+        # Define a localidade para português do Brasil
+        locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')  
+        
+        # Lista de possíveis formatos de data
+        formatos = ['%d-%m-%Y', '%Y-%m-%d']
+        
+        for formato in formatos:
+            try:
+                # Tenta converter a string para um objeto datetime
+                date_object = datetime.strptime(date_str, formato)
+                # Formata a data no formato desejado
+                formatted_date = date_object.strftime('%d de %B de %Y')
+                return formatted_date
+            except ValueError:
+                # Se der erro, passa para o próximo formato
+                continue
+        
+        # Se nenhum formato corresponder, lança um erro
+        raise ValueError("Formato de data não suportado: {}".format(date_str))
+    
+
+
+
 
     def generate_preamble(self):
         formatted_date = self.format_date(self.designated_date)  # Formata a data
