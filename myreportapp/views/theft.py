@@ -27,7 +27,7 @@ from docx import Document
 from docx.shared import Pt
 import os
 
-from .viewbase import adicionar_rodape, insert_image_from_base64_to_docx
+from .viewbase import adicionar_rodape, insert_image_from_base64_to_docx, format_filename
 
 def theft_report_view(request, report_id=None):
     user = request.user
@@ -63,7 +63,7 @@ def theft_report_view(request, report_id=None):
                 report.police_station = request.POST.get('delegacia')
                 report.requesting_authority = request.POST.get('autoridade_requisitante')
                 report.activation_date = request.POST.get('data_acionamento')
-                report.activation_time = request.POST.get('hora_atendimento')
+                report.activation_time = request.POST.get('hora_acionamento')
                 report.service_date = request.POST.get('data_atendimento')
                 report.service_time = request.POST.get('hora_atendimento')
                 report.photographer = request.POST.get('fotografo')
@@ -90,7 +90,7 @@ def theft_report_view(request, report_id=None):
                     police_station=request.POST.get('delegacia'),
                     requesting_authority=request.POST.get('autoridade_requisitante'),
                     activation_date=request.POST.get('data_acionamento'),
-                    activation_time=request.POST.get('hora_atendimento'),
+                    activation_time=request.POST.get('hora_acionamento'),
                     service_date=request.POST.get('data_atendimento'),
                     service_time=request.POST.get('hora_atendimento'),
                     director=user_data.director,
@@ -170,7 +170,15 @@ def generate_theft_docx(request, report_id):
     doc.add_paragraph(f'Data e hora do atendimento: {theft_report.service_date} | {theft_report.service_time}')
     doc.add_paragraph(f'Perito: {theft_report.reporting_expert}')
     doc.add_paragraph(f'Fotografia e apoio técnico: {theft_report.photographer}')
-    doc.add_heading(f'Descrição e Exame do Local')
+    doc.add_heading(f'Descrição e Exame do Local', 1)
+
+    doc.add_heading(f'Preservação', 2)
+    preservation = theft_report.preservation_context
+    if preservation:
+        preservation = preservation.replace('\r', '').strip()  # Remove caracteres de controle
+        paragraphs = preservation.split('\n')
+        for paragraph in paragraphs:
+            doc.add_paragraph(paragraph)
     
     counter = len(theft_report.localsubtitle)
     num_img = 0
@@ -189,20 +197,34 @@ def generate_theft_docx(request, report_id):
         label = theft_report.locallegend[i]
         if img:
             num_img = insert_image_from_base64_to_docx(doc, img, label, num_img)
+
+    considerations = theft_report.considerations
+    if considerations:
+        doc.add_heading('Considerações', 1)
+        considerations = considerations.replace('\r', '').strip()
+        paragraphs = considerations.split('\n')
+        for paragraph in paragraphs:
+            doc.add_paragraph(paragraph)
+
+    conclusion = theft_report.conclusion
+    if conclusion:
+        doc.add_heading('Considerações', 1)
+        conclusion = conclusion.replace('\r', '').strip()
+        paragraphs = conclusion.split('\n')
+        for paragraph in paragraphs:
+            doc.add_paragraph(paragraph)
     
     adicionar_rodape(doc, f'Laudo: {theft_report.report_number} | Boletim: {theft_report. occurring_number} - {theft_report.police_station}')
 
-    # doc.add_paragraph(f'Detalhes do Furto: {theft_report.details}')
-
-    # Ajusta o estilo do documento (opcional)
     style = doc.styles['Normal']
     font = style.font
     font.name = 'Arial'
     font.size = Pt(12)
 
-    # Salva o arquivo em um objeto de resposta HTTP
+    file_name = f"{theft_report.report_number.replace('/', '_')}${format_filename(theft_report.exam_objective)}.docx"
+
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
-    response['Content-Disposition'] = f'attachment; filename=relatorio_furto_{theft_report.report_number}.docx'
+    response['Content-Disposition'] = f'attachment; filename={file_name}'
     
     doc.save(response)
 

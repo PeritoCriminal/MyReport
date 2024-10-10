@@ -34,11 +34,11 @@ FRAGMENTO DE FORMULÁRIO - TOP
         </div>
         <div class="form-group col-3">
             <label for="protocolo">Registro de Entrada.</label>
-            <input type="text" id="protocolo" name="protocolo" class="form-control" required value="{{ protocol_prefix }}">
+            <input type="text" id="protocolo" name="protocolo" class="form-control" required value="{{ report.protocol_number }}">
         </div>
         <div class="form-group col-6">
             <label for="fotografo">Fotógrafo</label>
-            <input type="text" id="fotografo" name="fotografo" class="form-control" required value="{{ fotografo_prefix }}">
+            <input type="text" id="fotografo" name="fotografo" class="form-control" required value="{{ report.photographer }}">
         </div>        
     </div>
 
@@ -46,25 +46,25 @@ FRAGMENTO DE FORMULÁRIO - TOP
     <div class="form-group row">
         <div class="form-group col-4">
             <label for="boletim">Boletim</label>
-            <input type="text" id="boletim" name="boletim" class="form-control" required>
+            <input type="text" id="boletim" name="boletim" class="form-control" required value="{{ report.occurring_number }}">
         </div>
         <div class="form-group col-4">
             <label for="delegacia">Delegacia</label>
-            <input type="text" id="delegacia" name="delegacia" class="form-control" required value="{{ delegacia }}">
+            <input type="text" id="delegacia" name="delegacia" class="form-control" required value="{{ report.police_station }}">
         </div>
         <div class="form-group col-4">
             <label for="autoridade_requisitante">Autoridade Requisitante</label>
-            <input type="text" id="autoridade_requisitante" name="autoridade_requisitante" class="form-control" required>
+            <input type="text" id="autoridade_requisitante" name="autoridade_requisitante" class="form-control" required value="{{ report.requesting_authority }}">
         </div>
     </div>
     <div class="form-group row">
         <div class="form-group col-6">
             <label for="objetivo">Objetivo (conforme Requsição)</label>
-            <input type="text" id="objetivo" name="objetivo" class="form-control" required>
+            <input type="text" id="objetivo" name="objetivo" class="form-control" required value="{{ report.exam_objective }}">
         </div>
         <div class="form-group col-6">
             <label for="naturesa">Naturesa (conforme Requsição)</label>
-            <input type="text" id="naturesa" name="naturesa" class="form-control" required>
+            <input type="text" id="naturesa" name="naturesa" class="form-control" required value="{{ report.occurrence_nature }}">
         </div>
     </div>
 
@@ -73,23 +73,23 @@ FRAGMENTO DE FORMULÁRIO - TOP
     <div class="form-group d-flex justify-content-between">
         <div class="form-group">
             <label for="data_designacao">Designação</label>
-            <input type="date" id="data_designacao" name="data_designacao" class="form-control" value="{{ before_date|date:'Y-m-d' }}" required>
+            <input type="date" id="data_designacao" name="data_designacao" class="form-control" value="{% if before_date %}{{ before_date|date:'Y-m-d' }}{% else %}{{ report.designated_date }}{% endif %}" required>
         </div>
         <div class="form-group">
             <label for="data_acionamento">Acionamento</label>
-            <input type="date" id="data_acionamento" name="data_acionamento" class="form-control" value="{{ before_date|date:'Y-m-d' }}" required>
+            <input type="date" id="data_acionamento" name="data_acionamento" class="form-control" value="{% if before_date %}{{ before_date|date:'Y-m-d' }}{% else %}{{ report.activation_date }}{% endif %}" required>
         </div>
         <div class="form-group">
             <label for="hora_acionamento">Hora do acionamento</label>
-            <input type="time" id="hora_acionamento" name="hora_acionamento" class="form-control" value="{{ before_time }}" required>
+            <input type="time" id="hora_acionamento" name="hora_acionamento" class="form-control" value="{% if before_time %}{{ before_time }}{% else %}{{ report.activation_time }}{% endif %}" required>
         </div>
         <div class="form-group">
             <label for="data_atendimento">Atendimento</label>
-            <input type="date" id="data_atendimento" name="data_atendimento" class="form-control" value="{{ today_date|date:'Y-m-d' }}" required>
+            <input type="date" id="data_atendimento" name="data_atendimento" class="form-control" value="{%  if today_date %}{{ today_date|date:'Y-m-d' }}{% else %}{{ report.service_date }}{% endif %}" required>
         </div>
         <div class="form-group">
             <label for="hora_atendimento">Hora do Atendimento</label>
-            <input type="time" id="hora_atendimento" name="hora_atendimento" class="form-control" value="{{ current_time }}" required>
+            <input type="time" id="hora_atendimento" name="hora_atendimento" class="form-control" value="{% if current_time %}{{ current_time }}{% else %}{{ report.service_time }}{% endif %}" required>
         </div>
     </div>
 </div>
@@ -120,7 +120,7 @@ FRAGMENTO DE FORMULÁRIO - TOP
         serviceTime.focus();
     });
 
-    const testando = true;
+    const testando = false;
 
     function testandoInputs(){
         if (testando){

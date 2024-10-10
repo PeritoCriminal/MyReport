@@ -27,6 +27,7 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 import ast
+import re 
 
 # Variável global para contar as imagens
 img_label = 0
@@ -211,3 +212,11 @@ def check_images(materialImage, examImages, returnedItemsImage, counterProofImag
             return hasImg
 
         return "Não há imagens disponíveis."
+
+
+
+def format_filename(string):
+    string = string.strip()
+    string = re.sub(r'[^a-z ]', '', string)
+    string = string.replace(' ', '_')    
+    return string
