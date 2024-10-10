@@ -6,7 +6,7 @@
             <input type="text" class="form-control ml-2" placeholder="Subtítulo desse bloco - deixe em branco para manter o subtítulo anterior" style="flex-grow: 1;" value="Preservação do Local e Contexto do Atendimento"> <!-- Alinhamento e tamanho do input -->
         </div>
         <div class="form-group">
-            <!--<label for="local-description">Preservação do Local e Contexto do Atendimento</label>-->
+            <!--<label for="local-description">Preservação do Local e Contexto do Atendimento</label>--> 
             <div class="form-group row">
                 <div class="form-group col-2">
                     <label for="preservation-team">Equipe</label>
@@ -35,7 +35,7 @@
                     <label for="checkTeamInvestigation" class="form-check-label">Equipe de Investigação no Local</label>
                 </div>
             </div>
-            <textarea class="form-control" id="preservationContext" name="preservationContext" rows="4" placeholder="Texto exibido no laudo."></textarea>
+            <textarea class="form-control" id="preservationContext" name="preservationContext" rows="4" placeholder="O texto geado ou digitado será exibido no laudo.">{{ local_preservation }}</textarea>
         </div>
     </div>
     <div class="item-group form-group border p-3 mb-3">
@@ -45,7 +45,7 @@
         </div>
         <div class="form-group">
             <label for="local-description">Descrição e Exame do Local</label>
-            <textarea class="local-description form-control" id="local-description" name="local-description[]" rows="5" placeholder="Texto exibido no laudo."></textarea>
+            <textarea class="local-description form-control" id="local-description" name="local-description[]" rows="5" placeholder="digite aqui o texto que será exibido no laudo."></textarea>
         </div>    
         <div class="d-flex align-items-center">
             <input type="hidden" id="local-img-to-text-base64" class="local-img-to-text-base64" name="local-img-to-text-base64[]">  <!-- Input invisível para armazenar a imagem em Base64 -->
@@ -213,7 +213,7 @@
             newContainer.querySelector('.label-local-img').placeholder = 'Digite aqui uma legenda para a imagem selecionada.';
             newContainer.querySelector('.label-local-img').disabled = false;
             newContainer.querySelector('.label-local-img').focus();
-            alert('A imagem foi carregada, editada, e convertida para txt base64.');
+            //alert('A imagem foi carregada, editada, e convertida para txt base64.');
         });
     }
     
@@ -230,7 +230,7 @@
             document.querySelector('#label-local-img').placeholder = 'Digite aqui uma legenda para a imagem selecionada.';
             //document.querySelector('#label-local-img').disabled = false;
             document.querySelector('#label-local-img').focus();
-            alert('A imagem foi carregada, editada, e convertida para txt base64.');
+            //alert('A imagem foi carregada, editada, e convertida para txt base64.');
     });
 
     function initializeAddButtons() {
@@ -248,7 +248,7 @@
     const numberOfLocals = {{ number_of_locals }};
     if (numberOfLocals > 0){
         for (let i = 1; i < numberOfLocals; i++){
-            alert(`Numero de Itens = ${i}`);
+            //alert(`Numero de Itens = ${i}`);
             const btn = document.querySelector('#btn-add-item');
             btn.click();
         }

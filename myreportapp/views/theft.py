@@ -35,6 +35,7 @@ def theft_report_view(request, report_id=None):
     user_data = UserRegistrationModel.objects.get(username=user.username)
     message = None
     numberOfLocals = 0
+    local_preservation = ''
     list_local_subtitle = []
     list_local_description = []
     list_local_img = []
@@ -46,6 +47,7 @@ def theft_report_view(request, report_id=None):
         report = get_object_or_404(TheftReportModel, id=report_id)  # Busca o relatório existente para edição
         numberOfLocals = len(report.localsubtitle)  # Calcula o número de locais
         list_local_subtitle = report.localsubtitle  # Passa a lista de subtítulos locais
+        local_preservation = report.preservation_context
         list_local_description = report.localdescription
         list_local_img = report.localimgbase64
         list_local_label = report.locallegend
@@ -117,12 +119,15 @@ def theft_report_view(request, report_id=None):
                 )
                 newReport.save()  # Salva o novo relatório
                 message += " - Novo relatório salvo com sucesso!"
+                
+            return redirect('user_reports')
 
         except Exception as e:
             print(f'Erro: {e}')
             message = f"Erro ao salvar o relatório: {e}"
 
     context = {
+        'local_preservation': local_preservation,
         'list_local_subtitle': list_local_subtitle,
         'list_local_description': list_local_description,
         'list_local_img': list_local_img,
