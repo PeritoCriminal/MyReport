@@ -25,9 +25,10 @@ from ..models.custom_user_model import UserRegistrationModel
 from ..models.theft_report_model import TheftReportModel
 from docx import Document
 from docx.shared import Pt
+from docx.enum.text import WD_ALIGN_PARAGRAPH
 import os
 
-from .viewbase import adicionar_rodape, insert_image_from_base64_to_docx, format_filename
+from .viewbase import adicionar_rodape, insert_image_from_base64_to_docx, format_filename, adicionar_texto_formatado
 
 def theft_report_view(request, report_id=None):
     user = request.user
@@ -35,18 +36,24 @@ def theft_report_view(request, report_id=None):
     message = None
     numberOfLocals = 0
     list_local_subtitle = []
-    new_report = False   # Define como falso inicialmente
+    list_local_description = []
+    list_local_img = []
+    list_local_label = []
+    #new_report = False   # Define como falso inicialmente
 
     # Verificar se o relatório já existe (edição) ou se será um novo
     if report_id:
         report = get_object_or_404(TheftReportModel, id=report_id)  # Busca o relatório existente para edição
         numberOfLocals = len(report.localsubtitle)  # Calcula o número de locais
         list_local_subtitle = report.localsubtitle  # Passa a lista de subtítulos locais
+        list_local_description = report.localdescription
+        list_local_img = report.localimgbase64
+        list_local_label = report.locallegend
         message = f'obtido id {report_id}'  # Agora usando corretamente report_id
     else:
         report = TheftReportModel()  # Cria um novo relatório
         message = 'novo laudo.'
-        new_report = True  # Define como True para um novo relatório
+        #new_report = True  # Define como True para um novo relatório
 
     if request.method == 'POST':
         rep_id = request.POST.get('report_id')
@@ -117,6 +124,9 @@ def theft_report_view(request, report_id=None):
 
     context = {
         'list_local_subtitle': list_local_subtitle,
+        'list_local_description': list_local_description,
+        'list_local_img': list_local_img,
+        'list_local_label': list_local_label,
         'number_of_locals': numberOfLocals,
         'user_data': user_data,
         'report': report,
@@ -213,6 +223,48 @@ def generate_theft_docx(request, report_id):
         paragraphs = conclusion.split('\n')
         for paragraph in paragraphs:
             doc.add_paragraph(paragraph)
+
+    doc.add_paragraph('')
+    adicionar_texto_formatado(doc, '', 'Este laudo segue assinado digitalmente e encontra-se arquivado no sistema GDL da Superintendência da Polícia Técnico Científica do Estado de São Paulo.', 0)
+
+    # Criar o parágrafo assinado digitalmente
+    assinado_paragraph = doc.add_paragraph('ASSINADO DIGITALMENTE')
+    assinado_paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+
+    # Definir a fonte e o tamanho para 11
+    run_assinado = assinado_paragraph.runs[0]
+    run_assinado.font.size = Pt(11)
+    run_assinado.font.name = 'Times New Roman'  # ou outra fonte de sua preferência
+
+    # Ajustar espaçamento entre parágrafos
+    assinado_paragraph.paragraph_format.space_before = Pt(24)
+    assinado_paragraph.paragraph_format.space_after = Pt(6)
+
+    # Criar o parágrafo com o nome do perito
+    expert_paragraph = doc.add_paragraph(theft_report.reporting_expert)
+    expert_paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+
+    # Definir a fonte e o tamanho para 11
+    run_expert = expert_paragraph.runs[0]
+    run_expert.font.size = Pt(11)
+    run_expert.font.name = 'Times New Roman'
+
+    # Ajustar espaçamento entre parágrafos
+    expert_paragraph.paragraph_format.space_before = Pt(6)
+    expert_paragraph.paragraph_format.space_after = Pt(6)
+
+    # Criar o parágrafo Perito Criminal
+    perito_paragraph = doc.add_paragraph('Perito(a) Criminal')
+    perito_paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+
+    # Definir a fonte e o tamanho para 11
+    run_perito = perito_paragraph.runs[0]
+    run_perito.font.size = Pt(11)
+    run_perito.font.name = 'Times New Roman'
+
+    # Ajustar espaçamento entre parágrafos
+    perito_paragraph.paragraph_format.space_before = Pt(6)
+    perito_paragraph.paragraph_format.space_after = Pt(6)
     
     adicionar_rodape(doc, f'Laudo: {theft_report.report_number} | Boletim: {theft_report. occurring_number} - {theft_report.police_station}')
 

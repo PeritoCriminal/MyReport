@@ -21,13 +21,14 @@ FRAGMENTO DE FORMULÁRIO - BOTTOM
 <div class="form-group d-flex justify-content-between">
     <div class="form-group flex-fill mr-2">
         <label for="considerations"><h4>Considerações</h4></label>
-        <textarea class="form-control" id="considerations" name="considerations" rows="3" placeholder="Elementos de interesse investigativo, como por exemplo, presença de câmeras de vigilância."></textarea>
+        <textarea class="form-control" id="considerations" name="considerations" rows="3" placeholder="Elementos de interesse investigativo, como por exemplo, presença de câmeras de vigilância.">{{ report.considerations }}</textarea>
     </div>
 </div>
+
 <div class="form-group d-flex justify-content-between">
     <div class="form-group flex-fill mr-2">
         <label for="conclusions"><h4>Conclusão</h4></label>
-        <textarea class="form-control" id="conclusions" name="conclusions" rows="3" placeholder="Conclusão da análise, como por exemplo: Constatado furto mediante escalada."></textarea>
+        <textarea class="form-control" id="conclusions" name="conclusions" rows="3" placeholder="Conclusão da análise, como por exemplo: Constatado furto mediante escalada.">{{ report.conclusion }}</textarea>
     </div>
 </div>
 
