@@ -278,7 +278,9 @@ def generate_theft_docx(request, report_id):
     font.name = 'Arial'
     font.size = Pt(12)
 
-    file_name = f"{theft_report.report_number.replace('/', '_')}${format_filename(theft_report.occurrence_nature)}.docx"
+    report_number_formatted = theft_report.report_number.replace('/', '_').replace('.', '')
+    occurrence_nature_formatted = format_filename(theft_report.occurrence_nature)
+    file_name = f"{report_number_formatted}${occurrence_nature_formatted}.docx"
 
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
     response['Content-Disposition'] = f'attachment; filename={file_name}'
