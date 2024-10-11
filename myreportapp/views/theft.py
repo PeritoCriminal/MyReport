@@ -28,7 +28,7 @@ from docx.shared import Pt
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 import os
 
-from .viewbase import adicionar_rodape, insert_image_from_base64_to_docx, format_filename, adicionar_texto_formatado
+from .viewbase import adicionar_rodape, insert_image_from_base64_to_docx, format_filename, adicionar_texto_formatado, format_date, format_hour
 
 def theft_report_view(request, report_id=None):
     user = request.user
@@ -181,8 +181,8 @@ def generate_theft_docx(request, report_id):
     doc.add_heading('Histórico do Atendimento', 1)
     # doc.add_paragraph(f'Número do Laudo: {theft_report.report_number}')
     doc.add_paragraph(f'Registro de Entrada: {theft_report.protocol_number}')
-    doc.add_paragraph(f'Data e hora do acionamento: {theft_report.service_date} | {theft_report.service_time}')
-    doc.add_paragraph(f'Data e hora do atendimento: {theft_report.service_date} | {theft_report.service_time}')
+    doc.add_paragraph(f'Data e hora do acionamento: {format_date(theft_report.activation_date)} às {format_hour(theft_report.activation_time)}.')
+    doc.add_paragraph(f'Data e hora do atendimento: {format_date(theft_report.service_date)} às {format_hour(theft_report.service_time)}.')
     doc.add_paragraph(f'Perito: {theft_report.reporting_expert}')
     doc.add_paragraph(f'Fotografia e apoio técnico: {theft_report.photographer}')
     doc.add_heading(f'Descrição e Exame do Local', 1)
@@ -278,7 +278,7 @@ def generate_theft_docx(request, report_id):
     font.name = 'Arial'
     font.size = Pt(12)
 
-    file_name = f"{theft_report.report_number.replace('/', '_')}${format_filename(theft_report.exam_objective)}.docx"
+    file_name = f"{theft_report.report_number.replace('/', '_')}${format_filename(theft_report.occurrence_nature)}.docx"
 
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
     response['Content-Disposition'] = f'attachment; filename={file_name}'

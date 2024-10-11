@@ -27,7 +27,9 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 import ast
-import re 
+import re
+import locale
+from datetime import datetime
 
 # Variável global para contar as imagens
 img_label = 0
@@ -216,7 +218,42 @@ def check_images(materialImage, examImages, returnedItemsImage, counterProofImag
 
 
 def format_filename(string):
-    string = string.strip()
-    string = re.sub(r'[^a-z ]', '', string)
-    string = string.replace(' ', '_')    
+    # Remove espaços em branco no início e no fim
+    string = string.strip().lower()
+    string = string.replace('constatação', '').replace('constatar', '').replace('de', '')
+    string = string.replace(' ', '_')
+    string = re.sub(r'[^a-zA-Z ]', '', string)
+    string = re.sub(r'_+', '_', string)
+    string = string.strip('_')
     return string
+
+
+
+def format_date(date_str):
+    # Define a localidade para português do Brasil
+    locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')  
+    
+    # Lista de possíveis formatos de data
+    formatos = ['%d-%m-%Y', '%Y-%m-%d']
+    
+    for formato in formatos:
+        try:
+            # Tenta converter a string para um objeto datetime
+            date_object = datetime.strptime(date_str, formato)
+            # Formata a data no formato desejado
+            formatted_date = date_object.strftime('%d de %B de %Y')
+            return formatted_date
+        except ValueError:
+            # Se der erro, passa para o próximo formato
+            continue
+    
+    # Se nenhum formato corresponder, lança um erro
+    raise ValueError("Formato de data não suportado: {}".format(date_str))
+
+
+def format_hour(hour):
+    # Verifica se os minutos são zero e retorna o formato adequado
+    if hour.minute == 0:
+        return hour.strftime('%Hh00')
+    else:
+        return hour.strftime('%Hh%Mmin')
