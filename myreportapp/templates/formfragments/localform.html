@@ -78,7 +78,7 @@
 
     const preservationConditions = {
         'Selecione': '',
-        'Preservado - Acesso Controlado Pela Equipe': 'A equipe de preservação controlava o acesso de pessoas ao local, mantendo o estado dos vestígios inalterados, de fomra que o exame não foi prejudicado.',
+        'Preservado - Acesso Controlado Pela Equipe': 'A equipe de preservação controlava o acesso de pessoas ao local, mantendo o estado dos vestígios inalterados, de forma que o exame não foi prejudicado.',
         'Vestígios perdidos - accesso de populares': 'Alguns vestígios foram alterados em razão da movimentação de pessoas pelo local.',
         'Local Inidôneo': 'Vestígios comprometidos devido a condições inadequadas, como contaminação ou degradação.',
         'Local Idôneo': 'Vestígios preservados com sucesso através de técnicas adequadas e controle de acesso.',
@@ -106,6 +106,7 @@
     const preservationGeneralContext = document.querySelector('#preservationContext');
     const deltaInPlace = document.querySelector('#checkAuthority');
     const pcTeamInPlace = document.querySelector('#checkTeamInvestigation');
+    const label_local_img = document.querySelector('#label-local-img');
 
     for (const [key, value] of Object.entries(preservationTeam)) {
         const option = document.createElement('option');
@@ -152,6 +153,14 @@
         describePreservationContext();
     });
     
+    label_local_img.addEventListener('change', ()=>{
+        value = label_local_img.value.trim();
+        value = value.charAt(0).toUpperCase() + value.slice(1);
+        if (!value.endsWith('.')) {
+            value += '.';
+        }
+        label_local_img.value = value;
+    });
 
     function addNewContainer(button) {
         // Seleciona o container original, que é o "item-group" mais próximo do botão clicado
@@ -166,8 +175,17 @@
         newContainer.querySelector('.upload-local-image').value = '';
         newContainer.querySelector('input[type="text"]').value = 'Item examinado.';
         newContainer.querySelector('.local-subtitle').value = '';
-        newContainer.querySelector('.label-local-img').value = '';
-        newContainer.querySelector('.label-local-img').placeholder = '';
+        new_label_local_img = newContainer.querySelector('.label-local-img');
+        new_label_local_img.value = '';
+        new_label_local_img.placeholder = '';
+        new_label_local_img.addEventListener('change', ()=>{
+            value = new_label_local_img.value;
+            value = value.charAt(0).toUpperCase() + value.slice(1);
+            if (!value.endsWith('.')) {
+                value += '.';
+            }
+            new_label_local_img.value = value;
+        });
         //newContainer.querySelector('.label-local-img').disabled = true;
 
     

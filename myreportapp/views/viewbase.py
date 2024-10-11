@@ -219,8 +219,9 @@ def check_images(materialImage, examImages, returnedItemsImage, counterProofImag
 
 def format_filename(string):
     # Remove espaços em branco no início e no fim
-    string = string.strip().lower()
-    string = string.replace('constatação', '').replace('constatar', '').replace('de', '')
+    string.lower()
+    string = string.replace('constatação', '').replace('constatar', '').replace(' de ', '').replace('levantamento', '')
+    string = string.strip()
     string = string.replace(' ', '_')
     string = re.sub(r'[^a-zA-Z ]', '', string)
     string = re.sub(r'_+', '_', string)
