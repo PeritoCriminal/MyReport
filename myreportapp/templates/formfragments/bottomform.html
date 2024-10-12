@@ -36,6 +36,7 @@ FRAGMENTO DE FORMULÁRIO - BOTTOM alert
     <input type="hidden" name="report_id" value="{{ report.id }}">
 {% endif %}
 
+<button type="button" class="btn btn-secondary" id="cancelar">Cancelar</button>
 <button type="submit" class="btn btn-primary" id='enviar'>Enviar</button>
 
 </form>
@@ -48,6 +49,18 @@ FRAGMENTO DE FORMULÁRIO - BOTTOM alert
     document.addEventListener('DOMContentLoaded', function() {
 
         const submitButton = document.querySelector('#enviar');
+
+        const cancelButton = document.querySelector('#cancelar');
+
+        cancelButton.addEventListener('click', function(event) {
+           // alert('cancelar');
+        
+            let confirmar = confirm("Deseja retornar sem enviar o formulário?");
+            if (confirmar) {
+                window.history.back();
+            }
+               
+        });
         
         submitButton.addEventListener('click', function(){
             event.preventDefault();
