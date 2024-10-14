@@ -24,8 +24,8 @@ VIEW INDEX, A DESENVOLVER
 from django.shortcuts import render
 
 def index(request):
-    aviso = 'Próximo pásso desse projeto: Determinar as variáveis globias, como são impelmentadas, não esquecer de incluir o diretor'
-    importante = 'Não posso esquecer que tenho outras entregas.'
+    aviso = 'MYREPORT é um projeto independente'
+    importante = ''
     context = {
         'aviso': aviso,
         'recado': importante,

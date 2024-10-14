@@ -19,10 +19,10 @@ LAUDO DE FURTO, DESENVOLVENDO
 
 {% extends "base.html" %}
 
-{% block title %}Furto{% endblock title %}
+{% block title %}Exame Pericial{% endblock title %}
 
 {% block content %}
-    <h2 class="titulo-2">Local de Furto</h2>
+    <h2 class="titulo-2">Exame Pericial</h2>
     <form id="theft-report" method="post" action="{% url 'furto' %}" enctype="multipart/form-data">
         {% csrf_token %}
         {% include "formfragments/baseform.html" %}
@@ -36,141 +36,5 @@ LAUDO DE FURTO, DESENVOLVENDO
 <script>
     const form = document.querySelector('#theft-report');
 </script>
-<!--
-    //Setar com true durante exeção de alguns testes
 
-/*
-    const testando = true;
-
-    function testandoInputs(){
-        if (testando){
-            reportNumber.value = 'L001';
-            protocolNumber.value = 'P001';
-            policeReportNumber.value = 'LP001';
-            policeStation.value = 'Del. Sec. Limeira Plantão';
-            requestingAuthority.value = 'Dra. Mariana Ferreira';
-            const today = new Date().toISOString().split('T')[0];
-            serviceDate.value = today;
-            releaseDate.value = today;
-            serviceTime.value = '12:30';
-            releaseTime.value = '12:30';
-        }
-    }
-
-
-    //Atributos
-    const reportNumber = document.querySelector('#laudo');
-    const protocolNumber = document.querySelector('#protocolo');
-    const policeReportNumber = document.querySelector('#boletim');
-    const policeStation = document.querySelector('#delegacia');
-    const requestingAuthority = document.querySelector('#autoridade_requisitante');
-    const serviceDate = document.querySelector('#data_atendimento');
-    const serviceTime = document.querySelector('#hora_atendimento');
-    const releaseDate = document.querySelector('#data_liberacao');
-    const releaseTime = document.querySelector('#hora_liberacao');
-    const submitButton = document.querySelector('#enviar');
-
-    function checkForm(){
-        if (reportNumber.value.trim() == ''){
-            alert('Valor do número do Laudo não pode estar vazio.');
-            reportNumber.value = '';
-            reportNumber.focus();
-            return false;
-        }
-
-        if (protocolNumber.value.trim() == ''){
-            alert('O valor do Registro de Entrada não pode ser vazio.');
-            protocolNumber.value = '';
-            protocolNumber.focus();
-            return false;
-        }
-
-        if (policeReportNumber.value.trim() == ''){
-            alert('Valor para boletim não pode ser vazio.');
-            policeReportNumber.value = '';
-            policeReportNumber.focus();
-            return false;
-        }
-
-        if (policeStation.value.trim() == ''){
-            alert('Valor para delegacia não pode ser vazio.');
-            policeStation.value = '';
-            policeStation.focus();
-            return false;
-        }
-
-        if (requestingAuthority.value.trim() == ''){
-            alert('Valor para Autoridade Requisitante não pode ser vazio.');
-            requestingAuthority.value = '';
-            requestingAuthority.focus();
-            return false;
-        }
-
-        if (!isValidDate(serviceDate.value)){
-            alert('Data inválida.');
-            serviceDate.focus();
-            return false;
-        }
-
-        if (!isValidTime(serviceTime.value)){
-            alert('Hora inválida.');
-            serviceTime.focus();
-            return false;
-        }
-
-        if (!isValidDate(releaseDate.value)){
-            alert('Data inválida.');
-            releaseDate.focus();
-            return false;
-        }
-
-        if (!isValidTime(releaseTime.value)){
-            alert('Hora inválida.');
-            releaseTime.focus();
-            return false;
-        }
-
-        testeLocal();
-
-        alert(itemImgLabel.value);
-
-        alert('Todos os testes executados.')
-        return true;
-
-    }
-
-
-    document.addEventListener('DOMContentLoaded', function() {
-
-        reportNumber.addEventListener('change', function(){
-            reportNumber.value = reportNumber.value.toUpperCase();
-        });
-
-        protocolNumber.addEventListener('change', function(){
-            protocolNumber.value = protocolNumber.value.toUpperCase();
-        });
-
-        policeReportNumber.addEventListener('change', function(){
-            policeReportNumber.value = policeReportNumber.value.toUpperCase();
-        });
-
-        policeStation.addEventListener('change', function(){
-            policeStation.value = toNiceName(policeStation.value);
-        });
-
-        requestingAuthority.addEventListener('change', function(){
-            requestingAuthority.value = toNiceName(requestingAuthority.value);
-        });
-
-        submitButton.addEventListener('click', function(){
-            event.preventDefault();
-            checkForm();
-        });
-
-        testandoInputs();
-
-    });    
-    */
-</script>
--->
 {% endblock content %}

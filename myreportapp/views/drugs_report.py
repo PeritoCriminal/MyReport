@@ -29,6 +29,8 @@ from datetime import datetime, timedelta
 from docx import Document
 from docx.shared import Pt, Cm
 from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.section import WD_SECTION
+
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from io import BytesIO
@@ -52,6 +54,9 @@ def drugs_report(request):
 
         y2, m2, d2 = request.POST.get('data_liberacao').split('-')
         invert_date2 = f"{d2}-{m2}-{y2}"
+
+        lacres_saidas = ', '.join(request.POST.getlist('lacre_saida[]'))
+        # lacres_saidas_str = ', '.join(lacres_saidas)
 
         try:            
             new_report = DrugReport(
@@ -188,6 +193,7 @@ def drugs_report(request):
             adicionar_texto_formatado(doc, 'Dos Materiais Recebidos e Examinados ', f'({number_of_itens} {sing_or_pl}):')
 
             doc.add_paragraph(new_report.materialReceivedObservations)
+
             doc.add_paragraph('O Exame Revelou:')
 
             adicionar_itens(doc, number_of_itens)
@@ -222,6 +228,32 @@ def drugs_report(request):
 
             adicionar_rodape(doc, f'RE: {new_report.protocol_number} | Boletim {new_report.occurring_number} - {new_report.police_station}')
 
+            new_section = doc.add_section(WD_SECTION.NEW_PAGE)
+
+            new_section.header.is_linked_to_previous = True
+
+            new_section.footer.is_linked_to_previous = False
+            for paragraph in new_section.footer.paragraphs:
+                paragraph.clear()
+            doc.add_paragraph('')
+            doc.add_heading('DEVOLUÇÃO DE MATERIAL EXAMINADO', 0)
+            doc.add_paragraph('')
+            doc.add_paragraph(f'Origem: Boletim {new_report.occurring_number} | {new_report.police_station}')
+            doc.add_paragraph(f'Autoridade Requisitante: {new_report.requesting_authority}')
+            doc.add_paragraph(f'Registro de Entrada RE: {new_report.protocol_number}')
+            doc.add_paragraph(f'Perito: {new_report.reporting_expert}')
+            paragraph = doc.add_paragraph('Lacre(s) de saída: ')
+            run = paragraph.add_run(lacres_saidas)
+            run.bold = True
+            doc.add_paragraph('')
+            adicionar_texto_formatado(doc, 'Responsavel Pela Retirada','')
+            doc.add_paragraph('Nome: ___________________________________________________')
+            doc.add_paragraph('RG:  ________________________________')
+            doc.add_paragraph('Data da Retirada: _______/_______/_______')
+            doc.add_paragraph('')
+            adicionar_texto_formatado(doc, 'Assinatura: ', '_________________________________________')            
+            
+            
             doc_buffer = BytesIO()
             doc.save(doc_buffer)
             doc_buffer.seek(0)

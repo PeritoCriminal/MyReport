@@ -44,18 +44,18 @@ def theft_report_view(request, report_id=None):
 
     # Verificar se o relatório já existe (edição) ou se será um novo
     if report_id:
-        report = get_object_or_404(TheftReportModel, id=report_id)  # Busca o relatório existente para edição
-        numberOfLocals = len(report.localsubtitle)  # Calcula o número de locais
-        list_local_subtitle = report.localsubtitle  # Passa a lista de subtítulos locais
+        report = get_object_or_404(TheftReportModel, id=report_id)
+        numberOfLocals = len(report.localsubtitle)  
+        list_local_subtitle = report.localsubtitle 
         local_preservation = report.preservation_context
         list_local_description = report.localdescription
         list_local_img = report.localimgbase64
         list_local_label = report.locallegend
-        message = f'obtido id {report_id}'  # Agora usando corretamente report_id
+        message = f'Atualização do Laudo {report.report_number}'  
     else:
-        report = TheftReportModel()  # Cria um novo relatório
-        message = 'novo laudo.'
-        #new_report = True  # Define como True para um novo relatório
+        report = TheftReportModel()  
+        message = 'Elaboração de novo laudo.'
+        
 
     if request.method == 'POST':
         rep_id = request.POST.get('report_id')

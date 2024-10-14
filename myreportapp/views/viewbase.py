@@ -165,7 +165,7 @@ def adicionar_rodape(doc, texto_rodape):
         paragrafo_rodape2.paragraph_format.line_spacing = 1  # Espaçamento simples
 
         # Adicionando a contagem total de páginas
-        total_page_field_code = 'NUMPAGES'
+        total_page_field_code = 'SECTIONPAGES'
         total_page_field = OxmlElement('w:fldSimple')
         total_page_field.set(qn('w:instr'), total_page_field_code)
         run_total_pages = OxmlElement('w:r')
