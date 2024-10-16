@@ -184,7 +184,7 @@ def generate_theft_docx(request, report_id):
     doc.add_paragraph(f'Data e hora do acionamento: {format_date(theft_report.activation_date)} às {format_hour(theft_report.activation_time)}.')
     doc.add_paragraph(f'Data e hora do atendimento: {format_date(theft_report.service_date)} às {format_hour(theft_report.service_time)}.')
     doc.add_paragraph(f'Perito: {theft_report.reporting_expert}')
-    doc.add_paragraph(f'Fotografia e apoio técnico: {theft_report.photographer}')
+    doc.add_paragraph(f'Fotografia: {theft_report.photographer}')
     doc.add_heading(f'Descrição e Exame do Local', 1)
 
     doc.add_heading(f'Preservação', 2)
