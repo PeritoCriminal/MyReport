@@ -244,7 +244,7 @@ PODE MELHORAR:
 <script>
 
 // FUNÇÕES COMPARTILHADAS NO ARQUIVO scripts.js --
-let setar_como_true_para_realizar_testes = false;
+let setar_como_true_para_realizar_testes = true;
 
 if (setar_como_true_para_realizar_testes) {
     document.querySelector('#protocolo').value='prot_teste';
@@ -656,10 +656,14 @@ document.addEventListener('DOMContentLoaded', function() {
         if(!formCheking()){
             return;
         }else{  
-            form.submit();  
+            form.submit();
+
+            /*  
             setTimeout(function() {
                 window.location.href = "{% url 'index' %}";
             }, 5000);
+            */
+            alert(`O documento foi gerado. Verifique a pasta dowloads.`);
         };
     });
 });
@@ -826,13 +830,17 @@ function formCheking(){
             lacreEntrada[i - 1].value = lacreEntrada[i - 1].value.toUpperCase();
         };
 
-        if (lacreSaida[i - 1].value =='' || lacreSaida[i - 1].value =='SPTC' ){
+        /*
+        if (lacreSaida[i - 1].value =='' || lacreSaida[i - 1].value =='' ){
             alert('Valor inválido para Lacre de Saída.');
             lacreSaida[i - 1].focus();
             return false;
         }else{
+        */
             lacreSaida[i - 1].value = lacreSaida[i - 1].value.toUpperCase();
+        /*
         };
+        */
         
     }
 

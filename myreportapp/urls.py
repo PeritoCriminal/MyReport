@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth.views import LogoutView
 
-from .views import index, about, contact, login, register, CustomLoginView, reports, drugs_report, userReports, editProfile, theft, deleteReport
+from .views import index, about, contact, login, register, CustomLoginView, reports, drugs_report, userReports, editProfile, theft, deleteReport, HeaderImportView
 
 
 urlpatterns = [
@@ -17,11 +17,10 @@ urlpatterns = [
     path('user_reports', userReports, name='user_reports'),
     path('edit_profile', editProfile, name='edit_profile'),
     path('furto/', theft.theft_report_view, name='furto'),
-    path('furto/<int:report_id>/', theft.theft_report_view, name='edit_report'),
-    
+    path('furto/<int:report_id>/', theft.theft_report_view, name='edit_report'),    
     path('furto/<int:report_id>/', theft.theft_report_view, name='theft_report_view'),
     path('furto/generate-docx/<int:report_id>/', theft.generate_theft_docx, name='generate_theft_docx'),
-
-
     path('delete_report/<int:report_id>/', deleteReport, name='delete_report'),
+
+    path('headerreport', HeaderImportView, name='header_report')
 ]

@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 
 class HeaderReportModel(models.Model):
-    """ Informações comuns a praticamente todos os laudos """
+    """ A classe HeaderReportModel tem atributos e métdodos comuns dos relatórios em geral """
 
     # Atributos de data e hora com valor padrão 01-01-1900 para datas
     report_date = models.DateField('Data do Registro', default='1900-01-01')
