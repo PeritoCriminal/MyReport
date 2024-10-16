@@ -258,7 +258,7 @@ def drugs_report(request):
                 adicionar_texto_formatado(doc, 'Assinatura: ', '_________________________________________')            
             
             
-            doc_buffer = BytesIO()
+            doc_buffer = BytesIO()  
             doc.save(doc_buffer)
             doc_buffer.seek(0)
 
@@ -352,7 +352,7 @@ def drugs_report(request):
     context = {
         'protocol_prefix': 'TOX',
         'delegacia': 'Del. Sec. Limeira Plantão',
-        'lacre_saida': 'SPTC',
+        'lacre_saida': '',
         'today_date': today_date,
         'current_time': formatted_current_time,
         'material': 'Todo material recebido encontrava-se acondicionado em invólucro(s) plástico(s) lacrado(s), acompanhado da requisição de exame pericial.',
