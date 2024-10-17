@@ -3,5 +3,122 @@
 {% block title %}Heder Report{% endblock title %}
 
 {% block content %}
-    <h1>Relatório Técnico Pericial</h1>
+    <h2 class="titulo-2">Relatório Técnico Pericial</h2>
+
+    <form id="header_report_form" method="post" action="{% url 'header_report' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="alert alert-warning">                   
+            {{ msg_about_this_form_to_user | safe }}
+        </div>
+
+        <div class="form-group"> <!-- CONTAINER -->
+
+            <div class="form-group">
+                <label for="designated_date">Data da Designação</label>
+                <input type="date" id="designated_date" name="designated_date" class="form-control text-uppercase" required value="{{ designated_date }}">
+            </div>
+
+            <div class="form-group">
+                <label for="report_number">Número do Laudo</label>
+                <input type="text" id="report_number" name="report_number" class="form-control text-uppercase" required value="{{ report_number }}">
+            </div>
+
+            <div class="form-group">
+                <label for="protocolo">Número do Protocolo</label>
+                <input type="text" id="protocolo" name="protocolo" class="form-control text-uppercase" required value="{{ protocol_number }}">
+            </div>
+
+            <div class="form-group">
+                <label for="occurrence_date">Data da Ocorrência</label>
+                <input type="date" id="occurrence_date" name="occurrence_date" class="form-control text-uppercase" required value="{{ occurrence_date }}">
+            </div>
+
+            <div class="form-group">
+                <label for="occurrence_time">Hora da Ocorrência</label>
+                <input type="time" id="occurrence_time" name="occurrence_time" class="form-control text-uppercase" required value="{{ occurrence_time }}">
+            </div>
+
+            <div class="form-group">
+                <label for="call_date">Data do Acionamento</label>
+                <input type="date" id="call_date" name="call_date" class="form-control text-uppercase" required value="{{ call_date }}">
+            </div>
+
+            <div class="form-group">
+                <label for="call_time">Hora do Acionamento</label>
+                <input type="time" id="call_time" name="call_time" class="form-control text-uppercase" required value="{{ call_time }}">
+            </div>
+
+            <div class="form-group">
+                <label for="service_date">Data do Atendimento</label>
+                <input type="date" id="service_date" name="service_date" class="form-control text-uppercase" required value="{{ service_date }}">
+            </div>
+
+            <div class="form-group">
+                <label for="service_time">Hora do Atendimento</label>
+                <input type="time" id="service_time" name="service_time" class="form-control text-uppercase" required value="{{ service_time }}">
+            </div>
+
+            <div class="form-group">
+                <label for="police_report_number">Número do Boletim</label>
+                <input type="text" id="police_report_number" name="police_report_number" class="form-control text-uppercase" required value="{{ police_report_number }}">
+            </div>
+
+            <div class="form-group">
+                <label for="police_station">Delegacia</label>
+                <input type="text" id="police_station" name="police_station" class="form-control" required value="{{ police_station }}">
+            </div>
+
+            <div class="form-group">
+                <label for="requesting_authority">Autoridade Requisitante</label>
+                <input type="text" id="requesting_authority" name="requesting_authority" class="form-control" required value="{{ requesting_authority }}">
+            </div>
+
+            <div class="form-group">
+                <label for="examination_objective">Objetivo do Exame</label>
+                <input type="text" id="examination_objective" name="examination_objective" class="form-control" required value="{{ examination_objective }}">
+            </div>
+
+            <div class="form-group">
+                <label for="incident_nature">Natureza da Ocorrência</label>
+                <input type="text" id="incident_nature" name="incident_nature" class="form-control" required value="{{ incident_nature }}">
+            </div>
+
+        </div>  <!-- CONTAINER -->
+
+        <button type="submit" class="btn btn-primary" id='send_header'>Enviar</button>
+
+    </form>
+
 {% endblock content %}
+
+
+{% block scripts %}
+
+    <script>
+        const header_report_form = document.querySelector('#header_report_form')
+        const submitButton = document.querySelector('#send_header')
+
+
+        function formCheking(){
+            return true;
+        }
+        submitButton.addEventListener('click', function(event) {
+            event.preventDefault();  
+            if(!formCheking()){
+                alert('Teste executado.')
+                return;
+            }else{  
+                header_report_form.submit();
+
+                /*  
+                setTimeout(function() {
+                    window.location.href = "{% url 'index' %}";
+                }, 5000);
+                */
+                
+                alert(`O documento foi gerado. Verifique a pasta dowloads.`);
+            };
+        });
+
+    </script>
+{% endblock scripts %}

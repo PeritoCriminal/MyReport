@@ -22,5 +22,6 @@ urlpatterns = [
     path('furto/generate-docx/<int:report_id>/', theft.generate_theft_docx, name='generate_theft_docx'),
     path('delete_report/<int:report_id>/', deleteReport, name='delete_report'),
 
-    path('headerreport', HeaderImportView, name='header_report')
+    path('headerreport', HeaderImportView, name='header_report'),
+    path('headerreport/<int:report_id>/', HeaderImportView, name='edit_header_report')
 ]

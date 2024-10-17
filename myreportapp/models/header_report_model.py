@@ -4,14 +4,15 @@ from django.conf import settings
 class HeaderReportModel(models.Model):
     """ A classe HeaderReportModel tem atributos e métdodos comuns dos relatórios em geral """
 
-    # Atributos de data e hora com valor padrão 01-01-1900 para datas
+    # Atributos de data e hora com valor padrão 01-01-1900 para datas display
     report_date = models.DateField('Data do Registro', default='1900-01-01')
     designation_date = models.DateField('Data de Designação', default='1900-01-01')
     occurrence_date = models.DateField('Data da Ocorrência', default='1900-01-01')
+    occurrence_time = models.TimeField('Hora do Atendimento', null=True, default='00:00:00')
     activation_date = models.DateField('Data do Acionamento', default='1900-01-01')
-    activation_time = models.TimeField('Hora do Acionamento', null=True, blank=True)
+    activation_time = models.TimeField('Hora do Acionamento', null=True, default='00:00:00')
     service_date = models.DateField('Data do Atendimento', default='1900-01-01')
-    service_time = models.TimeField('Hora do Atendimento', null=True, blank=True)
+    service_time = models.TimeField('Hora do Atendimento', null=True, default='00:00:00')
 
     # Atributos de identificação
     report_number = models.CharField('Número do Laudo', max_length=100, default='', null=True)
@@ -50,7 +51,7 @@ class HeaderReportModel(models.Model):
     def save(self, *args, **kwargs):
         """Sobrescreve o método save para copiar o display_name do usuário"""
         if self.reporting_expert:
-            self.expert_display_name = self.reporting_expert.display_name  # Copia o display_name do usuário
+            self.expert_display_name = 'self.reporting_expert.display_name'  # Copia o display_name do usuário
         super().save(*args, **kwargs)
 
     @classmethod

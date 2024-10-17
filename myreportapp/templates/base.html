@@ -34,7 +34,7 @@ ESSE ARQUIVO É BASE PARA OS DEMAIS ARQUIVOS HTML DESSE PROJETO, E TEM O QUE É 
 
 <body>
     <header class="bg-light border-bottom mb-4">
-        <nav class="navbar navbar-expand-md navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container">
                 <a class="navbar-brand" href="{% url 'index' %}">MyReport</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,7 +48,7 @@ ESSE ARQUIVO É BASE PARA OS DEMAIS ARQUIVOS HTML DESSE PROJETO, E TEM O QUE É 
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'contact' %}">Contato</a>
                         </li>
-    
+
                         {% if user.is_authenticated %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'reports' %}">Relatórios</a>
@@ -82,9 +82,8 @@ ESSE ARQUIVO É BASE PARA OS DEMAIS ARQUIVOS HTML DESSE PROJETO, E TEM O QUE É 
             </div>
         </nav>
     </header>
-    
 
-    <main role="main" class="container">
+    <main role="main" class="container mb-4">
         {% block content %}
         <!-- Conteúdo específico da página -->
         {% endblock %}
@@ -96,19 +95,16 @@ ESSE ARQUIVO É BASE PARA OS DEMAIS ARQUIVOS HTML DESSE PROJETO, E TEM O QUE É 
         </div>
     </footer>
 
-    <!-- Carregue a versão completa do jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <!-- ACHO QUE NÃO VOU PRECISAR DESSE, ENTÃO ESTOU COMENTANDO 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.10/purify.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>-->
-
-    <script src="{% static 'js/jspdf.umd.min.js' %}"></script>  <!--VOU USAR SOMENTE ESSE?-->
-
+    <script src="{% static 'js/jspdf.umd.min.js' %}"></script>
     <script src="{% static 'js/scripts.js' %}"></script>
 </body>
+
+    {% block scripts %}
+        <!-- Conteúdo javascript específico -->
+    {% endblock %}
 
 </html>
