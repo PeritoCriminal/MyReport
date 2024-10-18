@@ -5,7 +5,7 @@ class HeaderReportModel(models.Model):
     """ A classe HeaderReportModel tem atributos e métdodos comuns dos relatórios em geral """
 
     # Atributos de data e hora com valor padrão 01-01-1900 para datas display
-    report_date = models.DateField('Data do Registro', default='1900-01-01')
+    report_date = models.DateField('Data do Registro', auto_now_add=True)  # Gera a data automaticamente, não aparece no formulário
     designation_date = models.DateField('Data de Designação', default='1900-01-01')
     occurrence_date = models.DateField('Data da Ocorrência', default='1900-01-01')
     occurrence_time = models.TimeField('Hora do Atendimento', null=True, default='00:00:00')
@@ -32,26 +32,23 @@ class HeaderReportModel(models.Model):
     forensic_team_base = models.CharField('Base da Equipe de Perícias', max_length=200, default='')
 
     # Atributos relacionados ao perito e fotógrafo
+    expert_display_name = models.CharField('Base da Equipe de Perícias', max_length=200, default='')
     reporting_expert = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
         on_delete=models.SET_NULL, 
         null=True, 
         verbose_name='Perito Relator'
     )
-    expert_display_name = models.CharField(
-        'Nome do Perito Exibido no Relatório', 
-        max_length=200
-    )
+    
     photographer = models.CharField('Fotógrafo', max_length=200, blank=True, null=True, default='')
 
-    # Atributos de considerações e conclusão
     considerations = models.TextField('Considerações', blank=True, default='')
     conclusion = models.TextField('Conclusão', blank=True, default='')
 
     def save(self, *args, **kwargs):
         """Sobrescreve o método save para copiar o display_name do usuário"""
         if self.reporting_expert:
-            self.expert_display_name = 'self.reporting_expert.display_name'  # Copia o display_name do usuário
+            self.expert_display_name = self.reporting_expert.full_name
         super().save(*args, **kwargs)
 
     @classmethod
@@ -60,6 +57,27 @@ class HeaderReportModel(models.Model):
         return """
         Algumas datas estão com o valor padrão de 01-01-1900. Reveja as antes de finalizar o relatório.
         """
+    
+    
+    def dateToForm(self, date_field):
+        """Converte qualquer uma das datas cadastradas no formato 'yyyy-mm-dd'"""
+        if date_field:
+            try:
+                return date_field.strftime('%Y-%m-%d')
+            except (ValueError, AttributeError):
+                return '1900-01-01'
+        return '1900-01-01'
+    
+    
+    def hourToForm(self, time_field):
+        """Converte qualquer uma das horas cadastradas no formato 'HH:MM'"""
+        if time_field:
+            try:
+                return time_field.strftime('%H:%M')
+            except (ValueError, AttributeError):
+                return '00:00'
+        return '00:00'
+
 
     def __str__(self):
         return f'Relatório {self.report_number} - Perito: {self.expert_display_name}'
