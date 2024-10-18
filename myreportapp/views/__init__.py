@@ -26,5 +26,5 @@ from .user_reports import userReports
 from .theft import theft_report_view
 from .edit_report import editReport
 from .delete_reports import deleteReport
-from .header_report_view import HeaderImportView
+from .header_report_view import HeaderReportView
 from .viewbase import adicionar_rodape

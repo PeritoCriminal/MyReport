@@ -28,7 +28,7 @@
 
             <div class="form-group">
                 <label for="protocolo">Número do Protocolo</label>
-                <input type="text" id="protocolo" name="protocolo" class="form-control text-uppercase" required value="{{ report.protocol_number }}">
+                <input type="text" id="protocolo" name="protocol" class="form-control text-uppercase" required value="{{ report.protocol_number }}">
             </div>
 
             <div class="form-group">
@@ -87,8 +87,9 @@
             </div>
 
         </div>  <!-- CONTAINER -->
-
-        <button type="submit" class="btn btn-primary" id='send_header'>Enviar</button>
+        <button type="button" class="btn btn-secondary" id="clear_form">Limpar Formulário</button>
+        <button type="button" class="btn btn-danger" onclick="window.history.back();">Cancelar</button>
+        <button type="submit" class="btn btn-primary" id='send_header'>Salvar</button>
 
     </form>
 

@@ -30,9 +30,8 @@ class HeaderReportModel(models.Model):
     institute_director = models.CharField('Diretor do Instituto', max_length=200, default='')
     institute_unit = models.CharField('Núcleo do Instituto', max_length=200, default='')
     forensic_team_base = models.CharField('Base da Equipe de Perícias', max_length=200, default='')
-
+    expert_display_name = models.CharField('Perito', max_length=200, default='')
     # Atributos relacionados ao perito e fotógrafo
-    expert_display_name = models.CharField('Base da Equipe de Perícias', max_length=200, default='')
     reporting_expert = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
         on_delete=models.SET_NULL, 
@@ -46,9 +45,12 @@ class HeaderReportModel(models.Model):
     conclusion = models.TextField('Conclusão', blank=True, default='')
 
     def save(self, *args, **kwargs):
-        """Sobrescreve o método save para copiar o display_name do usuário"""
+        """Sobrescreve o método save para copiar o full_name do usuário"""
         if self.reporting_expert:
+            print(f'Tem usuário sendo chamado: {self.reporting_expert.full_name}')
             self.expert_display_name = self.reporting_expert.full_name
+        else:
+            print(f'Não tem o usuário.')
         super().save(*args, **kwargs)
 
     @classmethod
@@ -59,7 +61,7 @@ class HeaderReportModel(models.Model):
         """
     
     
-    def dateToForm(self, date_field):
+    def dateToForm(self, date_field = '1900-01-01'):
         """Converte qualquer uma das datas cadastradas no formato 'yyyy-mm-dd'"""
         if date_field:
             try:
@@ -69,7 +71,7 @@ class HeaderReportModel(models.Model):
         return '1900-01-01'
     
     
-    def hourToForm(self, time_field):
+    def hourToForm(self, time_field = '00:00'):
         """Converte qualquer uma das horas cadastradas no formato 'HH:MM'"""
         if time_field:
             try:
