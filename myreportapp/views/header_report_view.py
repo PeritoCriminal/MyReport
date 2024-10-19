@@ -1,8 +1,9 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 from ..models.custom_user_model import UserRegistrationModel
 from ..models.header_report_model import HeaderReportModel
-from datetime import datetime
+# from datetime import datetime
 
 @login_required(login_url='/login/')
 def HeaderReportView(request, report_id=0):
@@ -13,7 +14,12 @@ def HeaderReportView(request, report_id=0):
     id_report = report_id
     report = HeaderReportModel()
     if id_report:
-        report = HeaderReportModel.objects.get(id=id_report)
+        report = get_object_or_404(HeaderReportModel, id=id_report)
+
+         # Verifica novamente se o usuário tem permissão para editar o relatório
+        if report.reporting_expert != user:
+            return HttpResponseForbidden("Você não tem permissão para editar este relatório.")
+
         msg_about_this_form_to_user = f'Atualização do Laudo {report.report_number}, RE {report.protocol_number}.'
 
     if request.method == 'POST':
@@ -25,6 +31,7 @@ def HeaderReportView(request, report_id=0):
         report = HeaderReportModel()
         if get_id_report > 0:
             report = HeaderReportModel.objects.get(id=int(get_id_report))
+
         print(get_id_report)
        
         report.report_date = '2024-10-10'  # Substitua pela data atual quando necessário
@@ -51,6 +58,8 @@ def HeaderReportView(request, report_id=0):
         report.considerations = request.POST.get('considerations', '')
         report.conclusion = request.POST.get('conclusion', '')
         report.save()
+
+        return redirect('modules_report', report_id=report.id)
 
     context = {
         'msg_about_this_form_to_user': msg_about_this_form_to_user,
