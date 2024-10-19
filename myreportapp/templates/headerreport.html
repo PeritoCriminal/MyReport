@@ -119,6 +119,7 @@
         const requesting_authority = document.querySelector('#requesting_authority');
         const examination_objective = document.querySelector('#examination_objective');
         const incident_nature = document.querySelector('#incident_nature');
+        const clear_form = document.querySelector('#clear_form');
         const submitButton = document.querySelector('#send_header');
 
         //Eventos
@@ -142,6 +143,13 @@
             requesting_authority.value = toNiceName(requesting_authority.value);
         });
 
+        clear_form.addEventListener('click', function(event) {
+            const confirmation = confirm("Deseja realmente limpar o formulário? Todos os dados serão perdidos.");
+            if (confirmation) {
+                clearInputs();
+            }
+        });
+
 
         //Verificação do formulário
         function formCheking(){
@@ -159,6 +167,26 @@
             }
             return true;            
         }
+
+
+            function clearInputs(){
+                designated_date.value = '' ;
+                report_number.value = '' ;
+                protocol.value = '' ;
+                occurrence_date.value = '' ;
+                occurrence_time.value = '' ;
+                call_date.value = '' ;
+                call_time.value = '' ;
+                service_date.value = '' ;
+                service_time.value = '' ;
+                police_report_number.value = '' ;
+                police_station.value = '' ;
+                requesting_authority.value = '' ;
+                examination_objective.value = '' ;
+                incident_nature.value = '' ;
+                designated_date.focus();
+            }
+    
 
 
         submitButton.addEventListener('click', function(event) {

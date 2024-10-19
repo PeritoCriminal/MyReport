@@ -3,6 +3,17 @@
 {% block title %}Módulos{% endblock title %}
 
 {% block content %}
+    <!-- Barra de ferramentas -->
+    <div class="btn-group mb-3" role="group" aria-label="Barra de Ferramentas">
+        <a href="{% url 'edit_header_report' report.id %}" class="btn btn-outline-primary">Relatório</a>
+        <a href="#" class="btn btn-outline-primary">Declarações</a>
+        <a href="#" class="btn btn-outline-primary">Imóvel</a>
+        <a href="#" class="btn btn-outline-primary">Via Pública</a>
+        <a href="#" class="btn btn-outline-primary">Veículo</a>
+        <a href="#" class="btn btn-outline-primary">Peça</a>
+        <a href="#" class="btn btn-outline-primary">Cadáver</a>
+    </div>
+
     <h2 class="titulo-2">Laudo {{ report.report_number }} | RE {{ report.protocol_number }}</h2>
     <p>{{ report.police_station }} | Boletim {{ report.police_report_number }}</p>
     <p>{{ report.examination_objective }} | {{ report.incident_nature }}</p>
