@@ -23,12 +23,12 @@
 
             <div class="form-group">
                 <label for="report_number">Número do Laudo</label>
-                <input type="text" id="report_number" name="report_number" class="form-control text-uppercase" required value="{{ report.report_number }}">
+                <input type="text" id="report_number" name="report_number" class="form-control" required value="{{ report.report_number }}">
             </div>
 
             <div class="form-group">
-                <label for="protocolo">Número do Protocolo</label>
-                <input type="text" id="protocolo" name="protocol" class="form-control text-uppercase" required value="{{ report.protocol_number }}">
+                <label for="protocol">Número do Protocolo</label>
+                <input type="text" id="protocol" name="protocol" class="form-control" required value="{{ report.protocol_number }}">
             </div>
 
             <div class="form-group">
@@ -99,22 +99,76 @@
 {% block scripts %}
 
     <script>
+        //Variáveis
+        checking_this_form = false;
+
+        //Atributos
         const header_report_form = document.querySelector('#header_report_form');
         const id_report = document.querySelector('#id-report');
+        const designated_date = document.querySelector('#designated_date');
+        const report_number = document.querySelector('#report_number');
+        const protocol = document.querySelector('#protocol');
+        const occurrence_date = document.querySelector('#occurrence_date');
+        const occurrence_time = document.querySelector('#occurrence_time');
+        const call_date = document.querySelector('#call_date');
+        const call_time = document.querySelector('#call_time');
+        const service_date = document.querySelector('#service_date');
+        const service_time = document.querySelector('#service_time');
+        const police_report_number = document.querySelector('#police_report_number');
+        const police_station = document.querySelector('#police_station');
+        const requesting_authority = document.querySelector('#requesting_authority');
+        const examination_objective = document.querySelector('#examination_objective');
+        const incident_nature = document.querySelector('#incident_nature');
         const submitButton = document.querySelector('#send_header');
 
+        //Eventos
+        report_number.addEventListener('change', (event)=>{
+            report_number.value = formatStringWithYear(report_number.value, designated_date.value);
+        });
 
+        protocol.addEventListener('change', (event)=>{
+            protocol.value = formatStringWithYear(protocol.value, designated_date.value);
+        });
+
+        police_report_number.addEventListener('change', (event)=>{
+            police_report_number.value = formatStringWithYear(police_report_number.value, designated_date);
+        });
+
+        police_station.addEventListener('change', (event)=>{
+            police_station.value = toNiceName(police_station.value);
+        });
+
+        requesting_authority.addEventListener('change', (event)=>{
+            requesting_authority.value = toNiceName(requesting_authority.value);
+        });
+
+
+        //Verificação do formulário
         function formCheking(){
-            console.log(id_report.value);
-            return true;
+            if (requesting_authority.value === ''){
+                alert('Prencha do campo Autoridade Requisitante.');
+                console.log('Campo Autoridade Requisitante é obrigatório.')
+                requesting_authority.focus();
+                return;
+            }
+            if (protocol.value ===''){
+                alert('Campo Número do Protocolo é obrigatório.');
+                console.log('Campo Número do Protocolo é obrigatório.');
+                protocol.focus();
+                return;
+            }
+            return true;            
         }
+
+
         submitButton.addEventListener('click', function(event) {
             event.preventDefault();  
             if(!formCheking()){
-                alert('Teste executado.')
+                console.log(`Formunário não enviado, necessário preencher campos obrigatórios.`)
                 return;
             }else{  
                 header_report_form.submit();
+                console.log(`Fomulário enviado com sucesso.`)
 
                 /*  
                 setTimeout(function() {
@@ -122,7 +176,6 @@
                 }, 5000);
                 */
                 
-                alert(`O documento foi gerado. Verifique a pasta dowloads.`);
             };
         });
 
