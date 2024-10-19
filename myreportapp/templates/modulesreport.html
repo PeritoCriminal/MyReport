@@ -3,5 +3,8 @@
 {% block title %}Módulos{% endblock title %}
 
 {% block content %}
-    <h1>Módulos {{ report }}</h1>
+    <h2 class="titulo-2">Laudo {{ report.report_number }} | RE {{ report.protocol_number }}</h2>
+    <p>{{ report.police_station }} | Boletim {{ report.police_report_number }}</p>
+    <p>{{ report.examination_objective }} | {{ report.incident_nature }}</p>
+
 {% endblock content %}

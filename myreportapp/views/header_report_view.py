@@ -57,6 +57,7 @@ def HeaderReportView(request, report_id=0):
         report.photographer = request.POST.get('photographer', '')
         report.considerations = request.POST.get('considerations', '')
         report.conclusion = request.POST.get('conclusion', '')
+        report.reporting_expert = user 
         report.save()
 
         return redirect('modules_report', report_id=report.id)

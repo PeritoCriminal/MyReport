@@ -21,7 +21,7 @@ class TheftTheftReportModelAdmin(admin.ModelAdmin):
 
 @admin.register(HeaderReportModel)
 class HeaderReportModelAdmin(admin.ModelAdmin):
-    list_display = ('report_number', 'protocol_number', 'incident_nature')
+    list_display = ('id', 'report_number', 'protocol_number', 'incident_nature', 'reporting_expert', 'expert_display_name')
     search_fields = ('report_number', 'protocol_number')
     list_filter = ('police_station',)
 

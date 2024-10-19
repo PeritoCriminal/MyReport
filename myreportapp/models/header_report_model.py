@@ -1,37 +1,34 @@
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 
 class HeaderReportModel(models.Model):
     """ A classe HeaderReportModel tem atributos e métdodos comuns dos relatórios em geral """
 
-    # Atributos de data e hora com valor padrão 01-01-1900 para datas display
-    report_date = models.DateField('Data do Registro', auto_now_add=True)  # Gera a data automaticamente, não aparece no formulário
-    designation_date = models.DateField('Data de Designação', default='1900-01-01')
-    occurrence_date = models.DateField('Data da Ocorrência', default='1900-01-01')
+    report_date = models.DateField('Data do Registro', auto_now_add=True) 
+    designation_date = models.DateField('Data de Designação', default=timezone.now) 
+    occurrence_date = models.DateField('Data da Ocorrência', default=timezone.now) 
     occurrence_time = models.TimeField('Hora do Atendimento', null=True, default='00:00:00')
-    activation_date = models.DateField('Data do Acionamento', default='1900-01-01')
+    activation_date = models.DateField('Data do Acionamento', default=timezone.now) 
     activation_time = models.TimeField('Hora do Acionamento', null=True, default='00:00:00')
-    service_date = models.DateField('Data do Atendimento', default='1900-01-01')
+    service_date = models.DateField('Data do Atendimento', default=timezone.now) 
     service_time = models.TimeField('Hora do Atendimento', null=True, default='00:00:00')
 
-    # Atributos de identificação
     report_number = models.CharField('Número do Laudo', max_length=100, default='', null=True)
     city = models.CharField('Cidade', max_length=100, default='Limeira', null=True)
     protocol_number = models.CharField('Número do Protocolo', max_length=200, default='', null=True)
     police_report_number = models.CharField('Número do Boletim de Ocorrência', max_length=200, default='', null=True)
 
-    # Atributos relacionados ao exame
     examination_objective = models.CharField('Objetivo do Exame', max_length=300, default='')
     incident_nature = models.CharField('Natureza da Ocorrência', max_length=300, default='', null=True)
     police_station = models.CharField('Distrito Policial', max_length=200, default='', null=True)
     requesting_authority = models.CharField('Autoridade Requisitante', max_length=200, default='', null=True)
 
-    # Atributos relacionados ao instituto e equipe
     institute_director = models.CharField('Diretor do Instituto', max_length=200, default='')
     institute_unit = models.CharField('Núcleo do Instituto', max_length=200, default='')
     forensic_team_base = models.CharField('Base da Equipe de Perícias', max_length=200, default='')
     expert_display_name = models.CharField('Perito', max_length=200, default='')
-    # Atributos relacionados ao perito e fotógrafo
+
     reporting_expert = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
         on_delete=models.SET_NULL, 
@@ -47,7 +44,7 @@ class HeaderReportModel(models.Model):
     def save(self, *args, **kwargs):
         """Sobrescreve o método save para copiar o full_name do usuário"""
         if self.reporting_expert:
-            print(f'Tem usuário sendo chamado: {self.reporting_expert.full_name}')
+            print(f'Nome completo do usuário: {self.reporting_expert.full_name}')
             self.expert_display_name = self.reporting_expert.full_name
         else:
             print(f'Não tem o usuário.')
