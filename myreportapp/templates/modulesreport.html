@@ -4,15 +4,36 @@
 
 {% block content %}
     <!-- Barra de ferramentas -->
-    <div class="btn-group mb-3" role="group" aria-label="Barra de Ferramentas">
-        <a href="{% url 'edit_header_report' report.id %}" class="btn btn-outline-primary">Relatório</a>
-        <a href="#" class="btn btn-outline-primary">Declarações</a>
-        <a href="#" class="btn btn-outline-primary">Imóvel</a>
-        <a href="#" class="btn btn-outline-primary">Via Pública</a>
-        <a href="#" class="btn btn-outline-primary">Veículo</a>
-        <a href="#" class="btn btn-outline-primary">Peça</a>
-        <a href="#" class="btn btn-outline-primary">Cadáver</a>
-    </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'edit_header_report' report.id %}">Relatório</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Declarações</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'scene_preservation_report' report.id %}">Preservação</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Imóvel</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Via Pública</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Veículo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Peça</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Cadáver</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
     <h2 class="titulo-2">Laudo {{ report.report_number }}</h2>
     <p>{{ report.makePreamble }}</p>

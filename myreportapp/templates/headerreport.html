@@ -23,12 +23,12 @@
 
             <div class="form-group">
                 <label for="report_number">Número do Laudo</label>
-                <input type="text" id="report_number" name="report_number" class="form-control" required value="{{ report.report_number }}">
+                <input type="text" id="report_number" name="report_number" class="form-control" required value="{{ report.report_number }}" placeholder="Ex. 12345">
             </div>
 
             <div class="form-group">
                 <label for="protocol">Número do Protocolo</label>
-                <input type="text" id="protocol" name="protocol" class="form-control" required value="{{ report.protocol_number }}">
+                <input type="text" id="protocol" name="protocol" class="form-control" required value="{{ report.protocol_number }}" placeholder="Ex. L125">
             </div>
 
             <div class="form-group">
@@ -63,17 +63,17 @@
 
             <div class="form-group">
                 <label for="police_report_number">Número do Boletim</label>
-                <input type="text" id="police_report_number" name="police_report_number" class="form-control text-uppercase" required value="{{ report.police_report_number }}">
+                <input type="text" id="police_report_number" name="police_report_number" class="form-control" required value="{{ report.police_report_number }}" placeholder="Ex. AB1234">
             </div>
 
             <div class="form-group">
                 <label for="police_station">Delegacia</label>
-                <input type="text" id="police_station" name="police_station" class="form-control" required value="{{ report.police_station }}">
+                <input type="text" id="police_station" name="police_station" class="form-control" required value="{{ report.police_station }}" placeholder="Ex. Del. Sec. Plantão">
             </div>
 
             <div class="form-group">
                 <label for="requesting_authority">Autoridade Requisitante</label>
-                <input type="text" id="requesting_authority" name="requesting_authority" class="form-control" required value="{{ report.requesting_authority }}">
+                <input type="text" id="requesting_authority" name="requesting_authority" class="form-control" required value="{{ report.requesting_authority }}" placeholder="Ex. Dra. Tatiane">
             </div>
 
             <div class="form-group">
@@ -84,6 +84,11 @@
             <div class="form-group">
                 <label for="incident_nature">Natureza da Ocorrência</label>
                 <input type="text" id="incident_nature" name="incident_nature" class="form-control" required value="{{ report.incident_nature }}">
+            </div>
+
+            <div class="form-group">
+                <label for="fotographer">Fotógrafo</label>
+                <input type="text" id="fotographer" name="fotographer" class="form-control" placeholder="Nome do Fotógrafo" value="{{ report.fotographer }}">
             </div>
 
         </div>  <!-- CONTAINER -->
