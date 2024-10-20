@@ -65,9 +65,6 @@ class HeaderReportModel(models.Model):
             except (ValueError, AttributeError):
                 return '1900-01-01'
         return '1900-01-01'
-    
-
-    from datetime import date
 
 
     def dateToDoc(self, date_field=date(1900, 1, 1)):
@@ -105,6 +102,20 @@ class HeaderReportModel(models.Model):
             except (ValueError, AttributeError):
                 return '00:00'
         return '00:00'
+    
+
+    def hourToDoc(self, time_field='00:00'):
+        """Converte qualquer uma das horas cadastradas no formato 'HHhMMmin' ou 'HHh' se os minutos forem 00"""
+        if time_field:
+            try:
+                # Verifica se os minutos são 00
+                if time_field.strftime('%M') == '00':
+                    return time_field.strftime('%Hh')
+                else:
+                    return time_field.strftime('%Hh%Mmin')
+            except (ValueError, AttributeError):
+                return '00h'
+        return '00h'
     
 
     def makePreamble (self):

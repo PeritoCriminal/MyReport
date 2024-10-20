@@ -54,9 +54,9 @@ def HeaderReportView(request, report_id=0):
         report.institute_director = user_data.director
         report.institute_unit = user_data.unit
         report.forensic_team_base = user_data.team
-        report.photographer = request.POST.get('photographer', '')
-        report.considerations = request.POST.get('considerations', '')
-        report.conclusion = request.POST.get('conclusion', '')
+        #report.photographer = request.POST.get('photographer', '')
+        #report.considerations = request.POST.get('considerations', '')
+        #report.conclusion = request.POST.get('conclusion', '')
         report.reporting_expert = user 
         report.save()
 

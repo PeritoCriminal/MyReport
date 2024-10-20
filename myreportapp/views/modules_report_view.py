@@ -10,6 +10,7 @@ def ModulesReportView(request, report_id):
     context = {
         'report': report,
         'occurrence_date': report.dateToDoc(report.occurrence_date),
+        'occurrence_time': report.hourToDoc(report.occurrence_time),
     }
 
     return render(request, 'modulesreport.html', context)
