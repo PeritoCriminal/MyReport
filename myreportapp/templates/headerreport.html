@@ -87,8 +87,8 @@
             </div>
 
             <div class="form-group">
-                <label for="fotographer">Fotógrafo</label>
-                <input type="text" id="fotographer" name="fotographer" class="form-control" placeholder="Nome do Fotógrafo" value="{{ report.fotographer }}">
+                <label for="photographer">Fotógrafo</label>
+                <input type="text" id="photographer" name="photographer" class="form-control" placeholder="Nome do Fotógrafo" value="{{ report.photographer }}">
             </div>
 
         </div>  <!-- CONTAINER -->
@@ -124,6 +124,7 @@
         const requesting_authority = document.querySelector('#requesting_authority');
         const examination_objective = document.querySelector('#examination_objective');
         const incident_nature = document.querySelector('#incident_nature');
+        const photographer = document.querySelector('#photographer');
         const clear_form = document.querySelector('#clear_form');
         const submitButton = document.querySelector('#send_header');
 
@@ -146,6 +147,10 @@
 
         requesting_authority.addEventListener('change', (event)=>{
             requesting_authority.value = toNiceName(requesting_authority.value);
+        });
+
+        photographer.addEventListener('change', (event)=>{
+            photographer.value = toNiceName(photographer.value);
         });
 
         clear_form.addEventListener('click', function(event) {
