@@ -14,8 +14,12 @@
         <a href="#" class="btn btn-outline-primary">Cadáver</a>
     </div>
 
-    <h2 class="titulo-2">Laudo {{ report.report_number }} | RE {{ report.protocol_number }}</h2>
-    <p>{{ report.police_station }} | Boletim {{ report.police_report_number }}</p>
+    <h2 class="titulo-2">Laudo {{ report.report_number }}</h2>
+    <p>{{ report.makePreamble }}</p>
+    <h3>Dados da Requisição de Exame</h3>
+    <p>Boletim: {{ report.police_report_number }} | {{ report.police_station }}.</p>
+    <p>Autordidade Requisitante: {{ report.requesting_authority }}.</p>
+    <p>Data e hora da ocorrência: {{ occurrence_date }} às {{report.occurrence_time}}.</p>
     <p>{{ report.examination_objective }} | {{ report.incident_nature }}</p>
 
 {% endblock content %}
