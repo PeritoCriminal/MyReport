@@ -1,7 +1,7 @@
 from django.db import models
 from ..models import HeaderReportModel
 
-class ScenePreservationReportModel():
+class ScenePreservationReportModel(models.Model):
     description = models.TextField(blank=True, verbose_name='Preservação - Descrição', default='')
     reportForeignKey = models.ForeignKey(
         HeaderReportModel, 

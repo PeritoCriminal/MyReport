@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserRegistrationModel, DrugReport, TheftReportModel, HeaderReportModel
+from .models import UserRegistrationModel, DrugReport, TheftReportModel, HeaderReportModel, ScenePreservationReportModel
 
 @admin.register(UserRegistrationModel)
 class UserAdmin(admin.ModelAdmin):
@@ -25,3 +25,7 @@ class HeaderReportModelAdmin(admin.ModelAdmin):
     search_fields = ('report_number', 'protocol_number')
     list_filter = ('police_station',)
 
+@admin.register(ScenePreservationReportModel)
+class HeaderReportModelAdmin(admin.ModelAdmin):
+    list_display = ('id', 'description')
+    

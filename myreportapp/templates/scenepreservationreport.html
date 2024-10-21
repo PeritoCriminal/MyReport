@@ -4,4 +4,33 @@
 
 {% block content %}
     <h1 class="title-2">Preservação</h1>
+
+    <form id="preservation_report_form" method="post" action="{% url 'scene_preservation_report' report.id %}" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="preservation">Preservação</label>
+            <textarea class="form-control" id="preservation" name="preservation" rows="6" placeholder="Digite aqui suas observações sobre a preservação do local.">{{ scene_preservation.description }}</textarea>
+        </div>
+
+        <button type="button" class="btn btn-danger" onclick="window.history.back();">Cancelar</button>
+        <button type="submit" class="btn btn-primary" id='send_preservation'>Salvar</button>
+    </form>
+
 {% endblock content %}
+
+{% block scripts %}
+    <script>
+        //Atributos
+        const form_preservation = document.querySelector('#preservation_report_form');
+        const send_preservation = document.querySelector('#send_preservation');
+
+
+        send_preservation.addEventListener('click', (event)=>{
+            event.preventDefault();
+            alert('btn_send');
+            form_preservation.submit();
+        });
+
+    </script>
+{% endblock scripts %}
