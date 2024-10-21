@@ -163,19 +163,95 @@
 
         //Verificação do formulário
         function formCheking(){
-            if (requesting_authority.value === ''){
-                alert('Prencha do campo Autoridade Requisitante.');
-                console.log('Campo Autoridade Requisitante é obrigatório.')
-                requesting_authority.focus();
+
+            if(!checkDate(designated_date)){
                 return;
             }
+
             if (protocol.value ===''){
                 alert('Campo Número do Protocolo é obrigatório.');
                 console.log('Campo Número do Protocolo é obrigatório.');
                 protocol.focus();
                 return;
             }
+
+            if(!checkDate(occurrence_date)){
+                return;
+            }
+
+            if(!checkTime(occurrence_time)){
+                return;
+            }
+
+            if(!checkDate(call_date)){
+                return;
+            }
+
+            if(!checkTime(call_time)){
+                return;
+            }
+
+            if(!checkDate(service_date)){
+                return;
+            }
+
+            if(!checkTime(service_time)){
+                return;
+            }
+
+            if (requesting_authority.value === ''){
+                alert('Prencha do campo Autoridade Requisitante.');
+                console.log('Campo Autoridade Requisitante é obrigatório.')
+                requesting_authority.focus();
+                return;
+            }
+
             return true;            
+        }
+
+
+        function checkDate(inputTypeDate) {
+            if (!inputTypeDate.value) {
+                alert('Preencha o campo data corretamente.');
+                console.log(`Valor de data inválido: ${inputTypeDate.value}.`);
+                inputTypeDate.focus();
+                return false;
+            }
+            const regexData = /^\d{4}-\d{2}-\d{2}$/;
+            if (!regexData.test(inputTypeDate.value)) {
+                alert('Formato de data inválido. Use o formato YYYY-MM-DD.');
+                console.log(`Formato de data inválido: ${inputTypeDate.value}.`);
+                inputTypeDate.focus();
+                return false;
+            }
+            const data = new Date(inputTypeDate.value);
+            if (isNaN(data.getTime())) {
+                alert('Data inválida.');
+                console.log(`Data inválida: ${inputTypeDate.value}.`);
+                inputTypeDate.focus();
+                return false;
+            }
+            console.log(`Data válida: ${inputTypeDate.value}.`);
+            return true;
+        }
+        
+
+        function checkTime(inputTypeTime) {
+            if (!inputTypeTime.value) {
+                alert('Preencha o campo hora corretamente.');
+                console.log(`Valor de hora inválido: ${inputTypeTime.value}.`);
+                inputTypeTime.focus();
+                return false;
+            }
+            const regexHora = /^([01]\d|2[0-3]):([0-5]\d)$/;
+            if (!regexHora.test(inputTypeTime.value)) {
+                alert('Hora inválida. Formato esperado: HH:MM.');
+                console.log(`Hora inválida: ${inputTypeTime.value}.`);
+                inputTypeTime.focus();
+                return false;
+            }
+            console.log(`Hora válida: ${inputTypeTime.value}.`);
+            return true;
         }
 
 
@@ -194,6 +270,7 @@
                 requesting_authority.value = '' ;
                 examination_objective.value = '' ;
                 incident_nature.value = '' ;
+                photographer.value = '';
                 designated_date.focus();
             }
     
