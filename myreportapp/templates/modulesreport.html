@@ -48,8 +48,17 @@
 
     {% if report.photographer %}
         <p>Fotografia: {{ report.photographer }}</p>
+        <p>Data e hora do acionamento: {{ activation_date }} às {{activation_time}}.</p>
+        <p>Data e hora do atendimento: {{ service_date }} às {{service_time}}.</p>
+
     {% endif %}
 
     <p>Registro de Entrada: {{ report.protocol_number }}</p>
+
+    {% if scene_preservation %}
+        <h3 class="titulo-2">Descrição e Exame do Local</h2>
+        <h4 class="titulo-2">Preservação</h4>
+        <p>{{ scene_preservation.description }}</p>
+    {% endif %}
 
 {% endblock content %}
