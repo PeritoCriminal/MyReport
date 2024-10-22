@@ -56,9 +56,10 @@
     <p>Registro de Entrada: {{ report.protocol_number }}</p>
 
     {% if scene_preservation %}
-        <h3 class="titulo-2">Descrição e Exame do Local</h2>
+        <h3 class="titulo-2">Descrição e Exame do Local</h3>
         <h4 class="titulo-2">Preservação</h4>
-        <p>{{ scene_preservation.description }}</p>
+        <p>{{ scene_preservation.description|linebreaks }}</p>  <!-- Ajuste para exibir parágrafos -->
     {% endif %}
+
 
 {% endblock content %}

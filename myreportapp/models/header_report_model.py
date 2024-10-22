@@ -9,12 +9,12 @@ class HeaderReportModel(models.Model):
     """ A classe HeaderReportModel tem atributos e métdodos comuns dos relatórios em geral """
 
     report_date = models.DateField('Data do Registro', auto_now_add=True) 
-    designation_date = models.DateField('Data de Designação', default=timezone.now) 
-    occurrence_date = models.DateField('Data da Ocorrência', default=timezone.now) 
+    designation_date = models.DateField('Data de Designação', default=timezone.localdate) 
+    occurrence_date = models.DateField('Data da Ocorrência', default=timezone.localdate) 
     occurrence_time = models.TimeField('Hora do Atendimento', null=True, default='00:00:00')
-    activation_date = models.DateField('Data do Acionamento', default=timezone.now) 
+    activation_date = models.DateField('Data do Acionamento', default=timezone.localdate) 
     activation_time = models.TimeField('Hora do Acionamento', null=True, default='00:00:00')
-    service_date = models.DateField('Data do Atendimento', default=timezone.now) 
+    service_date = models.DateField('Data do Atendimento', default=timezone.localdate) 
     service_time = models.TimeField('Hora do Atendimento', null=True, default='00:00:00')
     report_number = models.CharField('Número do Laudo', max_length=100, default='', null=True)
     city = models.CharField('Cidade', max_length=100, default='Limeira', null=True)

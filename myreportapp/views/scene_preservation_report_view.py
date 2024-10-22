@@ -19,14 +19,19 @@ def ScenePreservationReportView(request, report_id):
 
     # Se o método for POST, significa que o formulário foi enviado
     if request.method == 'POST':
+        preservation_description = request.POST.get('preservation')
+
+        # Divide o texto em parágrafos (usando \n como delimitador) e remove parágrafos vazios
+        paragraphs = [p.strip() for p in preservation_description.split('\n') if p.strip()]
+
         if scene_preservation:
             # Se o relatório já existir, atualiza os dados existentes
-            scene_preservation.description = request.POST.get('preservation')
+            scene_preservation.description = '\n'.join(paragraphs)  # Salva os parágrafos unidos
         else:
             # Se não existir, cria um novo registro
             scene_preservation = ScenePreservationReportModel(
                 reportForeignKey=report,
-                description=request.POST.get('preservation')
+                description='\n'.join(paragraphs)  # Salva os parágrafos unidos
             )
         
         # Salva o relatório (seja criação ou atualização)
@@ -43,4 +48,3 @@ def ScenePreservationReportView(request, report_id):
     }
 
     return render(request, 'scenepreservationreport.html', context)
-
