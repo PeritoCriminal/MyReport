@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserRegistrationModel, DrugReport, TheftReportModel, HeaderReportModel, ScenePreservationReportModel
+from .models import UserRegistrationModel, DrugReport, TheftReportModel, HeaderReportModel, ScenePreservationReportModel, PropertyReportModel
 
 @admin.register(UserRegistrationModel)
 class UserAdmin(admin.ModelAdmin):
@@ -26,6 +26,10 @@ class HeaderReportModelAdmin(admin.ModelAdmin):
     list_filter = ('police_station',)
 
 @admin.register(ScenePreservationReportModel)
-class HeaderReportModelAdmin(admin.ModelAdmin):
+class ScenePreservationModelAdmin(admin.ModelAdmin):
+    list_display = ('id', 'description')
+
+@admin.register(PropertyReportModel)
+class PropertyReportModelAdmin(admin.ModelAdmin):
     list_display = ('id', 'description')
     

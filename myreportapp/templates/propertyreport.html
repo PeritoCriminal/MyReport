@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Imóvel{% endblock title %}
+
+{% block content %}
+    <h1 class="title-2">Imóvel</h1>
+
+    <form id="property_report_form" method="post" action="{% url 'property_report' report.id %}" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="property">Imóvel</label>
+            <textarea class="form-control" id="property" name="property" rows="6" placeholder="Digite aqui sua descrição do local.">{{ property.description }}</textarea>
+        </div>
+
+        <button type="button" class="btn btn-danger" onclick="window.history.back();">Cancelar</button>
+        <button type="submit" class="btn btn-primary" id='send_property'>Salvar</button>
+    </form>
+
+{% endblock content %}
+
+{% block scripts %}
+    <script>
+        //Atributos
+        const form_property = document.querySelector('#property_report_form');
+        const send_property = document.querySelector('#send_property');
+
+
+        send_property.addEventListener('click', (event)=>{
+            event.preventDefault();
+            //alert('btn_send');
+            form_property.submit();
+        });
+
+    </script>
+{% endblock scripts %}

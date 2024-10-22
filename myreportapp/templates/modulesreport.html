@@ -4,7 +4,7 @@
 
 {% block content %}
     <!-- Barra de ferramentas -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
         <div class="container-fluid">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
@@ -17,7 +17,7 @@
                     <a class="nav-link" href="{% url 'scene_preservation_report' report.id %}">Preservação</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Imóvel</a>
+                    <a class="nav-link" href="{% url 'property_report' report.id %}">Imóvel</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Via Pública</a>
@@ -55,10 +55,16 @@
 
     <p>Registro de Entrada: {{ report.protocol_number }}</p>
 
-    {% if scene_preservation %}
+    {% if property %}
         <h3 class="titulo-2">Descrição e Exame do Local</h3>
-        <h4 class="titulo-2">Preservação</h4>
-        <p>{{ scene_preservation.description|linebreaks }}</p>  <!-- Ajuste para exibir parágrafos -->
+        {% if scene_preservation %}
+            <h4 class="titulo-2">Preservação</h4>
+            <p>{{ scene_preservation.description|linebreaks }}</p>
+        {% endif %}
+        {% if property %}
+            <h4 class="titulo-2">Descrição do Imóvel</h4>
+            <p>{{ property.description|linebreaks }}</p>
+        {% endif %}
     {% endif %}
 
 

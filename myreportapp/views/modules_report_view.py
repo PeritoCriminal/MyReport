@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from ..models import HeaderReportModel, ScenePreservationReportModel
+from ..models import HeaderReportModel, ScenePreservationReportModel, PropertyReportModel
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -14,9 +14,15 @@ def ModulesReportView(request, report_id):
     except ObjectDoesNotExist:
         scene_preservation = None  # Pode ser tratado no template posteriormente
 
+    try:
+        property = PropertyReportModel.objects.get(reportForeignKey=report)
+    except ObjectDoesNotExist:
+        property = None
+
     context = {
         'report': report,
         'scene_preservation': scene_preservation,
+        'property': property,
         'occurrence_date': report.dateToDoc(report.occurrence_date),
         'occurrence_time': report.hourToDoc(report.occurrence_time),
         'activation_date': report.dateToDoc(report.activation_date),

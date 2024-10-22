@@ -29,4 +29,5 @@ from .delete_reports import deleteReport
 from .header_report_view import HeaderReportView
 from .modules_report_view import ModulesReportView
 from .scene_preservation_report_view import ScenePreservationReportView
+from .property_report_view import PropertyReportView
 from .viewbase import adicionar_rodape
