@@ -7,30 +7,48 @@
 
     <form id="property_report_form" method="post" action="{% url 'property_report' report.id %}" enctype="multipart/form-data">
         {% csrf_token %}
-
+    
+        <div class="form-group">
+            <label for="title">Título</label>
+            <input type="text" class="form-control" id="title" name="title" placeholder="Digite o título" value="{{ property.title }}">
+        </div>
+    
+        <div class="form-group">
+            <label for="subtitle">Subtítulo</label>
+            <input type="text" class="form-control" id="subtitle" name="subtitle" placeholder="Digite o subtítulo" value="{{ property.subtitle }}">
+        </div>
+    
+        <div class="form-group">
+            <label for="legend">Legenda</label>
+            <input type="text" class="form-control" id="legend" name="legend" placeholder="Digite a legenda" value="{{ property.legend }}">
+        </div>
+    
         <div class="form-group">
             <label for="property">Imóvel</label>
             <textarea class="form-control" id="property" name="property" rows="6" placeholder="Digite aqui sua descrição do local.">{{ property.description }}</textarea>
         </div>
-
+    
+        <div class="form-group">
+            <label for="image">Imagem</label>
+            <input type="file" class="form-control" id="image" name="image">
+        </div>
+    
         <button type="button" class="btn btn-danger" onclick="window.history.back();">Cancelar</button>
         <button type="submit" class="btn btn-primary" id='send_property'>Salvar</button>
     </form>
+    
 
 {% endblock content %}
 
 {% block scripts %}
     <script>
-        //Atributos
+        // Atributos
         const form_property = document.querySelector('#property_report_form');
         const send_property = document.querySelector('#send_property');
 
-
-        send_property.addEventListener('click', (event)=>{
-            event.preventDefault();
-            //alert('btn_send');
-            form_property.submit();
+        send_property.addEventListener('click', (event) => {
+            event.preventDefault(); // Impede o envio padrão do formulário
+            form_property.submit();  // Envia o formulário
         });
-
     </script>
 {% endblock scripts %}
