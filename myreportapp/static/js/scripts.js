@@ -196,6 +196,70 @@ function resizeImage(file, width, height, callback) {
 }
 
 
+function resizeImageForA4(file, callback) {
+    const reader = new FileReader();
+
+    reader.onload = function (event) {
+        const img = new Image();
+        img.src = event.target.result;
+
+        img.onload = function () {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Definindo dimensões máximas para A4
+            const maxWidth = 1240;  // Largura máxima
+            const maxHeight = 1754; // Altura máxima
+
+            let width = img.width;
+            let height = img.height;
+
+            // Calculando a nova largura e altura mantendo a proporção
+            if (width > height) {
+                // Imagem mais larga que alta
+                if (width > maxWidth) {
+                    height *= maxWidth / width;
+                    width = maxWidth;
+                }
+            } else {
+                // Imagem mais alta que larga
+                if (height > maxHeight) {
+                    width *= maxHeight / height;
+                    height = maxHeight;
+                }
+            }
+
+            // Define o tamanho do canvas
+            canvas.width = width;
+            canvas.height = height;
+
+            // Preenche o fundo com cor preta
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Desenha a imagem redimensionada mantendo a proporção
+            ctx.drawImage(img, 1, 1, width - 2, height - 2);
+
+            // Converte o canvas em um arquivo Blob (formato JPEG)
+            canvas.toBlob(function (blob) {
+                // Cria um novo arquivo de imagem para envio ao servidor
+                const resizedImageFile = new File([blob], file.name, {
+                    type: 'image/jpeg',
+                    lastModified: Date.now()
+                });
+
+                // Chama o callback passando o arquivo redimensionado
+                callback(resizedImageFile);
+            }, 'image/jpeg', 0.9); // Qualidade 90%
+        };
+    };
+
+    // Lê o arquivo original
+    reader.readAsDataURL(file);
+}
+
+
+
 /*  CHAMA A FUNÇÃO ACIMA, SETANDO OS VALORES DE LARGURA E ALTURA.
     O ELEMENTO INPUT HTML OCULTO RECEBE O TXT BASE 64 QUE É ENVIADO AO BD */
 function handleImageResize(file, hiddenInputElement) {

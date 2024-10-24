@@ -36,19 +36,54 @@
         <button type="button" class="btn btn-danger" onclick="window.history.back();">Cancelar</button>
         <button type="submit" class="btn btn-primary" id='send_property'>Salvar</button>
     </form>
-    
 
 {% endblock content %}
 
 {% block scripts %}
+    
     <script>
         // Atributos
         const form_property = document.querySelector('#property_report_form');
         const send_property = document.querySelector('#send_property');
+        const imageInput = document.querySelector('#image');
 
         send_property.addEventListener('click', (event) => {
             event.preventDefault(); // Impede o envio padrão do formulário
-            form_property.submit();  // Envia o formulário
+        
+            const file = imageInput.files[0]; // Obtém o arquivo de imagem
+        
+            if (file) {
+                // Chama a função de redimensionamento e passa a função de callback
+                resizeImageForA4(file, function(resizedFile) {
+                    // Cria um novo FormData e anexa o arquivo redimensionado
+                    const formData = new FormData(form_property);
+                    formData.set('image', resizedFile); // Substitui a imagem original
+        
+                    // Envia o formulário via AJAX
+                    fetch(form_property.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                        }
+                    }).then(response => {
+                        if (response.ok) {
+                            return response.text();  // Lê a resposta como texto
+                        } else {
+                            throw new Error('Erro no envio do formulário');
+                        }
+                    }).then(data => {
+                        // Redireciona para a página 'modulesreport.html' com o ID do relatório
+                        const reportId = "{{ report.id }}";  // Pega o ID do relatório do template Django
+                        window.location.href = `/modulesreport/${reportId}`;  // Constrói a URL de redirecionamento
+                    }).catch(error => {
+                        console.error('Erro:', error);
+                    });
+                });
+            } else {
+                form_property.submit(); // Se não houver arquivo, envia o formulário normalmente
+            }
         });
+        
     </script>
 {% endblock scripts %}

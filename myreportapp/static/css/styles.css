@@ -45,3 +45,23 @@ input::placeholder {
 textarea::placeholder {
     color: rgb(43, 153, 226) !important;
 }
+
+p.legenda {
+    text-align: center; /* Centraliza o texto */
+    font-family: Arial, sans-serif; /* Define a fonte como Arial */
+    font-size: 12px; /* Define o tamanho da fonte como 12px */
+    font-style: italic; /* Define o estilo como itálico */
+    margin-top: 10px; /* Adiciona um espaço acima da legenda */
+    color: #be1616; /* Cor de texto para melhor visibilidade */
+}
+
+/* Estilos para a imagem */
+.img-report {
+    display: block; /* Permite centralização em conjunto com margin */
+    margin: 0 auto; /* Centraliza horizontalmente a imagem */
+    max-width: 16cm; /* Define a largura máxima de 12 cm */
+    height: auto; /* Mantém a proporção da imagem */
+    border: 1px solid black; /* Adiciona uma borda de 1px preta */
+    padding: 0px; /* Adiciona um pequeno espaçamento interno entre a imagem e a borda */
+    background-color: #fff; /* Fundo branco para destacar a imagem */
+}

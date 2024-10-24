@@ -62,8 +62,16 @@
             <p>{{ scene_preservation.description|linebreaks }}</p>
         {% endif %}
         {% if property %}
-            <h4 class="titulo-2">Descrição do Imóvel</h4>
+            <h4 class="titulo-2">{{ property.title }}</h4>
+            <h5 class="titulo-2">{{ property.subtitle }}</h5>
             <p>{{ property.description|linebreaks }}</p>
+        
+            <!-- Exibe a imagem -->
+            {% if property.image %}
+                <img src="{{ property.image.url }}" alt="Imagem do imóvel" class="img-fluid img-report">
+            {% endif %}
+        
+            <p class="legenda">{{ property.legend|linebreaks }}</p>
         {% endif %}
     {% endif %}
 
