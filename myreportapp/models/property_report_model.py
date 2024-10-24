@@ -3,7 +3,7 @@ import os
 from ..models import HeaderReportModel
 
 class PropertyReportModel(models.Model):
-    title = models.CharField(max_length=200, blank=True, default='')
+    title = models.CharField(max_length=200, blank=True, default='Descrição e Exame de Local')
     subtitle = models.CharField(max_length=200, blank=True, default='')
     description = models.TextField(blank=True, verbose_name='Imóvel - Descrição', default='')
     image = models.ImageField(blank=True, null=True, upload_to='property_images/', default='')

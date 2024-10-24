@@ -310,6 +310,20 @@ function twoBolleans(bol1, bol2){
     return val;
 }
 
+
+function updateFileName() {
+    var fileInput = document.getElementById('image');
+    var fileLabel = document.getElementById('file-label');
+    
+    // Define o texto padrão como um "placeholder"
+    var defaultText = 'Clique para inserir uma imagem';
+    
+    // Se um arquivo for selecionado, exibe o nome do arquivo; caso contrário, exibe o texto padrão
+    var fileName = fileInput.files.length ? fileInput.files[0].name : defaultText;
+    
+    fileLabel.textContent = fileName;
+}
+
 function teste(texto) {
     alert(texto);
 }

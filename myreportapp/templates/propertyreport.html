@@ -3,39 +3,41 @@
 {% block title %}Imóvel{% endblock title %}
 
 {% block content %}
-    <h1 class="title-2">Imóvel</h1>
+    <h2 class="titulo-2">Local - Descrição e Exame</h1>
 
     <form id="property_report_form" method="post" action="{% url 'property_report' report.id %}" enctype="multipart/form-data">
         {% csrf_token %}
     
-        <div class="form-group">
-            <label for="title">Título</label>
-            <input type="text" class="form-control" id="title" name="title" placeholder="Digite o título" value="{{ property.title }}">
-        </div>
+        <div id="property_container">
+            <div class="form-group">
+                <label for="subtitle">Subtítulo</label>
+                <input type="text" class="form-control" id="subtitle" name="subtitle" placeholder="Preencha esse campo se houver um subtítulo" value="{{ property.subtitle }}">
+            </div>
     
-        <div class="form-group">
-            <label for="subtitle">Subtítulo</label>
-            <input type="text" class="form-control" id="subtitle" name="subtitle" placeholder="Digite o subtítulo" value="{{ property.subtitle }}">
-        </div>
+            <div class="form-group">
+                <label for="property">Descrição do imóvel ou propriedade</label>
+                <textarea class="form-control" id="property" name="property" rows="6" placeholder="Preencha esse campo se houver uma descrição de local para essa secção.&#10;Esse campo aceita parágrafos.">{{ property.description }}</textarea>
+            </div>
     
-        <div class="form-group">
-            <label for="legend">Legenda</label>
-            <input type="text" class="form-control" id="legend" name="legend" placeholder="Digite a legenda" value="{{ property.legend }}">
-        </div>
-    
-        <div class="form-group">
-            <label for="property">Imóvel</label>
-            <textarea class="form-control" id="property" name="property" rows="6" placeholder="Digite aqui sua descrição do local.">{{ property.description }}</textarea>
-        </div>
-    
-        <div class="form-group">
-            <label for="image">Imagem</label>
-            <input type="file" class="form-control" id="image" name="image">
+            <div class="form-group row">
+                <div class="col-md-8">
+                    <label for="image">Imagem</label>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="image" name="image" onchange="updateFileName()">
+                        <label class="custom-file-label" for="image" id="file-label">{{ img_name }}</label>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <label for="legend">Legenda</label>
+                    <input type="text" class="form-control" id="legend" name="legend" placeholder="Se você escolheu uma imagem, adicione a legenda aqui." value="{{ property.legend }}">
+                </div>
+            </div>
         </div>
     
         <button type="button" class="btn btn-danger" onclick="window.history.back();">Cancelar</button>
         <button type="submit" class="btn btn-primary" id='send_property'>Salvar</button>
     </form>
+    
 
 {% endblock content %}
 

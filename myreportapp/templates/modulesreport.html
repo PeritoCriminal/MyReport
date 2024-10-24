@@ -4,34 +4,42 @@
 
 {% block content %}
     <!-- Barra de ferramentas -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'edit_header_report' report.id %}">Relatório</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Declarações</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'scene_preservation_report' report.id %}">Preservação</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'property_report' report.id %}">Imóvel</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Via Pública</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Veículo</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Peça</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Cadáver</a>
-                </li>
-            </ul>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#secondNavbar" aria-controls="secondNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="secondNavbar">
+                <div class="overflow-auto">
+                    <ul class="navbar-nav flex-nowrap">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'edit_header_report' report.id %}">Relatório</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Declarações</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'scene_preservation_report' report.id %}">Preservação</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'property_report' report.id %}">Imóvel</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Via Pública</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Veículo</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Peça</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Cadáver</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -65,12 +73,13 @@
             <h4 class="titulo-2">{{ property.title }}</h4>
             <h5 class="titulo-2">{{ property.subtitle }}</h5>
             <p>{{ property.description|linebreaks }}</p>
-        
+
             <!-- Exibe a imagem -->
             {% if property.image %}
                 <img src="{{ property.image.url }}" alt="Imagem do imóvel" class="img-fluid img-report">
+                <div class="clearfix"></div> <!-- Limpa a flutuação para os próximos elementos -->
             {% endif %}
-        
+
             <p class="legenda">{{ property.legend|linebreaks }}</p>
         {% endif %}
     {% endif %}
