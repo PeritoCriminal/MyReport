@@ -5,38 +5,55 @@
 {% block content %}
     <h2 class="titulo-2">Local - Descrição e Exame</h1>
 
-    <form id="property_report_form" method="post" action="{% url 'property_report' report.id %}" enctype="multipart/form-data">
-        {% csrf_token %}
-    
-        <div id="property_container">
-            <div class="form-group">
-                <label for="subtitle">Subtítulo</label>
-                <input type="text" class="form-control" id="subtitle" name="subtitle" placeholder="Preencha esse campo se houver um subtítulo" value="{{ property.subtitle }}">
-            </div>
-    
-            <div class="form-group">
-                <label for="property">Descrição do imóvel ou propriedade</label>
-                <textarea class="form-control" id="property" name="property" rows="6" placeholder="Preencha esse campo se houver uma descrição de local para essa secção.&#10;Esse campo aceita parágrafos.">{{ property.description }}</textarea>
-            </div>
-    
-            <div class="form-group row">
-                <div class="col-md-8">
-                    <label for="image">Imagem</label>
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="image" name="image" onchange="updateFileName()">
-                        <label class="custom-file-label" for="image" id="file-label">{{ img_name }}</label>
+        <form id="property_report_form" method="post" action="{% url 'property_report' report.id %}" enctype="multipart/form-data">
+            {% csrf_token %}
+        
+            <div id="property_container">
+                <!-- Campo Subtítulo -->
+                <div class="form-group">
+                    <label for="subtitle">Subtítulo</label>
+                    <input type="text" class="form-control" id="subtitle" name="subtitle" placeholder="Preencha esse campo se houver um subtítulo" value="{{ property.subtitle }}">
+                </div>
+        
+                <!-- Campo Descrição -->
+                <div class="form-group">
+                    <label for="property">Descrição do imóvel ou propriedade</label>
+                    <textarea class="form-control" id="property" name="property" rows="6" placeholder="Preencha esse campo se houver uma descrição de local para essa secção.&#10;Esse campo aceita parágrafos.">{{ property.description }}</textarea>
+                </div>
+        
+                <!-- Campo Imagem e Legenda com mesma largura -->
+                <div class="form-group row">
+                    <!-- Coluna para o input de arquivo (Imagem) -->
+                    <div class="col-md-6">
+                        <label for="image">Imagem</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="image" name="image" onchange="updateFileName()">
+                            <label class="custom-file-label" for="image" id="file-label">{{ img_name }}</label>
+                        </div>
+                    </div>
+        
+                    <!-- Coluna para o input de texto (Legenda) -->
+                    <div class="col-md-6">
+                        <label for="legend">Legenda</label>
+                        <input type="text" class="form-control" id="legend" name="legend" placeholder="Se você escolheu uma imagem, adicione a legenda aqui." value="{{ property.legend }}">
                     </div>
                 </div>
-                <div class="col-md-8">
-                    <label for="legend">Legenda</label>
-                    <input type="text" class="form-control" id="legend" name="legend" placeholder="Se você escolheu uma imagem, adicione a legenda aqui." value="{{ property.legend }}">
-                </div>
-            </div>
-        </div>
-    
-        <button type="button" class="btn btn-danger" onclick="window.history.back();">Cancelar</button>
-        <button type="submit" class="btn btn-primary" id='send_property'>Salvar</button>
-    </form>
+            </div>  <!-- FINAL CONTAINER -->
+        
+            <!-- Botões -->
+            <button type="button" class="btn btn-danger" onclick="window.history.back();">Cancelar</button>
+            <button type="submit" class="btn btn-primary" id='send_property'>Salvar</button>
+        </form>
+        
+        <script>
+            // Função para atualizar o nome do arquivo selecionado
+            function updateFileName() {
+                const input = document.getElementById('image');
+                const label = document.getElementById('file-label');
+                label.textContent = input.files[0].name;
+            }
+        </script>
+        
     
 
 {% endblock content %}
